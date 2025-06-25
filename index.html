@@ -39,19 +39,72 @@
       </div>
     </header>
 
-    <div id="divCalendarioFiltri">
+    <div class="divCalendarioFiltri">
       <!--Tendina filtro eventi-->
-      <div id="divFiltri">
-        <div>
+      <div class="divFiltri">
+        <div class="btnFiltro">
           <img
             src="./assets/filter.png"
             alt="pulsante Filtro Eventi"
             id="imgFiltroEvento"
           />
         </div>
-        <div>
-          <div></div>
+        <div class="containerFiltro">
+          <div class="elementoFiltro">
+            <div class="pallino"></div>
+            <span class="spanFiltro">Scuola Fisica</span>
+          </div>
+          <div class="elementoFiltro">
+            <div class="pallino"></div>
+            <span class="spanFiltro">Scuola Online</span>
+          </div>
+          <div class="elementoFiltro">
+            <div class="pallino"></div>
+            <span class="spanFiltro">Ripetizioni</span>
+          </div>
+          <div class="btnMoreFiltri">+</div>
         </div>
+      </div>
+
+      <!--Calendario-->
+      <div class="divCalendario">
+        <div class="giornate">
+          <div class="giorno">
+            <span class="segniGiorni">L</span>
+            <!-- secondo me può stare statico visto che è settiminale -->
+            <span class="dataGiorni">8</span>
+            <!-- idealmente modificabili -->
+            <div></div>
+          </div>
+          <div class="martedi">
+            <span class="segniGiorni">M</span>
+            <span class="dataGiorni">9</span>
+          </div>
+          <div class="mercoledi">
+            <span class="segniGiorni">M</span>
+            <span class="dataGiorni">10</span>
+          </div>
+          <div class="giovedi">
+            <span class="segniGiorni">G</span>
+            <span class="dataGiorni">11</span>
+          </div>
+          <div class="venerdi">
+            <span class="segniGiorni">V</span>
+            <span class="dataGiorni">12</span>
+          </div>
+          <div class="sabato">
+            <span class="segniGiorni">S</span>
+            <span class="dataGiorni">13</span>
+          </div>
+          <div class="domenica">
+            <span class="segniGiorni">D</span>
+            <span class="dataGiorni">14</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bottoneNuovoElemento">
+        <button class="bottoneCreaElemento">+</button>
       </div>
     </div>
   </body>
