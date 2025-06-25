@@ -1,11 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <link rel="icon" type="image/x-icon" href="./assets/logo.ico" />
+    <link rel="stylesheet" href="global.css" />
+    <link rel="stylesheet" href="calendar.css" />
+    <link rel="stylesheet" href="invoice.css" />
+    <link rel="stylesheet" href="balance.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="index.js"></script>
+    <title>Innuma</title>
   </head>
   <body>
-    <p>ciao</p>
+    <!--Header con logo, Saluto e menu hamburger-->
+    <header>
+      <div id="header">
+        <div class="divLogo-saluto">
+          <img
+            src="./assets/logo.png"
+            alt="Logo del sito web"
+            class="imgLogo"
+          />
+          <span class="spanSaluto">Buongiorno ☀️</span>
+        </div>
+        <img
+          src="./assets/menuHamburger.png"
+          alt="icona menu a tendina"
+          class="hamburgerMenu"
+        />
+      </div>
+    </header>
+
+    <div id="divCalendarioFiltri">
+      <!--Tendina filtro eventi-->
+      <div id="divFiltri">
+        <div>
+          <img
+            src="./assets/filter.png"
+            alt="pulsante Filtro Eventi"
+            id="imgFiltroEvento"
+          />
+        </div>
+        <div>
+          <div></div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
