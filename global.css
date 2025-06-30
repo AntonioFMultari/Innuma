@@ -3,10 +3,6 @@
   margin: 0;
 }
 
-span {
-  cursor: default;
-}
-
 header {
   position: relative;
   background-color: #fff;
@@ -19,6 +15,10 @@ header {
   justify-content: space-between;
   padding: 1rem;
   z-index: 1000px;
+
+  span {
+    cursor: default;
+  }
 }
 
 .imgLogo {
@@ -77,4 +77,8 @@ header {
   flex-grow: 1;
   text-align: center;
   font-weight: 500;
+}
+
+.elementoSelezionato {
+  box-shadow: inset 1px 1px 5px rgba(0, 0, 0, 0.25);
 }

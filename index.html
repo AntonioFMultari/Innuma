@@ -16,7 +16,7 @@
       rel="stylesheet"
     />
 
-    <script src="index.js"></script>
+    <script src="index.js" defer></script>
     <title>Innuma</title>
   </head>
   <body>
@@ -24,7 +24,10 @@
     <header>
       <!--Tendina HamburgerMenu-->
       <div class="tendinaHamburger">
-        <div class="divElementoHamburger">
+        <div
+          class="divElementoHamburger elementoSelezionato"
+          onclick="selezioneElementoHamburger(event)"
+        >
           <img
             src="./assets/calendario.png"
             alt="immagine bottone calendario"
@@ -32,7 +35,10 @@
           />
           <span class="spanElementoHamburger">Calendario</span>
         </div>
-        <div class="divElementoHamburger">
+        <div
+          class="divElementoHamburger"
+          onclick="selezioneElementoHamburger(event)"
+        >
           <img
             src="./assets/bilancio.png"
             alt="immagine bottone bilancio"
@@ -40,7 +46,10 @@
           />
           <span class="spanElementoHamburger">Bilancio</span>
         </div>
-        <div class="divElementoHamburger">
+        <div
+          class="divElementoHamburger"
+          onclick="selezioneElementoHamburger(event)"
+        >
           <img
             src="./assets/fattura.png"
             alt="immagine bottone bilancio"
@@ -62,6 +71,7 @@
         </div>
         <img
           src="./assets/menuHamburger.png"
+          onclick="tendinaHamburger()"
           alt="icona menu a tendina"
           class="hamburgerMenu"
         />
@@ -71,14 +81,14 @@
     <div class="divCalendarioFiltri">
       <!--Tendina filtro eventi-->
       <div class="divFiltri">
-        <div class="btnFiltro">
+        <div class="btnFiltro" onclick="aperturaFiltri()">
           <img
             src="./assets/filter.png"
             alt="pulsante Filtro Eventi"
             id="imgFiltroEvento"
           />
         </div>
-        <div class="containerFiltro">
+        <div class="containerFiltri">
           <div class="elementoFiltro">
             <div class="pallino"></div>
             <span class="spanFiltro">Scuola Fisica</span>
