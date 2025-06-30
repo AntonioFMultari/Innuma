@@ -91,7 +91,7 @@ function BalancePage() {
     //chart codice preso da Pietro Bosio
 
 
-    //filtri sotto il chart (coppiando come si scrive su HTML per i filtri sopra il calendario)
+    //filtri sotto il chart (copiando come si scrive su HTML per i filtri sopra il calendario)
     const contenutoFiltri = document.createElement('div');
     contenutoFiltri.classname = 'contFiltri';
     contenutoFiltri.innerHTML = '<div class="pallino"><span class="spanFiltro">Scuola Fisica</span></div>';
@@ -142,7 +142,7 @@ function BalancePage() {
         elencoTransazioni.appendChild(item);
     });
 
-    //penultimo funzione, aganciare destra con cartella (sinistra e destra finalmente fatto)
+    //penultima funzione, aganciare destra con cartella (sinistra e destra finalmente fatto)
     cartBilDestra.appendChild(elencoTransazioni);
     cartellaBilancio.appendChild(cartBilDestra);
 
