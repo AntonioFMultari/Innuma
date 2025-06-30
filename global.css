@@ -3,12 +3,22 @@
   margin: 0;
 }
 
+span {
+  cursor: default;
+}
+
+header {
+  position: relative;
+  background-color: #fff;
+  filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.25));
+}
+
 #header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 1rem;
-  box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.25);
+  z-index: 1000px;
 }
 
 .imgLogo {
@@ -17,6 +27,11 @@
 
 .hamburgerMenu {
   width: 2.5rem;
+  border-radius: 25%;
+}
+.hamburgerMenu:hover {
+  cursor: pointer;
+  background-color: whitesmoke;
 }
 
 .spanSaluto {
@@ -28,4 +43,38 @@
 .divLogo-saluto {
   display: flex;
   align-items: center;
+}
+
+.tendinaHamburger {
+  background-color: white;
+  position: absolute;
+  top: 72px;
+  right: 0;
+  padding: 1rem 2rem;
+  border-radius: 0 0 0 2rem;
+  min-width: 10rem;
+}
+
+.divElementoHamburger {
+  margin: 1.5rem 0;
+  display: flex;
+  gap: 1rem;
+  padding: 0.5rem 2rem;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 2rem;
+}
+.divElementoHamburger:hover {
+  cursor: pointer;
+  background-color: whitesmoke;
+}
+
+.icoElementiHamburger {
+  width: 2rem;
+}
+
+.spanElementoHamburger {
+  flex-grow: 1;
+  text-align: center;
+  font-weight: 500;
 }

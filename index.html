@@ -22,6 +22,35 @@
   <body>
     <!--Header con logo, Saluto e menu hamburger-->
     <header>
+      <!--Tendina HamburgerMenu-->
+      <div class="tendinaHamburger">
+        <div class="divElementoHamburger">
+          <img
+            src="./assets/calendario.png"
+            alt="immagine bottone calendario"
+            class="icoElementiHamburger"
+          />
+          <span class="spanElementoHamburger">Calendario</span>
+        </div>
+        <div class="divElementoHamburger">
+          <img
+            src="./assets/bilancio.png"
+            alt="immagine bottone bilancio"
+            class="icoElementiHamburger"
+          />
+          <span class="spanElementoHamburger">Bilancio</span>
+        </div>
+        <div class="divElementoHamburger">
+          <img
+            src="./assets/fattura.png"
+            alt="immagine bottone bilancio"
+            class="icoElementiHamburger"
+          />
+          <span class="spanElementoHamburger">Fatture</span>
+        </div>
+      </div>
+
+      <!--header-->
       <div id="header">
         <div class="divLogo-saluto">
           <img
@@ -69,7 +98,9 @@
       <!--Calendario-->
       <div class="divCalendario">
         <div class="containerSelezioneCalendario">
-          <span>&lt;&lt; 16/05 - 22/05 &gt;&gt;</span>
+          <button class="btnCalendar">&lt;&lt;</button>
+          <span>16/05 - 22/05</span>
+          <button class="btnCalendar">&gt;&gt;</button>
         </div>
         <div class="contenutoCalendario">
           <div class="righeCalendario" id="riga1"></div>
@@ -81,6 +112,7 @@
         </div>
       </div>
     </div>
+    <!--Bottone nuovo evento-->
     <div class="bottoneNuovoElemento">
       <button class="bottoneCreaElemento">+</button>
     </div>
