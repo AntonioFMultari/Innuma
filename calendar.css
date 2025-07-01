@@ -69,42 +69,6 @@
   background-color: #458fcb;
 }
 
-.divCalendario {
-  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.25);
-  width: 90%;
-  height: 30rem;
-  margin: 1.5rem;
-  border-radius: 2rem;
-
-  span {
-    cursor: default;
-  }
-}
-
-.containerSelezioneCalendario {
-  background-color: #a764bd;
-  border-radius: 2rem 2rem 0 0;
-  height: 5rem;
-  color: white;
-  font-size: 20pt;
-  font-weight: 300;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.righeCalendario {
-  width: 1px;
-  height: 25rem;
-  background-color: gainsboro;
-}
-
-.contenutoCalendario {
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-}
-
 .bottoneCreaElemento {
   width: 3rem;
   height: 3rem;
@@ -139,4 +103,14 @@
 .btnCalendar:hover {
   cursor: pointer;
   background-color: #854f97;
+}
+
+#calendar {
+  width: 80rem;
+}
+
+.wrapperCalendar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
