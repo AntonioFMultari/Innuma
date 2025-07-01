@@ -1,0 +1,7 @@
+.cartBil {
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.25);
+    width: 90%;
+    height: 30rem;
+    margin: 1.5rem;
+    border-radius: 2rem;
+}
