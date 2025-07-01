@@ -17,6 +17,7 @@
     />
 
     <script src="index.js" defer></script>
+    <script src="./libs/fullcalendar-6.1.18/dist/index.global.js"></script>
     <title>Innuma</title>
   </head>
   <body>
@@ -115,20 +116,8 @@
       </div>
 
       <!--Calendario-->
-      <div class="divCalendario">
-        <div class="containerSelezioneCalendario">
-          <button class="btnCalendar">&lt;&lt;</button>
-          <span>16/05 - 22/05</span>
-          <button class="btnCalendar">&gt;&gt;</button>
-        </div>
-        <div class="contenutoCalendario">
-          <div class="righeCalendario" id="riga1"></div>
-          <div class="righeCalendario" id="riga2"></div>
-          <div class="righeCalendario" id="riga3"></div>
-          <div class="righeCalendario" id="riga4"></div>
-          <div class="righeCalendario" id="riga5"></div>
-          <div class="righeCalendario" id="riga6"></div>
-        </div>
+      <div class="wrapperCalendar">
+        <div id="calendar"></div>
       </div>
     </div>
     <!--Bottone nuovo evento-->

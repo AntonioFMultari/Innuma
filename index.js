@@ -183,3 +183,15 @@ if (window.location.pathname === "./Innuma/index.html") {
   nPagina = 2;
   selezioneElementoHamburger();
 }
+
+//Inizializzazione del calendario
+document.addEventListener("DOMContentLoaded", function () {
+  var calendarEl = document.getElementById("calendar");
+  var calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: "dayGridMonth",
+    height: "450px",
+    locale: "it",
+  });
+
+  calendar.render();
+});
