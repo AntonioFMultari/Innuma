@@ -1,120 +1,104 @@
 <!DOCTYPE html>
 <html lang="it">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/x-icon" href="./assets/logo.ico" />
-    <link rel="stylesheet" href="global.css" />
-    <link rel="stylesheet" href="calendar.css" />
-    <link rel="stylesheet" href="invoice.css" />
-    <link rel="stylesheet" href="balance.css" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&display=swap"
-      rel="stylesheet"
-    />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="./assets/logo.ico" />
+  <link rel="stylesheet" href="global.css" />
+  <link rel="stylesheet" href="calendar.css" />
+  <link rel="stylesheet" href="invoice.css" />
+  <link rel="stylesheet" href="balance.css" />
 
-    <script src="index.js" defer></script>
-    <title>Innuma</title>
-  </head>
-  <body>
-    <!--Header con logo, Saluto e menu hamburger-->
-    <header>
-      <!--Tendina HamburgerMenu-->
-      <div class="tendinaHamburger">
-        <a href="./index.html">
-        <div
-          class="divElementoHamburger elementoSelezionato"
-          data-page="calendario"
-          onclick="selezioneElementoHamburger(event)"
-        >
-          <img
-            src="./assets/calendario.png"
-            alt="immagine bottone calendario"
-            class="icoElementiHamburger"
-          />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&display=swap" rel="stylesheet" />
+
+  <script src="index.js" defer></script>
+  <title>Innuma</title>
+</head>
+
+<body>
+  <!--Header con logo, Saluto e menu hamburger-->
+  <header>
+    <!--Tendina HamburgerMenu-->
+    <div class="tendinaHamburger">
+      <a href="./index.html">
+        <div class="divElementoHamburger elementoSelezionato" data-page="calendario"
+          onclick="selezioneElementoHamburger(event)">
+          <img src="./assets/calendario.png" alt="immagine bottone calendario" class="icoElementiHamburger" />
           <span class="spanElementoHamburger">Calendario</span>
         </div>
-        </a>
-        <a href="./bilancio.html">
-          <div
-            class="divElementoHamburger"
-            data-page="bilancio"
-            onclick="selezioneElementoHamburger(event)"
-          >
-            <img
-              src="./assets/bilancio.png"
-              alt="immagine bottone bilancio"
-              class="icoElementiHamburger"
-            />
-            <span class="spanElementoHamburger">Bilancio</span>
-          </div>
-        </a>
-        <a href="./fatture.html">
-          <div
-            class="divElementoHamburger"
-            data-page="fatture"
-            onclick="selezioneElementoHamburger(event)"
-          >
-            <img
-              src="./assets/fattura.png"
-              alt="immagine bottone bilancio"
-              class="icoElementiHamburger"
-            />
-            <span class="spanElementoHamburger">Fatture</span>
-          </div>
-        </a>
-      </div>
-
-      <!--header-->
-      <div id="header">
-        <div class="divLogo-saluto">
-          <img
-            src="./assets/logo.png"
-            alt="Logo del sito web"
-            class="imgLogo"
-          />
-          <span class="spanSaluto">Buongiorno ☀️</span>
+      </a>
+      <a href="./bilancio.html">
+        <div class="divElementoHamburger" data-page="bilancio" onclick="selezioneElementoHamburger(event)">
+          <img src="./assets/bilancio.png" alt="immagine bottone bilancio" class="icoElementiHamburger" />
+          <span class="spanElementoHamburger">Bilancio</span>
         </div>
-        <img
-          src="./assets/menuHamburger.png"
-          onclick="tendinaHamburger()"
-          alt="icona menu a tendina"
-          class="hamburgerMenu"
-        />
-      </div>
-    </header>
+      </a>
+      <a href="./fatture.html">
+        <div class="divElementoHamburger" data-page="fatture" onclick="selezioneElementoHamburger(event)">
+          <img src="./assets/fattura.png" alt="immagine bottone bilancio" class="icoElementiHamburger" />
+          <span class="spanElementoHamburger">Fatture</span>
+        </div>
+      </a>
+    </div>
 
-    <div class="divCalendarioFiltri">
-      
+    <!--header-->
+    <div id="header">
+      <div class="divLogo-saluto">
+        <img src="./assets/logo.png" alt="Logo del sito web" class="imgLogo" />
+        <span class="spanSaluto">Buongiorno ☀️</span>
+      </div>
+      <img src="./assets/menuHamburger.png" onclick="tendinaHamburger()" alt="icona menu a tendina"
+        class="hamburgerMenu" />
+    </div>
+  </header>
+
+  <div class="divCalendarioFiltri">
+
     <!--Bottone nuovo evento-->
     <div class="bottoneNuovoElemento">
       <button class="bottoneCreaElemento">+</button>
     </div>
 
     <div class="cartBil">
-        <div class="grafaBil">
-            Il codice qua
-        </div>
+      <div class="grafaBil">
+        Il codice qua
+      </div>
 
+      <div class="cartSinistra">
         <div class="divBilancioFiltri">
-
+          <div class="elementoFiltro">
+            <div class="pallino"></div>
+            <span class="spanFiltro">Scuola Fisica</span>
+          </div>
+          <div class="elementoFiltro">
+            <div class="pallino"></div>
+            <span class="spanFiltro">Scuola Online</span>
+          </div>
+          <div class="elementoFiltro">
+            <div class="pallino"></div>
+            <span class="spanFiltro">Ripetizioni</span>
+          </div>
         </div>
+      </div>
 
+      <div class="cartDestra">
         <button class="entrateUscita">
-            Entrata/Uscita
+          Entrata/Uscita
         </button>
 
         <h1 class="titoloBil">
-
+          Transazioni
         </h1>
 
         <div class="listaBil">
 
         </div>
+      </div>
     </div>
 
-  </body>
+</body>
+
 </html>

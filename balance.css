@@ -1,7 +1,20 @@
 .cartBil {
+    display: flex;
     box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.25);
     width: 90%;
-    height: 30rem;
+    height: 35rem;
     margin: 1.5rem;
     border-radius: 2rem;
 }
+
+.divBilancioFiltri {
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 1rem;
+    width: 27rem;
+    height: 1.5rem;
+    border-radius: 2.5rem;
+}
+
