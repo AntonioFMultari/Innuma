@@ -26,6 +26,7 @@
       <div class="tendinaHamburger">
         <div
           class="divElementoHamburger elementoSelezionato"
+          data-page="calendario"
           onclick="selezioneElementoHamburger(event)"
         >
           <img
@@ -36,20 +37,22 @@
           <span class="spanElementoHamburger">Calendario</span>
         </div>
         <a href="./bilancio.html">
-        <div
-          class="divElementoHamburger"
-          onclick="selezioneElementoHamburger(event)"
-        >
-          <img
-            src="./assets/bilancio.png"
-            alt="immagine bottone bilancio"
-            class="icoElementiHamburger"
-          />
-          <span class="spanElementoHamburger">Bilancio</span>
-        </div>
+          <div
+            class="divElementoHamburger"
+            data-page="bilancio"
+            onclick="selezioneElementoHamburger(event)"
+          >
+            <img
+              src="./assets/bilancio.png"
+              alt="immagine bottone bilancio"
+              class="icoElementiHamburger"
+            />
+            <span class="spanElementoHamburger">Bilancio</span>
+          </div>
         </a>
         <div
           class="divElementoHamburger"
+          data-page="fatture"
           onclick="selezioneElementoHamburger(event)"
         >
           <img
