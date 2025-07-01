@@ -77,3 +77,21 @@
     background-color: black;
     width: 30rem;
 }
+
+#grafico {
+    height: 20rem;
+    width: 20rem;
+    padding-left: 2rem;
+    padding-top: 2rem;
+    position: relative;
+    left: 4rem;
+    top: 2rem;
+}
+
+#grafico::after {
+    content: '';
+    position: absolute;
+    inset: 3rem;
+    border-radius: 100vw;
+    background: white;
+}
