@@ -129,7 +129,7 @@ DROP TABLE IF EXISTS `evento`;
 CREATE TABLE `evento` (
   `evento_Id` int NOT NULL AUTO_INCREMENT,
   `tipologia` char(20) DEFAULT NULL,
-  `evento_data` date DEFAULT NULL,
+  `evento_data` datetime DEFAULT NULL,
   `cliente_Id` int DEFAULT NULL,
   PRIMARY KEY (`evento_Id`),
   KEY `fk_cliente_ID` (`cliente_Id`),
@@ -185,4 +185,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-07-01 18:07:58
+-- Dump completed on 2025-07-01 18:29:43
