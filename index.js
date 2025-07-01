@@ -189,9 +189,61 @@ document.addEventListener("DOMContentLoaded", function () {
   var calendarEl = document.getElementById("calendar");
   var calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: "dayGridMonth",
-    height: "450px",
+    aspectRatio: 2,
+    expandRows: true,
     locale: "it",
-  });
+    headerToolbar: {
+      left: "prev today next",
+      center: "title",
+      right: "dayGridMonth timeGridWeek timeGridDay listWeek",
+    },
+    buttonIcons: {
+      prev: "chevrons-left",
+      next: "chevrons-right",
+    },
+    allDaySlot: false,
+    slotDuration: "01:00:00",
+    slotLabelFormat: {
+      hour: "2-digit",
+      minute: "2-digit",
+      omitZeroMinute: true,
+      meridiem: "short",
+    },
+    navLinks: true,
+    editable: true,
+    nowIndicator: true,
+    slotMinTime: "08:00",
+    slotMaxTime: "22:00",
 
+
+    events: [
+      {
+        title: "Lezione di Matematica",
+        start: "2025-07-02T10:00:00",
+        end: "2025-07-02T12:00:00",
+        color: "#56b1fb"
+      },
+      {
+        title: "Ripetizione Inglese",
+        start: "2025-07-03T15:00:00",
+        end: "2025-07-03T16:30:00",
+        color: "#a9f5c1"
+      },
+      {
+        title: "Corso Online",
+        start: "2025-07-04T14:00:00",
+        end: "2025-07-04T16:00:00",
+        color: "#A764BD"
+      },
+      {
+        title: "Colloquio",
+        start: "2025-07-05T09:00:00",
+        end: "2025-07-05T09:30:00",
+        color: "#f3e6f8"
+      }
+    ]
+
+
+  });
   calendar.render();
 });

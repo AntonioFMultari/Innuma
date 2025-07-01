@@ -89,22 +89,6 @@
   cursor: pointer;
 }
 
-.btnCalendar {
-  color: white;
-  border-style: none;
-  background-color: #a764bd;
-  margin: 0 1rem;
-  border-radius: 1.5rem;
-  width: 3rem;
-  height: 3rem;
-  font-weight: 700;
-}
-
-.btnCalendar:hover {
-  cursor: pointer;
-  background-color: #854f97;
-}
-
 #calendar {
   width: 80rem;
 }
@@ -113,4 +97,54 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Cambia il colore di sfondo delle celle del calendario */
+.fc-daygrid-day, .fc-timegrid-slot {
+  background-color: white;
+}
+/* Cambia colore header (barra superiore) */
+.fc .fc-toolbar.fc-header-toolbar {
+  background: #f3e6f8;
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Cambia colore titolo header */
+.fc .fc-toolbar-title {
+  color: #A764BD !important;
+  font-weight: bold;
+}
+
+/* Cambia colore dei bottoni */
+.fc .fc-button, .fc .fc-button-primary {
+  background: #A764BD !important;
+  color: #fff !important;
+  border-radius: 20px !important;
+  border: none !important;
+  box-shadow: none !important;
+  transition: background 0.2s;
+}
+
+/* Colore bottoni attivi e hover */
+.fc .fc-button-primary:not(:disabled):active,
+.fc .fc-button-primary:not(:disabled):focus,
+.fc .fc-button-primary:not(:disabled):hover {
+  background: #854f97 !important;
+  color: #fff !important;
+}
+
+/* Cambia colore del giorno corrente */
+.fc .fc-day-today {
+  background: #f3e6f8 !important;
+  color: #fff !important;
+  border-radius: 10px;
+}
+
+/* Arrotonda gli angoli di tutto il calendario */
+#calendar, #calendar .fc {
+  border-radius: 32px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.10);
 }
