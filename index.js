@@ -214,74 +214,126 @@ document.addEventListener("DOMContentLoaded", function () {
     nowIndicator: true,
     slotMinTime: "08:00",
     slotMaxTime: "22:00",
+    buttonText: {
+      today: "Oggi",
+      month: "Mese",
+      week: "Settimana",
+      day: "Giorno",
+      list: "Lista",
+    },
+    eventClick: function (info) {
+      // Rimuovi eventuali box già presenti
+      const oldBox = document.getElementById("popup-evento");
+      if (oldBox) oldBox.remove();
 
+      // Crea il box
+      const box = document.createElement("div");
+      box.id = "popup-evento";
+      box.style.position = "absolute";
+      box.style.zIndex = 9999;
+      box.style.background = "#fff";
+      box.style.border = "1px solid #ccc";
+      box.style.borderRadius = "10px";
+      box.style.padding = "1rem";
+      box.style.boxShadow = "0 2px 10px rgba(0,0,0,0.2)";
+      box.style.minWidth = "200px";
+      box.innerHTML = `
+    <strong>${info.event.title}</strong><br>
+    <span><b>Inizio:</b> ${info.event.start.toLocaleString()}</span><br>
+    ${
+      info.event.end
+        ? `<span><b>Fine:</b> ${info.event.end.toLocaleString()}</span><br>`
+        : ""
+    }
+    ${
+      info.event.extendedProps && info.event.extendedProps.descrizione
+        ? `<span><b>Descrizione:</b> ${info.event.extendedProps.descrizione}</span>`
+        : ""
+    }
+    <div style="text-align:right;margin-top:10px;">
+      <button id="chiudi-popup-evento" style="padding:2px 10px;">Chiudi</button>
+    </div>
+  `;
+
+      // Posiziona il box vicino al click
+      box.style.left = info.jsEvent.pageX + 10 + "px";
+      box.style.top = info.jsEvent.pageY + 10 + "px";
+
+      document.body.appendChild(box);
+
+      // Chiudi il box al click su "Chiudi"
+      document.getElementById("chiudi-popup-evento").onclick = () =>
+        box.remove();
+
+      // Previeni navigazione
+      info.jsEvent.preventDefault();
+    },
 
     events: [
       {
         title: "Lezione di Matematica",
         start: "2025-07-02T10:00:00",
         end: "2025-07-02T12:00:00",
-        color: "#56b1fb"
+        color: "#56b1fb",
       },
       {
         title: "Ripetizione Inglese",
         start: "2025-07-03T15:00:00",
         end: "2025-07-03T16:30:00",
-        color: "#a9f5c1"
+        color: "#a9f5c1",
       },
       {
         title: "Corso Online",
         start: "2025-07-04T14:00:00",
         end: "2025-07-04T16:00:00",
-        color: "#A764BD"
+        color: "#A764BD",
       },
       {
         title: "Colloquio",
         start: "2025-07-05T09:00:00",
         end: "2025-07-05T09:30:00",
-        color: "#f3e6f8"
-      }
-    ]
-
-
+        color: "#f3e6f8",
+      },
+    ],
   });
   calendar.render();
 });
 
-
 // Funzione per creare un grafico a torta con gradienti
 let vettoreDati = [20, 30, 50];
-    let vettoreColori = ['red', 'green', 'blue'];
-    const grafico = document.getElementById('grafico');
-    const CreaGrafico = (grafico, vettoreDati, vettoreColori) =>{
-        const somma = vettoreDati.reduce((acc, val) => acc + val, 0);
+let vettoreColori = ["red", "green", "blue"];
+const grafico = document.getElementById("grafico");
+const CreaGrafico = (grafico, vettoreDati, vettoreColori) => {
+  const somma = vettoreDati.reduce((acc, val) => acc + val, 0);
 
-        if(somma < 99 || somma > 101) {
-            console.error("La somma dei dati deve essere 100");
-            return;
-        }
+  if (somma < 99 || somma > 101) {
+    console.error("La somma dei dati deve essere 100");
+    return;
+  }
 
-        if(vettoreDati.length !== vettoreColori.length) {
-            console.warn("Il numero di dati e colori è diverso");
-        }
+  if (vettoreDati.length !== vettoreColori.length) {
+    console.warn("Il numero di dati e colori è diverso");
+  }
 
-        const angoli = vettoreDati.map(val => (val / 100) * 360);
+  const angoli = vettoreDati.map((val) => (val / 100) * 360);
 
-        const OFFSET_GRAFICO = 0;
-        let angoloIniziale = 0 + OFFSET_GRAFICO;
+  const OFFSET_GRAFICO = 0;
+  let angoloIniziale = 0 + OFFSET_GRAFICO;
 
-        const fasiGradient = angoli.map((angle, i) => {
-            const angoloFinale = angoloIniziale + angle;
-            const inizioPercent = (angoloIniziale / 360) * 100;
-            const finePercent = (angoloFinale / 360) * 100;
-            angoloIniziale = angoloFinale;
+  const fasiGradient = angoli.map((angle, i) => {
+    const angoloFinale = angoloIniziale + angle;
+    const inizioPercent = (angoloIniziale / 360) * 100;
+    const finePercent = (angoloFinale / 360) * 100;
+    angoloIniziale = angoloFinale;
 
-            return `${vettoreColori[i % vettoreColori.length]} ${inizioPercent}% ${finePercent}%`;
-        });
+    return `${
+      vettoreColori[i % vettoreColori.length]
+    } ${inizioPercent}% ${finePercent}%`;
+  });
 
-        const gradient = `conic-gradient(${fasiGradient.join(', ')})`;
+  const gradient = `conic-gradient(${fasiGradient.join(", ")})`;
 
-        grafico.style.background = gradient;
-        grafico.style.borderRadius = '50%';
-    }
-    CreaGrafico(grafico, vettoreDati, vettoreColori);
+  grafico.style.background = gradient;
+  grafico.style.borderRadius = "50%";
+};
+CreaGrafico(grafico, vettoreDati, vettoreColori);

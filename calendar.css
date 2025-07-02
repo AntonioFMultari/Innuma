@@ -16,7 +16,6 @@
   align-items: center;
   justify-content: space-around;
   padding: 1rem;
-  width: 27rem;
   height: 1.5rem;
   border-radius: 2.5rem;
 }
@@ -70,6 +69,8 @@
 }
 
 .bottoneCreaElemento {
+  position: relative;
+  z-index: 10;
   width: 3rem;
   height: 3rem;
   border-radius: 1.75rem;
@@ -100,26 +101,28 @@
 }
 
 /* Cambia il colore di sfondo delle celle del calendario */
-.fc-daygrid-day, .fc-timegrid-slot {
+.fc-daygrid-day,
+.fc-timegrid-slot {
   background-color: white;
 }
 /* Cambia colore header (barra superiore) */
 .fc .fc-toolbar.fc-header-toolbar {
   background: #f3e6f8;
-  border-radius: 20px;
-  padding: 0.5rem 1rem;
-  margin-bottom: 1rem;
+  border-radius: 20px 20px 0 0;
+  padding: 1.5rem 1.5rem;
+  margin: 0;
 }
 
 /* Cambia colore titolo header */
 .fc .fc-toolbar-title {
-  color: #A764BD !important;
+  color: #a764bd !important;
   font-weight: bold;
 }
 
 /* Cambia colore dei bottoni */
-.fc .fc-button, .fc .fc-button-primary {
-  background: #A764BD !important;
+.fc .fc-button,
+.fc .fc-button-primary {
+  background: #a764bd !important;
   color: #fff !important;
   border-radius: 20px !important;
   border: none !important;
@@ -143,8 +146,9 @@
 }
 
 /* Arrotonda gli angoli di tutto il calendario */
-#calendar, #calendar .fc {
+#calendar,
+#calendar .fc {
   border-radius: 32px;
   overflow: hidden;
-  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.10);
+  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.1);
 }
