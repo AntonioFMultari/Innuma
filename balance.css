@@ -2,25 +2,28 @@
     gap: 25px;
     display: flex;
     box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.25);
+    max-width: 1400px;
     width: 90%;
-    height: 35rem;
-    margin: 1.5rem;
+    min-height: 35rem;
+    margin: 1.5rem auto;
     border-radius: 2rem;
+    padding: 1.5rem;
 }
 
 .cartSinitra {
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 1.2rem;
+    max-width: 0; /*per shrink-are i ogetti*/ 
 }
 
 .grafaBil {
     /* Placeholder per l'eventuale grafa inserito */ 
     flex-grow: 1;
-    border-radius: 1rem;
-    font-size: 1.2rem;
-    padding: 1rem;
-    display: grid;
+    justify-content: center;
+    align-items: center;
+    display: flex; //*prima era grid(?)*/
 }
 
 .grafaEs {
@@ -36,11 +39,20 @@
     align-items: center;
     justify-content: space-around;
     padding: 1rem;
-    width: 27rem;
-    height: 1.2rem;
+    width: 100%;
+    max-width: 27rem;
+    height: auto;
+    min-height: 1.2rem;
     border-radius: 2.5rem;
-    margin-top: 2rem;
-    margin-left: 2rem;
+    margin: 24px;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.elementoFiltro {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .entrateUscita {
@@ -51,41 +63,131 @@
     border-radius: 1.5rem;
     font-size: 1.1rem;
     cursor: pointer;
-    margin-top: 2rem;
-    margin-left: 10.5rem;
-    width: 12rem;
+    margin-top: 1rem;
+    margin-left: 130px;
+    width: 80%;
+    max-width: 15rem;
 }
 
 .cartDestra {
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 1.2rem;
 }
 
 .titoloBil {
-    margin-top: 2rem;
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #2c3e50;
 }
 
 .listaBil {
     /* Stesso placeholder come grafa 
     è nero solo per vedere la dimensione, fammi sapere se la dimensione va bene*/
     flex-wrap: 1; 
+    flex-direction: column;
     overflow-y: auto;
-    border-radius: 1rem;
-    padding: 0.8rem;
-    height: 26rem;
-    background-color: black;
-    width: 30rem;
+    border-radius: 1.5rem;
+    padding: 1rem;
+    width: 95%;
+    min-height: 26rem;
+    border: 2px solid #3498db;
+    gap: 0.8rem;
+    display: flex;
+}
+
+.transazioneOgetto { /* contenitore per ogni transazione in righe*/
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 1rem;
+}
+
+.transazioneNome {
+    font-weight: 500;
+    text-align: left;
+}
+
+.transazioneUscita {
+    font-weight: bold;
+    white-space: nowrap; /* evita line-breaking */
+}
+
+.transazioneEntrata {
+    color: #2c3e50;
+}
+
+.transazioneUscita {
+    color: #e74c3c;
+}
+
+.transazioneStato {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    text-align: roght;
+    white-space: nowrap;
+}
+
+/* da migliorare lo farò */
+.transazionePallino1 {
+    background-color: #3498db;
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: 50%;
+}
+
+.transazionePallino2 {
+    background-color: #e74c3c;
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: 50%;
+}
+
+.transazionePallino3 {
+    background-color: #3498db;
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: 50%;
+}
+
+.transazionePallino4 {
+    background-color: #3498db;
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: 50%;
+}
+
+.transazionePallino5 {
+    background-color: #e74c3c;
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: 50%;
+}
+
+.transazionePallino6 {
+    background-color: #3498db;
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: 50%;
+}
+
+.transazionePallino7 {
+    background-color: #2ecc71;
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: 50%;
 }
 
 #grafico {
     height: 20rem;
-    width: 20rem;
-    padding-left: 2rem;
-    padding-top: 2rem;
+    max-width: 22rem;
+    aspect-ratio: 1 / 1;
     position: relative;
-    left: 4rem;
-    top: 2rem;
 }
 
 #grafico::after {
@@ -94,4 +196,62 @@
     inset: 3rem;
     border-radius: 100vw;
     background: white;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* spertimento - mobile schermi*/
+
+@media screen and (max-width: 992px) { /* Tablet in giù */
+    .cartBil {
+        flex-direction: column;
+        height: auto;
+        width: 95%;
+        align-items: center;
+        padding: 1.5rem 1rem;
+    }
+
+    .cartSinitra {
+        width: 100%;
+        max-width: 550px; /* per leggibilità */ 
+    }
+
+    .cartDestra {
+        width: 100%;
+        max-width: 550px;
+        margin-top: 2rem;
+    }
+
+    .titoloBil {
+        margin-top: 0; /* interesante, fa reset per stacked view */
+    }
+
+    #grafico {
+        max-width: 18rem; /* shirnk-a la grafa un pochino */
+    }
+}
+
+/* adesso telefoni */
+@media screen and (max-width: 480px) {
+    html {
+        font-size: 13px; /* aggiustare per più leggibilità sullo schermo */ 
+    }
+
+    .cartBil {
+        width: 100%;
+        border-radius: 0; /* carta completo su mobile forse(?) fammi sapere */
+        box-shadow: none;
+        margin-top: 0.5rem;
+    }
+
+    .divBilancioFiltri {
+        flex-direction: column; /* stack verticale per accessibilità */
+        height: auto;
+        gap: 1rem;
+        padding: 1.5rem 1rem;
+        align-items: flex-start; /* mette ogetti a sinistra */
+    }
+
+    .spanSaluto {
+        display: none; /* salva spazio forse? */ 
+    }
 }
