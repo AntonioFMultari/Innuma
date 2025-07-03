@@ -333,7 +333,47 @@ const CreaGrafico = (grafico, vettoreDati, vettoreColori) => {
 
   const gradient = `conic-gradient(${fasiGradient.join(", ")})`;
 
+  if (!grafico) return;
+
   grafico.style.background = gradient;
   grafico.style.borderRadius = "50%";
 };
 CreaGrafico(grafico, vettoreDati, vettoreColori);
+
+document.addEventListener("DOMContentLoaded", function () {
+  const btnMore = document.querySelector(".btnMoreFiltri");
+  const modal = document.getElementById("modal-filtri");
+  const chiudi = document.getElementById("chiudi-modal-filtri");
+  const salva = document.getElementById("salva-filtro");
+  const nomeInput = document.getElementById("nome-filtro");
+  const coloreInput = document.getElementById("colore-filtro");
+  const containerFiltri = document.querySelector(".containerFiltri");
+
+  if (btnMore && modal) {
+    btnMore.onclick = () => {
+      nomeInput.value = "";
+      coloreInput.value = "#a9f5c1";
+      modal.showModal();
+    };
+  }
+  if (chiudi && modal) {
+    chiudi.onclick = () => {
+      modal.close();
+    };
+  }
+  if (salva && containerFiltri) {
+    salva.onclick = (e) => {
+      e.preventDefault();
+      const nome = nomeInput.value.trim();
+      const colore = coloreInput.value;
+      if (!nome) return alert("Inserisci un nome filtro!");
+      // Crea nuovo filtro
+      const filtro = document.createElement("div");
+      filtro.className = "elementoFiltro";
+      filtro.innerHTML = `<div class="pallino" style="background:${colore};"></div>
+        <span class="spanFiltro">${nome}</span>`;
+      containerFiltri.prepend(filtro);
+      modal.close();
+    };
+  }
+});

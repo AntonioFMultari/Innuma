@@ -7,7 +7,6 @@
 
 .spanFiltro {
   font-size: 12pt;
-  margin: 0 0.5rem;
 }
 
 .containerFiltri {
@@ -44,6 +43,11 @@
 .divFiltri {
   display: flex;
   margin: 1.5rem;
+
+  span {
+    cursor: default;
+    margin-right: 2rem;
+  }
 }
 
 #imgFiltroEvento {
@@ -131,12 +135,12 @@
 }
 
 /* Colore bottoni attivi e hover */
-.fc .fc-button-primary:not(:disabled):active,
+/*.fc .fc-button-primary:not(:disabled):active,
 .fc .fc-button-primary:not(:disabled):focus,
 .fc .fc-button-primary:not(:disabled):hover {
   background: #854f97 !important;
   color: #fff !important;
-}
+}*/
 
 /* Cambia colore del giorno corrente */
 .fc .fc-day-today {
@@ -151,4 +155,100 @@
   border-radius: 32px;
   overflow: hidden;
   box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.1);
+}
+
+#secondButtonEvento {
+  display: none;
+}
+
+#modal-filtri {
+  border: none;
+  border-radius: 1.5rem;
+  padding: 2rem;
+  min-width: 260px;
+  max-width: 90vw;
+  margin: auto;
+
+  &::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+}
+
+#formDialog {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+#h2Dialog {
+  margin-top: 0;
+}
+
+#nome-filtro {
+  width: 100%;
+}
+
+#colore-filtro {
+  width: 3rem;
+  height: 2rem;
+  border: none;
+}
+
+#menuDialog {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+#salva-filtro {
+  margin-right: 1rem;
+}
+
+/*RESPONSIVE RULES*/
+@media screen and (width < 480px) {
+  #calendar {
+    height: 750px;
+    max-width: 95%;
+  }
+
+  .btnFiltro {
+    display: none;
+  }
+
+  .containerFiltri {
+    display: flex !important;
+  }
+
+  .btnMoreFiltri {
+    aspect-ratio: 1;
+  }
+
+  .pallino {
+    aspect-ratio: 1;
+  }
+
+  .spanFiltro {
+    font-size: 1rem;
+  }
+
+  .bottoneCreaElemento {
+    top: 0.75rem;
+    right: 5rem;
+    position: absolute;
+    font-size: 1rem;
+    font-weight: 500;
+    width: 10rem;
+  }
+  .fc .fc-button,
+  .fc .fc-button-primary {
+    font-size: 0.5rem;
+  }
+
+  #plusButtonEvento {
+    display: none;
+  }
+  #secondButtonEvento {
+    display: flex;
+  }
 }

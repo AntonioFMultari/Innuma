@@ -16,7 +16,7 @@
       rel="stylesheet"
     />
 
-    <script src="index.js" defer></script>
+    <script src="index.js"></script>
     <script src="./libs/fullcalendar-6.1.18/dist/index.global.js"></script>
     <title>Innuma</title>
   </head>
@@ -120,9 +120,39 @@
         <div id="calendar"></div>
       </div>
     </div>
+
     <!--Bottone nuovo evento-->
     <div class="bottoneNuovoElemento">
-      <button class="bottoneCreaElemento">+</button>
+      <button id="plusButtonEvento" class="bottoneCreaElemento">+</button>
+      <button id="secondButtonEvento" class="bottoneCreaElemento">
+        Nuovo Elemento
+      </button>
     </div>
+
+    <!--Modale aggiunta/modifica filtri calendario-->
+    <dialog id="modal-filtri">
+      <form method="dialog" id="formDialog">
+        <h2 id="h2Dialog">Aggiungi/Modifica Filtro</h2>
+        <label>
+          Nome filtro:
+          <input id="nome-filtro" name="nome-filtro" type="text" required />
+        </label>
+        <label>
+          Colore pallino:
+          <input
+            id="colore-filtro"
+            name="colore-filtro"
+            type="color"
+            value="#a9f5c1"
+          />
+        </label>
+        <menu id="menuDialog">
+          <button id="salva-filtro" value="default">Salva</button>
+          <button id="chiudi-modal-filtri" value="cancel" type="button">
+            Annulla
+          </button>
+        </menu>
+      </form>
+    </dialog>
   </body>
 </html>
