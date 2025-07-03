@@ -16,6 +16,7 @@
     flex-direction: column;
     gap: 1.2rem;
     max-width: 0; /*per shrink-are i ogetti*/ 
+    justify-content: center;;
 }
 
 .grafaBil {
@@ -24,6 +25,9 @@
     justify-content: center;
     align-items: center;
     display: flex; //*prima era grid(?)*/
+    max-width: 250px;
+    aspect-ratio: 1 / 1;
+    margin: o auto;
 }
 
 .grafaEs {
