@@ -1,0 +1,27 @@
+.ContainerFatture{
+    margin-top: 5rem;
+  display: flex; /* Trasforma il contenitore in un flex container */
+  gap: 20px; /* Imposta la distanza tra gli elementi flessibili (i tuoi div) */
+  justify-content: center;
+  align-items: center;
+
+}
+
+.anteprimafatture {
+    height: 40rem; /* Imposta l'altezza desiderata */
+    width: 30rem; 
+    background-color: white;
+    box-shadow: 0 0 1rem #888888;
+    overflow-y: auto; /* Aggiunge lo scroll verticale se il contenuto è troppo grande */
+    border-radius: 2rem; /* Aggiunge un bordo arrotondato per un aspetto migliore */
+}
+
+
+
+.SpecificaFattura {
+  height: 40rem; /* Imposta l'altezza desiderata */
+    width: 40rem; 
+    background-color: white;
+    box-shadow: 0 0 1rem #888888;
+    border-radius: 2rem;;
+}
