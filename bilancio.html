@@ -48,7 +48,14 @@
     <!--header-->
     <div id="header">
       <div class="divLogo-saluto">
-        <img src="./assets/logo.png" alt="Logo del sito web" class="imgLogo" />
+        <a href="./index.html">
+            <img
+              src="./assets/logo.png"
+              alt="Logo del sito web"
+              class="imgLogo"
+              onclick="tornaAllaHome()"
+            />
+          </a>
         <span class="spanSaluto">Buongiorno ☀️</span>
       </div>
       <img src="./assets/menuHamburger.png" onclick="tendinaHamburger()" alt="icona menu a tendina"
@@ -61,6 +68,9 @@
     <!--Bottone nuovo evento-->
     <div class="bottoneNuovoElemento">
       <button class="bottoneCreaElemento">+</button>
+      <button id="secondButtonEvento" class="bottoneCreaElemento">
+        Nuovo Elemento
+      </button>
     </div>
 
     <!--Cartella Bilancio con due viversi lati che si uniscono dentro-->
@@ -68,8 +78,6 @@
 
       <div class="cartSinistra">
         <div class="grafaBil">
-          <!--è solo un imagine, messo per avere l'idea di come sarebbe il resto-->
-          <!-- <img src="./assets/bilanciografico 1.png" alt="grafa" class="grafaEs"> -->
            <div id="grafico"></div>
         </div>
         <div class="divBilancioFiltri">

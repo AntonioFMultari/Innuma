@@ -3,6 +3,7 @@
   width: 1rem;
   height: 1rem;
   border-radius: 0.5rem;
+  aspect-ratio: 1;
 }
 
 .spanFiltro {
@@ -57,6 +58,7 @@
 .btnMoreFiltri {
   width: 2.5rem;
   height: 2.5rem;
+  aspect-ratio: 1;
   border-radius: 1.75rem;
   background-color: #56b1fb;
   color: white;
@@ -149,12 +151,19 @@
   border-radius: 10px;
 }
 
-/* Arrotonda gli angoli di tutto il calendario */
+/* Modifica l'intero calendario tutto il calendario */
 #calendar,
 #calendar .fc {
   border-radius: 32px;
   overflow: hidden;
   box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.1);
+  max-width: 95%;
+  min-height: 35rem;
+}
+
+#calendar .fc .fc-toolbar-chunk {
+  display: flex;
+  flex-direction: row;
 }
 
 #secondButtonEvento {
@@ -208,7 +217,7 @@
 /*RESPONSIVE RULES*/
 @media screen and (width < 480px) {
   #calendar {
-    height: 750px;
+    min-height: 40rem;
     max-width: 95%;
   }
 

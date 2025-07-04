@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="calendar.css" />
     <link rel="stylesheet" href="invoice.css" />
     <link rel="stylesheet" href="balance.css" />
-    <link rel="stylesheet" href="fatture.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -27,18 +26,18 @@
       <!--Tendina HamburgerMenu-->
       <div class="tendinaHamburger">
         <a href="./index.html">
-        <div
-          class="divElementoHamburger elementoSelezionato"
-          data-page="calendario"
-          onclick="selezioneElementoHamburger(event)"
-        >
-          <img
-            src="./assets/calendario.png"
-            alt="immagine bottone calendario"
-            class="icoElementiHamburger"
-          />
-          <span class="spanElementoHamburger">Calendario</span>
-        </div>
+          <div
+            class="divElementoHamburger elementoSelezionato"
+            data-page="calendario"
+            onclick="selezioneElementoHamburger(event)"
+          >
+            <img
+              src="./assets/calendario.png"
+              alt="immagine bottone calendario"
+              class="icoElementiHamburger"
+            />
+            <span class="spanElementoHamburger">Calendario</span>
+          </div>
         </a>
         <a href="./bilancio.html">
           <div
@@ -73,11 +72,14 @@
       <!--header-->
       <div id="header">
         <div class="divLogo-saluto">
-          <img
-            src="./assets/logo.png"
-            alt="Logo del sito web"
-            class="imgLogo"
-          />
+          <a href="./index.html">
+            <img
+              src="./assets/logo.png"
+              alt="Logo del sito web"
+              class="imgLogo"
+              onclick="tornaAllaHome()"
+            />
+          </a>
           <span class="spanSaluto">Buongiorno ☀️</span>
         </div>
         <img
@@ -88,14 +90,19 @@
         />
       </div>
     </header>
-    
+    <!--Fatture-->
     <div class="ContainerFatture">
+      <!--Anteprima fatture-->
       <div class="anteprimaFatture"></div>
+      <!--Speciafica Fattura-->
       <div class="specificaFattura"></div>
     </div>
     <!--Bottone nuovo evento-->
     <div class="bottoneNuovoElemento">
       <button class="bottoneCreaElemento">+</button>
+      <button id="secondButtonEvento" class="bottoneCreaElemento">
+        Nuovo Elemento
+      </button>
     </div>
   </body>
 </html>

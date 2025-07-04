@@ -1,0 +1,46 @@
+.ContainerFatture {
+  margin-top: 5rem;
+  display: flex; /* Trasforma il contenitore in un flex container */
+  gap: 20px; /* Imposta la distanza tra gli elementi flessibili (i tuoi div) */
+  /* justify-content: center; */
+  align-items: center;
+  margin-left: 5rem;
+  flex-wrap: wrap;
+}
+
+.anteprimaFatture {
+  height: 40rem; /* Imposta l'altezza desiderata */
+  width: 32rem;
+  background-color: white;
+  box-shadow: 0 0 1rem #888888;
+  overflow-y: auto; /* Aggiunge lo scroll verticale se il contenuto è troppo grande */
+  border-radius: 2rem; /* Aggiunge un bordo arrotondato per un aspetto migliore */
+  display: flex; /* Cambia da inline-flex a flex */
+  flex-direction: column; /* Dispone gli elementi in colonna */
+  align-items: center; /* Centra gli elementi figli orizzontalmente */
+}
+
+.specificaFattura {
+  height: 40rem; /* Imposta l'altezza desiderata */
+  width: 45rem;
+  background-color: white;
+  box-shadow: 0 0 1rem #888888;
+  border-radius: 2rem;
+}
+
+.anteprimaSpec {
+  height: 8rem;
+  width: 30rem;
+  background-color: #c6adcf /* #A764BD */;
+  cursor: pointer;
+  color: black;
+  border-radius: 2rem;
+  display: flex; /* Aggiunto per centrare il contenuto interno */
+  justify-content: center; /* Centra orizzontalmente il contenuto interno */
+  align-items: center; /* Centra verticalmente il contenuto interno */
+  margin: 1.5rem auto 0 auto; /* Sposta il div un po' in basso e lo centra orizzontalmente */
+}
+
+.anteprimaSpec:focus {
+  background-color: #a764bd;
+}
