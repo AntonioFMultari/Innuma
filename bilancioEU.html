@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="./assets/logo.ico" />
+  <link rel="stylesheet" href="global.css" />
+  <link rel="stylesheet" href="calendar.css" />
+  <link rel="stylesheet" href="invoice.css" />
+  <link rel="stylesheet" href="balance.css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="balance-mobile-add-on.css" />
+
+  <script src="index.js" defer></script>
+  <script src="bilancio.js" defer></script>
+  <title>Innuma</title>
+</head>
+
+<body>
+  <!--Header con logo, Saluto e menu hamburger-->
+  <header>
+    <!--Tendina HamburgerMenu-->
+    <div class="tendinaHamburger">
+      <a href="./index.html">
+        <div class="divElementoHamburger elementoSelezionato" data-page="calendario"
+          onclick="selezioneElementoHamburger(event)">
+          <img src="./assets/calendario.png" alt="immagine bottone calendario" class="icoElementiHamburger" />
+          <span class="spanElementoHamburger">Calendario</span>
+        </div>
+      </a>
+      <a href="./bilancio.html">
+        <div class="divElementoHamburger" data-page="bilancio" onclick="selezioneElementoHamburger(event)">
+          <img src="./assets/bilancio.png" alt="immagine bottone bilancio" class="icoElementiHamburger" />
+          <span class="spanElementoHamburger">Bilancio</span>
+        </div>
+      </a>
+      <a href="./fatture.html">
+        <div class="divElementoHamburger" data-page="fatture" onclick="selezioneElementoHamburger(event)">
+          <img src="./assets/fattura.png" alt="immagine bottone bilancio" class="icoElementiHamburger" />
+          <span class="spanElementoHamburger">Fatture</span>
+        </div>
+      </a>
+    </div>
+
+    <!--header-->
+    <div id="header">
+      <div class="divLogo-saluto">
+        <a href="./index.html">
+            <img
+              src="./assets/logo.png"
+              alt="Logo del sito web"
+              class="imgLogo"
+              onclick="tornaAllaHome()"
+            />
+          </a>
+        <span class="spanSaluto">Buongiorno ☀️</span>
+      </div>
+      <img src="./assets/menuHamburger.png" onclick="tendinaHamburger()" alt="icona menu a tendina"
+        class="hamburgerMenu" />
+    </div>
+  </header>
+
+  <div class="divCalendarioFiltri">
+
+    <!--Bottone nuovo evento-->
+    <div class="bottoneNuovoElemento">
+      <button class="bottoneCreaElemento">+</button>
+      <button id="secondButtonEvento" class="bottoneCreaElemento">
+        Nuovo Elemento
+      </button>
+    </div>
+
+    <!--Cartella Bilancio con due viversi lati che si uniscono dentro-->
+    <div class="cartBil">
+
+      <div class="cartSinistra">
+        <div class="grafaBil">
+           <div id="grafico"></div>
+        </div>
+        <div class="divBilancioFiltri">
+          <!--Preso dal calendario, CSS nel GLOBAL?-->
+          <div class="elementoFiltro"> 
+            <div class="pallino"></div>
+            <span class="spanFiltro">Scuola Fisica</span>
+          </div>
+          <div class="elementoFiltro">
+            <div class="pallino"></div>
+            <span class="spanFiltro">Scuola Online</span>
+          </div>
+          <div class="elementoFiltro">
+            <div class="pallino"></div>
+            <span class="spanFiltro">Ripetizioni</span>
+          </div>
+        </div>
+        <button class="entrateUscita">
+          Entrata/Uscita
+        </button>
+      </div>
+
+      <div class="cartDestra">
+        <h1 class="titoloBil">Transazioni</h1>
+        <div class="listaBil">
+
+          <div class="transazioneOgetto">
+            <div class="transazionePallino1"></div>
+            <span class="transazioneNome">Ezra Federico</span>
+            <span class="transazioneEntrata">€45.00</span>
+            <span class="transazioneStato">Da Cont.</span>
+          </div>
+
+          <div class="transazioneOgetto">
+            <div class="transazionePallino2"></div>
+            <span class="transazioneNome">Materie</span>
+            <span class="transazioneUscita">-€20.00</span>
+            <span class="transazioneStato">Uscita</span>
+          </div>
+
+          <div class="transazioneOgetto">
+            <div class="transazionePallino3"></div>
+            <span class="transazioneNome">Ezra Federico</span>
+            <span class="transazioneEntrata">€45.00</span>
+            <span class="transazioneStato">Da Cont.</span>
+          </div>
+
+          <div class="transazioneOgetto">
+            <div class="transazionePallino4"></div>
+            <span class="transazioneNome">Marco Delfinis</span>
+            <span class="transazioneEntrata">€45.00</span>
+            <span class="transazioneStato">Da Cont.</span>
+          </div>
+
+          <div class="transazioneOgetto">
+            <div class="transazionePallino5"></div>
+            <span class="transazioneNome">Libri</span>
+            <span class="transazioneUscita">-€15.00</span>
+            <span class="transazioneStato">Uscita</span>
+          </div>
+
+          <div class="transazioneOgetto">
+            <div class="transazionePallino6"></div>
+            <span class="transazioneNome">Mario Ross</span>
+            <span class="transazioneEntrata">€45.00</span>
+            <span class="transazioneStato">Da Cont.</span>
+          </div>
+
+          <div class="transazioneOgetto">
+            <div class="transazionePallino7"></div>
+            <span class="transazioneNome">Mario Rossi</span>
+            <span class="transazioneEntrata">€45.00</span>
+            <span class="transazioneStato">Contab.</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!--Modale aggiunta Evento calendario-->
+    <dialog id="modal-evento">
+      <form method="dialog" id="formDialog">
+        <h2 id="h2Dialog">Aggiungi Evento</h2>
+        <label>
+          Nome Evento:
+          <input id="nome-evento" name="nome-evento" type="text" required />
+        </label>
+        <label>
+          Orario di inizio:
+          <input
+            id="orario-inizio-evento"
+            name="orario-inizio-evento"
+            type="datetime-local"
+            required
+          />
+        </label>
+        <label>
+          Orario di fine:
+          <input
+            id="orario-fine-evento"
+            name="orario-fine-evento"
+            type="datetime-local"
+            required
+          />
+        </label>
+        <label>
+          Colore pallino:
+          <input
+            id="colore-evento"
+            name="colore-evento"
+            type="color"
+            value="#a9f5c1"
+          />
+        </label>
+        <menu id="menuDialog">
+          <button id="salva-evento" value="default">Salva</button>
+          <button id="chiudi-modal-evento" value="cancel" type="button">
+            Annulla
+          </button>
+        </menu>
+      </form>
+    </dialog>
+
+</body>
+
+</html>
