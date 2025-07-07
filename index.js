@@ -224,7 +224,7 @@ document.addEventListener("DOMContentLoaded", function () {
     },
 
     eventSources: {
-      url: `${_URL}/events`,
+      url: `${_URL}/db-events`,
     },
   });
   calendar.render();

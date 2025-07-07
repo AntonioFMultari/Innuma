@@ -2,6 +2,7 @@ import express from "express";
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
+import { get } from "http";
 
 const app = express();
 const PORT = 3000;
@@ -104,4 +105,64 @@ app.delete("/events/:id", (req, res) => {
   );
 
   res.status(204).send();
+});
+
+//query sul database
+const db = require("./database.js"); // Supponendo che tu abbia salvato il tuo pool in db.js
+
+async function getEvents() {
+  try {
+    // Esegui una query SELECT
+    const [rows, fields] = await db.promiseConnection.query(
+      "SELECT * FROM events"
+    );
+    console.log("Eventi:", rows, fields);
+    return rows;
+  } catch (err) {
+    console.error("Errore durante il recupero degli eventi:", err);
+    throw err;
+  }
+}
+
+app.get("/db-events", async (req, res) => {
+  try {
+    const events = await getEvents();
+    res.json(events);
+  } catch (err) {
+    res.status(500).json({ error: "Errore durante il recupero degli eventi" });
+  }
+});
+
+app.post("/db-events", express.json(), async (req, res) => {
+  const newEvent = req.body;
+
+  try {
+    // Esegui una query INSERT
+    const [result] = await db.promiseConnection.query(
+      "INSERT INTO events (title, start, end) VALUES (?, ?, ?)",
+      [newEvent.title, newEvent.start, newEvent.end]
+    );
+    newEvent.id = result.insertId; // Aggiungi l'ID generato dal database
+    res.status(201).json(newEvent);
+  } catch (err) {
+    console.error("Errore durante l'inserimento dell'evento:", err);
+    res.status(500).json({ error: "Errore durante l'inserimento dell'evento" });
+  }
+});
+
+app.delete("/db-events/:id", async (req, res) => {
+  const eventId = req.params.id;
+
+  try {
+    // Esegui una query DELETE
+    await db.promiseConnection.query("DELETE FROM events WHERE id = ?", [
+      eventId,
+    ]);
+    res.status(204).send();
+  } catch (err) {
+    console.error("Errore durante l'eliminazione dell'evento:", err);
+    res
+      .status(500)
+      .json({ error: "Errore durante l'eliminazione dell'evento" });
+  }
 });
