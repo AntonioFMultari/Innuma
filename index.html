@@ -9,6 +9,14 @@
     <link rel="stylesheet" href="invoice.css" />
     <link rel="stylesheet" href="balance.css" />
 
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.10.0/axios.min.js"
+      integrity="sha512-WkZrEcQ5LMyNy6Y2PQf+Tu3vMcsmKKRKuPXtJSTHQJ3mpuvLRlA5dlDDhrrcXfyWr6Z/y3wIMfjfqVFO/gDZYQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="./richieste.js"></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -132,26 +140,44 @@
       </button>
     </div>
 
-    <!--Modale aggiunta/modifica filtri calendario-->
-    <dialog id="modal-filtri">
+    <!--Modale aggiunta Evento calendario-->
+    <dialog id="modal-evento">
       <form method="dialog" id="formDialog">
-        <h2 id="h2Dialog">Aggiungi/Modifica Filtro</h2>
+        <h2 id="h2Dialog">Aggiungi Evento</h2>
         <label>
-          Nome filtro:
-          <input id="nome-filtro" name="nome-filtro" type="text" required />
+          Nome Evento:
+          <input id="nome-evento" name="nome-evento" type="text" required />
+        </label>
+        <label>
+          Orario di inizio:
+          <input
+            id="orario-inizio-evento"
+            name="orario-inizio-evento"
+            type="datetime-local"
+            required
+          />
+        </label>
+        <label>
+          Orario di fine:
+          <input
+            id="orario-fine-evento"
+            name="orario-fine-evento"
+            type="datetime-local"
+            required
+          />
         </label>
         <label>
           Colore pallino:
           <input
-            id="colore-filtro"
-            name="colore-filtro"
+            id="colore-evento"
+            name="colore-evento"
             type="color"
             value="#a9f5c1"
           />
         </label>
         <menu id="menuDialog">
-          <button id="salva-filtro" value="default">Salva</button>
-          <button id="chiudi-modal-filtri" value="cancel" type="button">
+          <button id="salva-evento" value="default">Salva</button>
+          <button id="chiudi-modal-evento" value="cancel" type="button">
             Annulla
           </button>
         </menu>

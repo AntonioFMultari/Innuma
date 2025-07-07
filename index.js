@@ -185,9 +185,10 @@ if (window.location.pathname === "./Innuma/index.html") {
 }
 
 //Inizializzazione del calendario
+var calendar;
 document.addEventListener("DOMContentLoaded", function () {
   var calendarEl = document.getElementById("calendar");
-  var calendar = new FullCalendar.Calendar(calendarEl, {
+  calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: "dayGridMonth",
     aspectRatio: 2,
     expandRows: true,
@@ -239,6 +240,7 @@ document.addEventListener("DOMContentLoaded", function () {
       box.style.minWidth = "200px";
       box.innerHTML = `
     <strong>${info.event.title}</strong><br>
+    <br>
     <span><b>Inizio:</b> ${info.event.start.toLocaleString()}</span><br>
     ${
       info.event.end
@@ -250,8 +252,9 @@ document.addEventListener("DOMContentLoaded", function () {
         ? `<span><b>Descrizione:</b> ${info.event.extendedProps.descrizione}</span>`
         : ""
     }
-    <div style="text-align:right;margin-top:10px;">
-      <button id="chiudi-popup-evento" style="padding:2px 10px;">Chiudi</button>
+    <div id="divbtnPopupEvento">
+    <button id="elimina-evento"><img id="imgPopupEvent" src="./assets/delete.png" alt="Elimina evento"></button>
+      <button id="chiudi-popup-evento"><img id="imgPopupEvent" src="./assets/indietro.png" alt="Chiudi popup"></button>
     </div>
   `;
 
@@ -265,97 +268,73 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("chiudi-popup-evento").onclick = () =>
         box.remove();
 
+      // Elimina l'evento al click su "Elimina"
+      document.getElementById("elimina-evento").onclick = () => {
+        if (confirm("Sei sicuro di voler eliminare questo evento?")) {
+          inviaRichiesta("DELETE", `/events/${info.event.id}`)
+            .then((ris) => {
+              console.log(ris);
+              box.remove(); // Rimuovi il box popup
+              calendar.refetchEvents(); // Ricarica gli eventi
+            })
+            .catch((err) => {
+              console.error(err);
+              alert("Errore durante l'eliminazione dell'evento.");
+            });
+        }
+      };
+
       // Previeni navigazione
       info.jsEvent.preventDefault();
     },
 
-    events: [
-      {
-        title: "Lezione di Matematica",
-        start: "2025-07-02T10:00:00",
-        end: "2025-07-02T12:00:00",
-        color: "#56b1fb",
-      },
-      {
-        title: "Ripetizione Inglese",
-        start: "2025-07-03T15:00:00",
-        end: "2025-07-03T16:30:00",
-        color: "#a9f5c1",
-      },
-      {
-        title: "Corso Online",
-        start: "2025-07-04T14:00:00",
-        end: "2025-07-04T16:00:00",
-        color: "#A764BD",
-      },
-      {
-        title: "Colloquio",
-        start: "2025-07-05T09:00:00",
-        end: "2025-07-05T09:30:00",
-        color: "#f3e6f8",
-      },
-    ],
+    eventSources: {
+      url: `${_URL}/events`,
+    },
   });
   calendar.render();
 });
 
-// Funzione per creare un grafico a torta con gradienti
-let vettoreDati = [20, 30, 50];
-let vettoreColori = ["red", "green", "blue"];
-const grafico = document.getElementById("grafico");
-const CreaGrafico = (grafico, vettoreDati, vettoreColori) => {
-  const somma = vettoreDati.reduce((acc, val) => acc + val, 0);
-
-  if (somma < 99 || somma > 101) {
-    console.error("La somma dei dati deve essere 100");
-    return;
-  }
-
-  if (vettoreDati.length !== vettoreColori.length) {
-    console.warn("Il numero di dati e colori è diverso");
-  }
-
-  const angoli = vettoreDati.map((val) => (val / 100) * 360);
-
-  const OFFSET_GRAFICO = 0;
-  let angoloIniziale = 0 + OFFSET_GRAFICO;
-
-  const fasiGradient = angoli.map((angle, i) => {
-    const angoloFinale = angoloIniziale + angle;
-    const inizioPercent = (angoloIniziale / 360) * 100;
-    const finePercent = (angoloFinale / 360) * 100;
-    angoloIniziale = angoloFinale;
-
-    return `${
-      vettoreColori[i % vettoreColori.length]
-    } ${inizioPercent}% ${finePercent}%`;
-  });
-
-  const gradient = `conic-gradient(${fasiGradient.join(", ")})`;
-
-  if (!grafico) return;
-
-  grafico.style.background = gradient;
-  grafico.style.borderRadius = "50%";
-};
-CreaGrafico(grafico, vettoreDati, vettoreColori);
-
 document.addEventListener("DOMContentLoaded", function () {
-  const btnMore = document.querySelector(".btnMoreFiltri");
-  const modal = document.getElementById("modal-filtri");
-  const chiudi = document.getElementById("chiudi-modal-filtri");
-  const salva = document.getElementById("salva-filtro");
-  const nomeInput = document.getElementById("nome-filtro");
-  const coloreInput = document.getElementById("colore-filtro");
+  const btnEvent = [...document.querySelectorAll(".bottoneCreaElemento")];
+  const modal = document.getElementById("modal-evento");
+  const chiudi = document.getElementById("chiudi-modal-evento");
+  const salva = document.getElementById("salva-evento");
+  const nomeInput = document.getElementById("nome-evento");
+  const orarioInizioInput = document.getElementById("orario-inizio-evento");
+  const orarioFineInput = document.getElementById("orario-fine-evento");
+  const coloreInput = document.getElementById("colore-evento");
   const containerFiltri = document.querySelector(".containerFiltri");
 
-  if (btnMore && modal) {
-    btnMore.onclick = () => {
+  orarioInizioInput.addEventListener("change", () => {
+    if (orarioInizioInput.value != "") {
+      const [giorno, oreStringa] = orarioInizioInput.value.split("T");
+      const [ore, minuti] = oreStringa.split(":");
+
+      const oreAggiunte = (+ore + 1) % 24;
+      const stringaAggiunta =
+        giorno + "T" + (oreAggiunte + "").padStart(2, "0") + ":" + minuti;
+      orarioFineInput.value = stringaAggiunta;
+    }
+  });
+
+  if (btnEvent[0] && btnEvent[1] && modal) {
+    btnEvent[0].onclick = () => {
       nomeInput.value = "";
+      orarioInizioInput.value = "";
+      orarioFineInput.value = "";
+      coloreInput.value = "#a9f5c1";
+      modal.showModal();
+    };
+    btnEvent[1].onclick = () => {
+      nomeInput.value = "";
+      orarioInizioInput.value = "";
+      orarioFineInput.value = "";
       coloreInput.value = "#a9f5c1";
       modal.showModal();
     };
   }
+
   if (chiudi && modal) {
     chiudi.onclick = () => {
       modal.close();
@@ -365,15 +344,42 @@ document.addEventListener("DOMContentLoaded", function () {
     salva.onclick = (e) => {
       e.preventDefault();
       const nome = nomeInput.value.trim();
+      const orarioInizio = orarioInizioInput.value;
       const colore = coloreInput.value;
-      if (!nome) return alert("Inserisci un nome filtro!");
+      if (!nome) return alert("Inserisci un nome all'evento!");
+      if (!orarioInizio)
+        return alert("Inserisci un orario di inizio all'evento!");
       // Crea nuovo filtro
       const filtro = document.createElement("div");
       filtro.className = "elementoFiltro";
       filtro.innerHTML = `<div class="pallino" style="background:${colore};"></div>
         <span class="spanFiltro">${nome}</span>`;
       containerFiltri.prepend(filtro);
-      modal.close();
+      const nuovoEvento = {
+        title: nome,
+        start: orarioInizioInput.value,
+        end: orarioFineInput.value,
+        color: colore,
+      };
+
+      inviaRichiesta("POST", "/events", nuovoEvento)
+        .then((ris) => {
+          console.log(ris);
+          modal.close();
+          calendar.refetchEvents();
+        })
+        .catch((err) => {
+          console.error(err);
+          modal.close();
+        });
     };
   }
 });
+
+inviaRichiesta("GET", "/events")
+  .then((ris) => {
+    console.log(ris.data);
+  })
+  .catch((err) => {
+    console.error(err);
+  });
