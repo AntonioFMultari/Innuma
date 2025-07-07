@@ -26,6 +26,9 @@
   background-color: white;
   box-shadow: 0 0 1rem #888888;
   border-radius: 2rem;
+  display: grid;
+  grid-template-columns: 10rem 1fr; /* Due colonne: la prima di 10rem, la seconda occupa lo spazio rimanente */
+  grid-template-rows:repeat(3, 1fr); /* Tre righe di altezza uguale */;
 }
 
 .anteprimaSpec {
@@ -41,6 +44,30 @@
   margin: 1.5rem auto 0 auto; /* Sposta il div un po' in basso e lo centra orizzontalmente */
 }
 
-.anteprimaSpec:focus {
+.anteprimaSpec.active {
   background-color: #a764bd;
+}
+
+.dot{
+  height: 2rem;
+  width: 2rem;
+  background-color: #a764bd;
+  border-radius: 50%;
+  display: inline-block;
+  margin: auto;
+}
+
+.TitoloFattura {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: black;
+  margin: 3rem auto;
+  display: block;
+}
+
+.sottoTitolo{
+  font-size: 1.2rem;
+  color: black;
+  margin: 0.5rem auto;
+  display: block;
 }

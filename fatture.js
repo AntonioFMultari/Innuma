@@ -13,7 +13,22 @@ anteprimaFatture.appendChild(anteprimaSpec);*/
 
 let anteprimaFatture = document.getElementsByClassName("anteprimaFatture")[0];
 
-let anteprimaSpec = document.createElement("div");
-anteprimaSpec.classList.add("anteprimaSpec");
+const anteprime = []
 
-anteprimaFatture.appendChild(anteprimaSpec);
+for (let i = 0; i < 3; i++) {
+    let anteprimaSpec = document.createElement("div");
+    anteprimaSpec.classList.add("anteprimaSpec");
+
+    anteprimaFatture.appendChild(anteprimaSpec);
+
+  anteprime.push(anteprimaSpec);
+}
+
+anteprime.forEach((anteprima, index) => {
+  anteprima.addEventListener("click", () => {
+    
+    anteprime.forEach((a) => {
+      a.classList.toggle("active", a === anteprima);
+    });
+  });
+})
