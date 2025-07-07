@@ -89,6 +89,40 @@ a {
   color: black;
 }
 
+#chiudi-modal-evento {
+  color: white;
+  border: none;
+  border-radius: 5rem;
+  background-color: #999999;
+  width: 6rem;
+  height: 2.5rem;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+#salva-evento {
+  color: white;
+  border: none;
+  border-radius: 5rem;
+  background-color: #56b1fb;
+  width: 6rem;
+  height: 2.5rem;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 @media screen and (width < 1920px) {
   html {
     font-size: 14px;

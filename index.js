@@ -97,84 +97,6 @@ function aperturaFiltri() {
   }
 }
 
-// Pagina Bilancio
-function BalancePage() {
-  //la cartella dove mettiamo tutte i contenuti della pagina bilancio
-  const wrapperBilancio = document.createElement("div");
-  wrapperBilancio.classname = "contenitoreBilancio";
-
-  //la cartella per il chart e transazioni
-  const cartellaBilancio = document.createElement("div");
-  cartellaBilancio.classname = "cartellaBilancio";
-
-  //parte chart
-  const cartBilSinistra = document.createElement("div");
-  cartBilSinistra.classname = "cartellaSinitra";
-
-  //chart codice preso da Pietro Bosio
-
-  //filtri sotto il chart (copiando come si scrive su HTML per i filtri sopra il calendario)
-  const contenutoFiltri = document.createElement("div");
-  contenutoFiltri.classname = "contFiltri";
-  contenutoFiltri.innerHTML =
-    '<div class="pallino"><span class="spanFiltro">Scuola Fisica</span></div>';
-  contenutoFiltri.innerHTML =
-    '<div class="pallino"><span class="spanFiltro">Scuola Online</span></div>';
-  contenutoFiltri.innerHTML =
-    '<div class="pallino"><span class="spanFiltro">Ripetizioni</span></div>';
-  cartBilSinistra.appendChild(contenutoFiltri);
-
-  //bottone per entrata e uscita
-  const entraUscita = document.createElement("button");
-  entraUscita.textContent = "Entrate/Uscite";
-  entraUscita.classname = "btnEntUsc";
-  cartBilSinistra.appendChild(entraUscita);
-
-  //collega la parte sinistra sulla cartella principiale
-  cartellaBilancio.appendChild(cartBilSinistra);
-
-  //parte transazioni
-  const cartBilDestra = document.createElement("div");
-  cartBilDestra.classname = "cartellaDestra";
-
-  //dove mettiamo il titolo (o transizioni o Scuola Online) per es.
-  const titolo = document.createElement("h1");
-  titolo.textContent = "Transazioni";
-  titolo.classname = "headerTransazione";
-  cartBilDestra.appendChild(title);
-
-  //l'elenco delle transazioni
-  const elencoTransazioni = document.createElement("div");
-  elencoTransazioni.classname = "listaTrans";
-
-  //esempio di data preso online (la struttura, il resto ho messo per comodita di vedere paragonandola con la Figma)
-  const transactions = [
-    { name: "Mario Rossi", amount: "€45.00", type: "Da Cont." },
-    { name: "ITS Accade...", amount: "€128.00", type: "Da Cont." },
-    { name: "Corso Onlin...", amount: "€235.00", type: "Corrib." },
-    { name: "Mario Rossi", amount: "€45.00", type: "Da Cont." },
-    { name: "Corso Onlin...", amount: "€100.00", type: "Corrib." },
-    { name: "ITA Accade...", amount: "€90.00", type: "Corrib." },
-  ];
-
-  //fa un loop e crea un elemento per ogni transactions (questo anche ma studierò, sembra molto utile)
-  transactions.forEach((tx) => {
-    const item = document.createElement("div");
-    item.classname = "transaction-item";
-    item.innerHTML = '<span class="tx-name">${tx.name}</span>';
-    item.innerHTML = '<span class="tx-amount">${tx.amount}</span>';
-    item.innerHTML = '<span class="tx-type">${tx.type}</span>';
-    elencoTransazioni.appendChild(item);
-  });
-
-  //penultima funzione, aganciare destra con cartella (sinistra e destra finalmente fatto)
-  cartBilDestra.appendChild(elencoTransazioni);
-  cartellaBilancio.appendChild(cartBilDestra);
-
-  //agganciare tutto sulla cartella di bilancio
-  wrapperBilancio.appendChild(cartellaBilancio);
-}
-
 // Gestione della navigazione tra le pagine
 if (window.location.pathname === "./Innuma/index.html") {
   nPagina = 1;
@@ -259,8 +181,21 @@ document.addEventListener("DOMContentLoaded", function () {
   `;
 
       // Posiziona il box vicino al click
-      box.style.left = info.jsEvent.pageX + 10 + "px";
-      box.style.top = info.jsEvent.pageY + 10 + "px";
+      //Condizione per evitare che il box esca dallo schermo
+      const boxWidth = 200; // Larghezza del box
+      const boxHeight = 150; // Altezza del box
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
+      if (info.jsEvent.pageX + boxWidth > screenWidth) {
+        box.style.left = screenWidth - boxWidth - 15 + "px"; // Posiziona a destra
+      } else {
+        box.style.left = info.jsEvent.pageX - 15 + "px"; // Posiziona a sinistra
+      }
+      if (info.jsEvent.pageY + boxHeight > screenHeight) {
+        box.style.top = screenHeight - boxHeight - 15 + "px"; // Posiziona in basso
+      } else {
+        box.style.top = info.jsEvent.pageY - 15 + "px"; // Posiziona in alto
+      }
 
       document.body.appendChild(box);
 

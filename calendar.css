@@ -167,6 +167,8 @@
 #formDialog {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 1rem;
 }
 
@@ -187,8 +189,8 @@
 #menuDialog {
   display: flex;
   gap: 1rem;
-  justify-content: flex-end;
-  margin-top: 1rem;
+  align-items: center;
+  justify-content: center;
 }
 
 #salva-filtro {
