@@ -55,25 +55,6 @@
   width: 2rem;
 }
 
-.btnMoreFiltri {
-  width: 2.5rem;
-  height: 2.5rem;
-  aspect-ratio: 1;
-  border-radius: 1.75rem;
-  background-color: #56b1fb;
-  color: white;
-  font-size: 20pt;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.btnMoreFiltri:hover {
-  cursor: pointer;
-  background-color: #458fcb;
-}
-
 .bottoneCreaElemento {
   position: relative;
   z-index: 10;
