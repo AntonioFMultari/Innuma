@@ -62,7 +62,9 @@
   font-weight: bold;
   color: black;
   margin: 3rem auto;
+    /* position: relative; */
   display: block;
+  padding-right: 3rem;
 }
 
 .sottoTitolo{
@@ -70,4 +72,40 @@
   color: black;
   margin: 0.5rem auto;
   display: block;
+}
+
+.IconaPanoramica {
+  width: 3rem;
+  height: 3rem;
+  display: inline-block;
+  margin: auto;
+}
+
+ul{
+  position:absolute;
+  margin:  auto;
+  color: black;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding-left: 1rem;
+}
+
+.Panoramica{
+  margin-top: 3.75rem;
+}
+
+.pre {
+  white-space: pre;
+  font-weight: bold;
+  width: 15rem;
+}
+
+.Money{
+  font-weight: bolder;
+  text-align: center;
+  font-size: 2rem;
+}
+.iconaMoney{
+  width: 2rem;
+  height: 2rem;
 }
