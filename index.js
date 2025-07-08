@@ -250,6 +250,40 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         document.removeEventListener("keydown", handleBackspace);
       };
+
+      // Chiudi il box al click all'esterno
+      function handleClickOutside(e) {
+        if (!box.contains(e.target)) {
+          box.remove();
+          document.removeEventListener("mousedown", handleClickOutside);
+          document.removeEventListener("keydown", handleBackspace);
+        }
+      }
+      document.addEventListener("mousedown", handleClickOutside);
+
+      // Ricordati di rimuovere anche questo listener quando chiudi con il bottone
+      document.getElementById("chiudi-popup-evento").onclick = () => {
+        box.remove();
+        document.removeEventListener("keydown", handleBackspace);
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+
+      document.getElementById("elimina-evento").onclick = () => {
+        if (confirm("Sei sicuro di voler eliminare questo evento?")) {
+          inviaRichiesta("DELETE", `/db-events/${info.event.id}`)
+            .then((ris) => {
+              console.log(ris);
+              box.remove();
+              calendar.refetchEvents();
+            })
+            .catch((err) => {
+              console.error(err);
+              alert("Errore durante l'eliminazione dell'evento.");
+            });
+        }
+        document.removeEventListener("keydown", handleBackspace);
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
       // Previeni navigazione
       info.jsEvent.preventDefault();
     },
