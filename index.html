@@ -123,6 +123,9 @@
             <span class="spanFiltro">Ripetizioni</span>
           </div>
         </div>
+        <button id="btn-deseleziona-filtro" type="button">
+          <img src="./assets/deseleziona.png" alt="Deseleziona filtro" />
+        </button>
       </div>
 
       <!--Calendario-->
@@ -161,8 +164,8 @@
         <label>
           Tipo di Attività:
           <select id="tipo-attivita-evento" name="tipo-attivita-evento">
-            <option value="Insegnante">Insegnante</option>
-            <option value="Nutrizionista">Nutrizionista</option>
+            <option value="insegnante">Insegnante</option>
+            <option value="nutrizionista">Nutrizionista</option>
           </select>
         </label>
 
@@ -215,6 +218,24 @@
             type="color"
             value="#a9f5c1"
             required
+          />
+        </label>
+        <label>
+          Ripetizione Evento:
+          <select id="ripetizione-evento" name="ripetizione-evento">
+            <option value="nessuna">Nessuna</option>
+            <option value="giornaliera">Ogni giorno</option>
+            <option value="settimanale">Ogni settimana</option>
+            <option value="mensile">Ogni mese</option>
+            <option value="annuale">Ogni anno</option>
+          </select>
+        </label>
+        <label id="label-fine-ripetizione" style="display: none">
+          Ripeti fino al:
+          <input
+            type="date"
+            id="fine-ripetizione-evento"
+            name="fine-ripetizione-evento"
           />
         </label>
         <menu id="menuDialog">

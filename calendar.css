@@ -244,6 +244,29 @@
   align-items: center;
 }
 
+/* Evidenzia evento */
+.evento-evidenziato {
+  background: #ffe066 !important;
+  border: 2px solid #f7b731 !important;
+  color: #222 !important;
+}
+
+/* Evidenzia filtro selezionato */
+.filtro-evidenziato {
+  background: #f3e6f8 !important;
+  color: #222 !important;
+  border-radius: 2rem;
+  padding: 0.5rem;
+}
+
+/* Evidenzia filtro al passaggio */
+.filtro-hover {
+  background: #f3e6f8 !important;
+  color: #222 !important;
+  border-radius: 2rem;
+  padding: 0.5rem;
+}
+
 /*RESPONSIVE RULES*/
 @media screen and (width < 480px) {
   #calendar {
@@ -290,4 +313,29 @@
   #secondButtonEvento {
     display: flex;
   }
+}
+
+#btn-deseleziona-filtro {
+  display: none;
+}
+#btn-deseleziona-filtro.visibile {
+  display: inline-block;
+}
+#btn-deseleziona-filtro {
+  background: #a764bd;
+  border: none;
+  border-radius: 5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin: 0 1rem;
+
+  img {
+    width: 1.5rem;
+    aspect-ratio: 1;
+  }
+}
+#btn-deseleziona-filtro:hover {
+  background: #a764bd;
+  color: white;
 }

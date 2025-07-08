@@ -207,9 +207,32 @@ document.addEventListener("DOMContentLoaded", function () {
 
       document.body.appendChild(box);
 
+      // Gestione eliminazione con Backspace
+      function handleBackspace(e) {
+        if (e.key === "Backspace") {
+          if (document.body.contains(box)) {
+            if (confirm("Sei sicuro di voler eliminare questo evento?")) {
+              inviaRichiesta("DELETE", `/db-events/${info.event.id}`)
+                .then((ris) => {
+                  console.log(ris);
+                  box.remove();
+                  calendar.refetchEvents();
+                })
+                .catch((err) => {
+                  console.error(err);
+                  alert("Errore durante l'eliminazione dell'evento.");
+                });
+            }
+          }
+        }
+      }
+      document.addEventListener("keydown", handleBackspace);
+
       // Chiudi il box al click su "Chiudi"
-      document.getElementById("chiudi-popup-evento").onclick = () =>
+      document.getElementById("chiudi-popup-evento").onclick = () => {
         box.remove();
+        document.removeEventListener("keydown", handleBackspace);
+      };
 
       // Elimina l'evento al click su "Elimina"
       document.getElementById("elimina-evento").onclick = () => {
@@ -217,16 +240,16 @@ document.addEventListener("DOMContentLoaded", function () {
           inviaRichiesta("DELETE", `/db-events/${info.event.id}`)
             .then((ris) => {
               console.log(ris);
-              box.remove(); // Rimuovi il box popup
-              calendar.refetchEvents(); // Ricarica gli eventi
+              box.remove();
+              calendar.refetchEvents();
             })
             .catch((err) => {
               console.error(err);
               alert("Errore durante l'eliminazione dell'evento.");
             });
         }
+        document.removeEventListener("keydown", handleBackspace);
       };
-
       // Previeni navigazione
       info.jsEvent.preventDefault();
     },
@@ -289,6 +312,12 @@ document.addEventListener("DOMContentLoaded", function () {
       const nome = nomeInput.value.trim();
       const orarioInizio = orarioInizioInput.value;
       const colore = coloreInput.value;
+      const rivalsa_inps = document.getElementById("rivalsa-inps-evento")
+        .checked
+        ? 1
+        : 0;
+      const ripetizione = document.getElementById("ripetizione-evento").value;
+
       if (!nome) return alert("Inserisci un nome all'evento!");
       if (!orarioInizio)
         return alert("Inserisci un orario di inizio all'evento!");
@@ -303,11 +332,66 @@ document.addEventListener("DOMContentLoaded", function () {
         start: orarioInizioInput.value,
         end: orarioFineInput.value,
         color: colore,
+        nome_cliente: document.getElementById("nome-cliente-evento").value, // <-- input testo
+        tariffa_oraria: Number(
+          document.getElementById("tariffa-oraria-evento").value
+        ).toFixed(2), // <-- input numero
+        descrizione_evento: document.getElementById("descrizione-evento").value, // <-- textarea
+        rivalsa_inps: rivalsa_inps,
+        tipo_attivita: document.getElementById("tipo-attivita-evento").value, // <-- select o input
       };
 
-      inviaRichiesta("POST", "/db-events", nuovoEvento)
+      console.log("Nuovo evento che sto per inviare:", nuovoEvento);
+
+      const fineRipetizione = document.getElementById(
+        "fine-ripetizione-evento"
+      ).value;
+
+      let eventiDaSalvare = [nuovoEvento];
+
+      if (ripetizione !== "nessuna" && fineRipetizione) {
+        let lastStart = new Date(nuovoEvento.start);
+        let lastEnd = new Date(nuovoEvento.end);
+        const dataFine = new Date(fineRipetizione);
+
+        while (true) {
+          let nextStart = new Date(lastStart);
+          let nextEnd = new Date(lastEnd);
+          switch (ripetizione) {
+            case "giornaliera":
+              nextStart.setDate(nextStart.getDate() + 1);
+              nextEnd.setDate(nextEnd.getDate() + 1);
+              break;
+            case "settimanale":
+              nextStart.setDate(nextStart.getDate() + 7);
+              nextEnd.setDate(nextEnd.getDate() + 7);
+              break;
+            case "mensile":
+              nextStart.setMonth(nextStart.getMonth() + 1);
+              nextEnd.setMonth(nextEnd.getMonth() + 1);
+              break;
+            case "annuale":
+              nextStart.setFullYear(nextStart.getFullYear() + 1);
+              nextEnd.setFullYear(nextEnd.getFullYear() + 1);
+              break;
+          }
+          // Cambia qui: se la data è dopo la fine, esci dal ciclo
+          if (nextStart > dataFine) break;
+          eventiDaSalvare.push({
+            ...nuovoEvento,
+            start: nextStart.toISOString().slice(0, 16),
+            end: nextEnd.toISOString().slice(0, 16),
+          });
+          lastStart = nextStart;
+          lastEnd = nextEnd;
+        }
+      }
+
+      // Salva tutti gli eventi (uno alla volta)
+      Promise.all(
+        eventiDaSalvare.map((ev) => inviaRichiesta("POST", "/db-events", ev))
+      )
         .then((ris) => {
-          console.log(ris);
           modal.close();
           calendar.refetchEvents();
         })
@@ -317,6 +401,116 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     };
   }
+
+  const ripetizioneSelect = document.getElementById("ripetizione-evento");
+  const labelFineRipetizione = document.getElementById(
+    "label-fine-ripetizione"
+  );
+
+  if (ripetizioneSelect && labelFineRipetizione) {
+    ripetizioneSelect.addEventListener("change", function () {
+      if (this.value !== "nessuna") {
+        labelFineRipetizione.style.display = "block";
+      } else {
+        labelFineRipetizione.style.display = "none";
+      }
+    });
+  }
+
+  // Evidenzia eventi e filtro al click e hover
+  const filtri = document.querySelectorAll(".elementoFiltro");
+
+  filtri.forEach((filtro) => {
+    // Evidenzia eventi al click sul filtro
+    filtro.addEventListener("click", function () {
+      const nomeFiltro = filtro.querySelector(".spanFiltro").innerText.trim();
+
+      // Rimuovi evidenziazione da tutti gli eventi
+      document.querySelectorAll(".fc-event").forEach((ev) => {
+        ev.classList.remove("evento-evidenziato");
+      });
+
+      // Evidenzia solo quelli con lo stesso nome_cliente
+      document.querySelectorAll(".fc-event").forEach((ev) => {
+        const title = ev.querySelector(".fc-event-title")?.innerText || "";
+        if (title.includes(nomeFiltro)) {
+          ev.classList.add("evento-evidenziato");
+        }
+      });
+
+      // Evidenzia il filtro selezionato
+      filtri.forEach((f) => f.classList.remove("filtro-evidenziato"));
+      filtro.classList.add("filtro-evidenziato");
+    });
+
+    // Hover: evidenzia filtro
+    filtro.addEventListener("mouseenter", function () {
+      filtro.classList.add("filtro-hover");
+    });
+    filtro.addEventListener("mouseleave", function () {
+      filtro.classList.remove("filtro-hover");
+    });
+  });
+
+  const btnDeseleziona = document.getElementById("btn-deseleziona-filtro");
+
+  // Funzione di utilità per aggiornare la visibilità del bottone
+  function aggiornaBottoneDeseleziona() {
+    const almenoUnoSelezionato = Array.from(filtri).some((f) =>
+      f.classList.contains("filtro-evidenziato")
+    );
+    if (btnDeseleziona) {
+      btnDeseleziona.classList.toggle("visibile", almenoUnoSelezionato);
+    }
+  }
+
+  filtri.forEach((filtro) => {
+    // Evidenzia eventi al click sul filtro
+    filtro.addEventListener("click", function () {
+      const nomeFiltro = filtro.querySelector(".spanFiltro").innerText.trim();
+
+      // Rimuovi evidenziazione da tutti gli eventi
+      document.querySelectorAll(".fc-event").forEach((ev) => {
+        ev.classList.remove("evento-evidenziato");
+      });
+
+      // Evidenzia solo quelli con lo stesso nome_cliente
+      document.querySelectorAll(".fc-event").forEach((ev) => {
+        const title = ev.querySelector(".fc-event-title")?.innerText || "";
+        if (title.includes(nomeFiltro)) {
+          ev.classList.add("evento-evidenziato");
+        }
+      });
+
+      // Evidenzia il filtro selezionato
+      filtri.forEach((f) => f.classList.remove("filtro-evidenziato"));
+      filtro.classList.add("filtro-evidenziato");
+      aggiornaBottoneDeseleziona();
+    });
+
+    // Hover: evidenzia filtro
+    filtro.addEventListener("mouseenter", function () {
+      filtro.classList.add("filtro-hover");
+    });
+    filtro.addEventListener("mouseleave", function () {
+      filtro.classList.remove("filtro-hover");
+    });
+  });
+
+  if (btnDeseleziona) {
+    btnDeseleziona.addEventListener("click", function () {
+      // Rimuovi evidenziazione da tutti gli eventi
+      document.querySelectorAll(".fc-event").forEach((ev) => {
+        ev.classList.remove("evento-evidenziato");
+      });
+      // Rimuovi evidenziazione da tutti i filtri
+      filtri.forEach((f) => f.classList.remove("filtro-evidenziato"));
+      aggiornaBottoneDeseleziona();
+    });
+  }
+
+  // All'avvio, assicura che il bottone sia nascosto
+  aggiornaBottoneDeseleziona();
 });
 
 inviaRichiesta("GET", "/db-events")

@@ -68,9 +68,33 @@ app.get("/db-events", async (req, res) => {
 // Assicurati che il body della richiesta sia in formato JSON
 app.post("/db-events", express.json(), async (req, res) => {
   const newEvent = req.body;
+  console.log("Nuovo evento ricevuto:", newEvent);
 
   try {
-    // Esegui una query INSERT
+    newEvent.rivalsa_inps = newEvent.rivalsa_inps ? 1 : 0;
+    newEvent.tariffa_oraria = Number(newEvent.tariffa_oraria).toFixed(2);
+    newEvent.start = new Date(newEvent.start)
+      .toISOString()
+      .slice(0, 19)
+      .replace("T", " ");
+    newEvent.end = new Date(newEvent.end)
+      .toISOString()
+      .slice(0, 19)
+      .replace("T", " ");
+
+    console.log("Dati che sto per inserire:", [
+      newEvent.title,
+      newEvent.start,
+      newEvent.end,
+      newEvent.color,
+      newEvent.nome_cliente,
+      newEvent.tariffa_oraria,
+      newEvent.descrizione_evento,
+      newEvent.rivalsa_inps,
+      2,
+      newEvent.tipo_attivita,
+    ]);
+
     const [result] = await db.promiseConnection.query(
       "INSERT INTO events (title, start, end, color, nome_cliente, tariffa_oraria, descrizione_evento, rivalsa_inps, marca_da_bollo, tipo_attivita) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
       [
@@ -82,16 +106,16 @@ app.post("/db-events", express.json(), async (req, res) => {
         newEvent.tariffa_oraria,
         newEvent.descrizione_evento,
         newEvent.rivalsa_inps,
-        2, // <-- marca_da_bollo fisso a 2
+        2,
         newEvent.tipo_attivita,
       ]
     );
-    newEvent.id = result.insertId; // Aggiungi l'ID generato dal database
-    newEvent.marca_da_bollo = 2; // Imposta anche nella risposta
+    newEvent.id = result.insertId;
+    newEvent.marca_da_bollo = 2;
     res.status(201).json(newEvent);
   } catch (err) {
     console.error("Errore durante l'inserimento dell'evento:", err);
-    res.status(500).json({ error: "Errore durante l'inserimento dell'evento" });
+    res.status(500).json({ error: err.message, stack: err.stack });
   }
 });
 
