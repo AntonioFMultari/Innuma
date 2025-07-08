@@ -148,6 +148,44 @@
           <input id="nome-evento" name="nome-evento" type="text" required />
         </label>
         <label>
+          Descrizione:
+          <textarea
+            id="descrizione-evento"
+            name="descrizione-evento"
+            rows="4"
+            cols="50"
+            placeholder="Breve descrizione dell'evento (max 500 caratteri)"
+            maxlength="500"
+          ></textarea>
+        </label>
+        <label>
+          Tipo di Attività:
+          <select id="tipo-attivita-evento" name="tipo-attivita-evento">
+            <option value="Insegnante">Insegnante</option>
+            <option value="Nutrizionista">Nutrizionista</option>
+          </select>
+        </label>
+
+        <label>
+          Nome Cliente:
+          <input
+            id="nome-cliente-evento"
+            name="nome-cliente-evento"
+            type="text"
+            required
+          />
+        </label>
+        <label>
+          Tariffa Oraria:
+          <input
+            id="tariffa-oraria-evento"
+            name="tariffa-oraria-evento"
+            type="number"
+            step="0.05"
+            required
+          />
+        </label>
+        <label>
           Orario di inizio:
           <input
             id="orario-inizio-evento"
@@ -166,12 +204,17 @@
           />
         </label>
         <label>
+          Rivalsa INPS:
+          <input type="checkbox" id="rivalsa-inps-evento" required />
+        </label>
+        <label>
           Colore pallino:
           <input
             id="colore-evento"
             name="colore-evento"
             type="color"
             value="#a9f5c1"
+            required
           />
         </label>
         <menu id="menuDialog">

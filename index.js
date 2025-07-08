@@ -160,25 +160,33 @@ document.addEventListener("DOMContentLoaded", function () {
       box.style.padding = "1rem";
       box.style.boxShadow = "0 2px 10px rgba(0,0,0,0.2)";
       box.style.minWidth = "200px";
-      box.innerHTML = `
-    <strong>${info.event.title}</strong><br>
-    <br>
-    <span><b>Inizio:</b> ${info.event.start.toLocaleString()}</span><br>
-    ${
-      info.event.end
-        ? `<span><b>Fine:</b> ${info.event.end.toLocaleString()}</span><br>`
-        : ""
-    }
-    ${
-      info.event.extendedProps && info.event.extendedProps.descrizione
-        ? `<span><b>Descrizione:</b> ${info.event.extendedProps.descrizione}</span>`
-        : ""
-    }
-    <div id="divbtnPopupEvento">
+
+      // Genera dinamicamente i dettagli dell'evento
+      let dettagli = `<strong>${info.event.title}</strong><br><br>`;
+      dettagli += `<span><b>Inizio:</b> ${
+        info.event.start?.toLocaleString() || ""
+      }</span><br>`;
+      if (info.event.end) {
+        dettagli += `<span><b>Fine:</b> ${info.event.end.toLocaleString()}</span><br>`;
+      }
+
+      // Mostra tutte le proprietà di extendedProps
+      if (info.event.extendedProps) {
+        for (const [key, value] of Object.entries(info.event.extendedProps)) {
+          if (value !== null && value !== undefined && value !== "") {
+            dettagli += `<span><b>${key}:</b> ${value}</span><br>`;
+          }
+        }
+      }
+
+      dettagli += `
+  <div id="divbtnPopupEvento" style="margin-top:1rem;">
     <button id="elimina-evento"><img id="imgPopupEvent" src="./assets/delete.png" alt="Elimina evento"></button>
-      <button id="chiudi-popup-evento"><img id="imgPopupEvent" src="./assets/indietro.png" alt="Chiudi popup"></button>
-    </div>
-  `;
+    <button id="chiudi-popup-evento"><img id="imgPopupEvent" src="./assets/indietro.png" alt="Chiudi popup"></button>
+  </div>
+`;
+
+      box.innerHTML = dettagli;
 
       // Posiziona il box vicino al click
       //Condizione per evitare che il box esca dallo schermo
@@ -206,7 +214,7 @@ document.addEventListener("DOMContentLoaded", function () {
       // Elimina l'evento al click su "Elimina"
       document.getElementById("elimina-evento").onclick = () => {
         if (confirm("Sei sicuro di voler eliminare questo evento?")) {
-          inviaRichiesta("DELETE", `/events/${info.event.id}`)
+          inviaRichiesta("DELETE", `/db-events/${info.event.id}`)
             .then((ris) => {
               console.log(ris);
               box.remove(); // Rimuovi il box popup
@@ -297,7 +305,7 @@ document.addEventListener("DOMContentLoaded", function () {
         color: colore,
       };
 
-      inviaRichiesta("POST", "/events", nuovoEvento)
+      inviaRichiesta("POST", "/db-events", nuovoEvento)
         .then((ris) => {
           console.log(ris);
           modal.close();
@@ -311,7 +319,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-inviaRichiesta("GET", "/events")
+inviaRichiesta("GET", "/db-events")
   .then((ris) => {
     console.log(ris.data);
   })

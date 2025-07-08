@@ -36,79 +36,9 @@ app.listen(PORT, () => {
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../index.html"));
 });
-//GET -> events - leggi da events.json
-app.get("/events", (req, res) => {
-  const { end, start } = req.query;
-
-  const eventsPath = path.join(__dirname, "./events.json");
-  const eventsData = fs.readFileSync(eventsPath, "utf-8");
-  const events = JSON.parse(eventsData)["events"];
-
-  if (!start || !end) {
-    res.json(events);
-    return;
-  }
-
-  const dataInizio = new Date(start);
-  const dataFine = new Date(end);
-
-  dataInizio.setHours(0, 0, 0, 0);
-  dataFine.setHours(23, 59, 59, 999);
-
-  res.json(
-    events.filter((evento) => {
-      const dataEventoInizio = new Date(evento.start);
-      const dataEventoFine = new Date(evento.end);
-      dataEventoInizio.setHours(0, 0, 0, 0);
-      dataEventoFine.setHours(23, 59, 59, 999);
-      return dataEventoInizio >= dataInizio && dataEventoFine <= dataFine;
-    })
-  );
-});
-
-app.post("/events", express.json(), (req, res) => {
-  const newEvent = req.body;
-  const eventsPath = path.join(__dirname, "./events.json");
-
-  // Read existing events
-  const eventsData = fs.readFileSync(eventsPath, "utf-8");
-  const events = JSON.parse(eventsData)["events"];
-
-  // add id: new UUID to new event
-  newEvent.id = crypto.randomUUID();
-
-  // Add new event
-  events.push(newEvent);
-
-  // Write updated events back to file
-  fs.writeFileSync(eventsPath, JSON.stringify({ events }, null, 2));
-
-  res.status(201).json(newEvent);
-});
-
-//delete -> events/:id - elimina un evento
-app.delete("/events/:id", (req, res) => {
-  const eventId = req.params.id;
-  const eventsPath = path.join(__dirname, "./events.json");
-
-  // Read existing events
-  const eventsData = fs.readFileSync(eventsPath, "utf-8");
-  const events = JSON.parse(eventsData)["events"];
-
-  // Filter out the event to delete
-  const updatedEvents = events.filter((evento) => evento.id !== eventId);
-
-  // Write updated events back to file
-  fs.writeFileSync(
-    eventsPath,
-    JSON.stringify({ events: updatedEvents }, null, 2)
-  );
-
-  res.status(204).send();
-});
 
 //query sul database
-const db = require("./database.js"); // Supponendo che tu abbia salvato il tuo pool in db.js
+const db = require("./database.js"); // Supponendo che tu abbia salvato il tuo pool in database.js
 
 async function getEvents() {
   try {
@@ -124,6 +54,7 @@ async function getEvents() {
   }
 }
 
+//GET -> PRENDI TUTTI GLI EVENTI
 app.get("/db-events", async (req, res) => {
   try {
     const events = await getEvents();
@@ -133,16 +64,30 @@ app.get("/db-events", async (req, res) => {
   }
 });
 
+//POST -> INSERISCI UN NUOVO EVENTO
+// Assicurati che il body della richiesta sia in formato JSON
 app.post("/db-events", express.json(), async (req, res) => {
   const newEvent = req.body;
 
   try {
     // Esegui una query INSERT
     const [result] = await db.promiseConnection.query(
-      "INSERT INTO events (title, start, end) VALUES (?, ?, ?)",
-      [newEvent.title, newEvent.start, newEvent.end]
+      "INSERT INTO events (title, start, end, color, nome_cliente, tariffa_oraria, descrizione_evento, rivalsa_inps, marca_da_bollo, tipo_attivita) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      [
+        newEvent.title,
+        newEvent.start,
+        newEvent.end,
+        newEvent.color,
+        newEvent.nome_cliente,
+        newEvent.tariffa_oraria,
+        newEvent.descrizione_evento,
+        newEvent.rivalsa_inps,
+        2, // <-- marca_da_bollo fisso a 2
+        newEvent.tipo_attivita,
+      ]
     );
     newEvent.id = result.insertId; // Aggiungi l'ID generato dal database
+    newEvent.marca_da_bollo = 2; // Imposta anche nella risposta
     res.status(201).json(newEvent);
   } catch (err) {
     console.error("Errore durante l'inserimento dell'evento:", err);
@@ -150,6 +95,8 @@ app.post("/db-events", express.json(), async (req, res) => {
   }
 });
 
+//DELETE -> ELIMINA UN EVENTO
+// Assicurati che l'ID dell'evento sia passato come parametro nella URL
 app.delete("/db-events/:id", async (req, res) => {
   const eventId = req.params.id;
 
