@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="balance-mobile-add-on.css" />
 
   <script src="index.js" defer></script>
-  <script src="bilancio.js" defer></script>
+  <script src="bilancioEU.js" defer></script>
   <title>Innuma</title>
 </head>
 
@@ -83,22 +83,25 @@
         </div>
         <div class="divBilancioFiltri">
           <!--Preso dal calendario, CSS nel GLOBAL?-->
+          <!--per la classe pallinoEU vedi calendar.css-->
           <div class="elementoFiltro"> 
-            <div class="pallino"></div>
-            <span class="spanFiltro">Scuola Fisica</span>
+            <div class="pallinoEntrate"></div>
+            <span class="spanFiltro">Entrate</span>
           </div>
           <div class="elementoFiltro">
-            <div class="pallino"></div>
-            <span class="spanFiltro">Scuola Online</span>
+            <div class="pallinoUscite"></div>
+            <span class="spanFiltro">Uscite</span>
           </div>
           <div class="elementoFiltro">
-            <div class="pallino"></div>
-            <span class="spanFiltro">Ripetizioni</span>
+            <div class="pallinoDaCont"></div>
+            <span class="spanFiltro">Da Contabilizzare</span>
           </div>
         </div>
+        <a href="bilancio.html">
         <button class="entrateUscita">
           Entrata/Uscita
         </button>
+        </a>
       </div>
 
       <div class="cartDestra">
