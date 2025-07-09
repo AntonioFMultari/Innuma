@@ -24,21 +24,25 @@ header {
 
 .imgLogo {
   width: 10rem;
+  user-select: none;
 }
 
 .hamburgerMenu {
   width: 2.5rem;
   border-radius: 25%;
+  user-select: none;
 }
 .hamburgerMenu:hover {
   cursor: pointer;
   background-color: whitesmoke;
+  user-select: none;
 }
 
 .spanSaluto {
   margin-left: 2rem;
   font-size: 1.5rem;
   font-weight: 500;
+  user-select: none;
 }
 
 .divLogo-saluto {
