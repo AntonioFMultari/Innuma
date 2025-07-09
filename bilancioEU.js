@@ -48,7 +48,7 @@ function BalancePage() {
   const elencoTransazioni = document.createElement("div");
   elencoTransazioni.classname = "listaTrans";
 
-
+ 
 
   //fa un loop e crea un elemento per ogni transactions (questo anche ma studierò, sembra molto utile)
   transactions.forEach((tx) => {
@@ -66,6 +66,41 @@ function BalancePage() {
 
   //agganciare tutto sulla cartella di bilancio
   wrapperBilancio.appendChild(cartellaBilancio);
+}
+
+// Make transactions globally accessible and match HTML
+const transactions = [
+  { name: "Ezra Federico", amount: "€45.00", type: "Da Cont." },
+  { name: "Materie", amount: "-€20.00", type: "Uscita" },
+  { name: "Ezra Federico", amount: "€45.00", type: "Da Cont." },
+  { name: "Marco Delfinis", amount: "€45.00", type: "Da Cont." },
+  { name: "Libri", amount: "-€15.00", type: "Uscita" },
+  { name: "Mario Ross", amount: "€45.00", type: "Da Cont." },
+  { name: "Mario Rossi", amount: "€45.00", type: "Contab." },
+];
+
+function getTransactionTotal(transactions) {
+  return transactions.reduce((sum, tx) => {
+    // Handles both positive and negative euro values
+    let amt = parseFloat(String(tx.amount).replace(/[^\d.-]+/g, ''));
+    // If the amount string starts with '-', keep it negative
+    if (String(tx.amount).trim().startsWith('-')) amt = -Math.abs(amt);
+    return sum + (isNaN(amt) ? 0 : amt);
+  }, 0);
+}
+
+function updateGraphTotal(transactions) {
+  const total = getTransactionTotal(transactions);
+  let graficoTotal = document.getElementById('grafico-total');
+  // Fallback: create if not present
+  if (!graficoTotal && document.getElementById('grafico')) {
+    graficoTotal = document.createElement('div');
+    graficoTotal.id = 'grafico-total';
+    document.getElementById('grafico').appendChild(graficoTotal);
+  }
+  if (graficoTotal) {
+    graficoTotal.textContent = `€${total.toLocaleString('it-IT', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+  }
 }
 
 // Funzione per creare un grafico a torta con gradienti
