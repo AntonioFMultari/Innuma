@@ -5,28 +5,7 @@
   border-radius: 0.5rem;
   aspect-ratio: 1;
 }
-/* ho fatto questi tre classi per i pallini del bilancioEU */
-.pallinoEntrate {
-  background-color: #ade27b;
-  width: 1rem;
-  height: 1rem;
-  border-radius: 0.5rem;
-  aspect-ratio: 1;
-}
-.pallinoUscite {
-  background-color: #ff4645;
-  width: 1rem;
-  height: 1rem;
-  border-radius: 0.5rem;
-  aspect-ratio: 1;
-}
-.pallinoDaCont {
-  background-color: #49b4ff;
-  width: 1rem;
-  height: 1rem;
-  border-radius: 0.5rem;
-  aspect-ratio: 1;
-}
+
 .spanFiltro {
   font-size: 12pt;
 }
