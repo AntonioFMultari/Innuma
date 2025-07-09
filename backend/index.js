@@ -1,8 +1,5 @@
 import express from "express";
-import fs from "fs";
 import path from "path";
-import crypto from "crypto";
-import { get } from "http";
 
 const app = express();
 const PORT = 3000;
@@ -54,6 +51,7 @@ async function getEvents() {
   }
 }
 
+//PAGINA CALENDARIO
 //GET -> PRENDI TUTTI GLI EVENTI
 app.get("/db-events", async (req, res) => {
   try {
