@@ -108,7 +108,7 @@ const CreaGrafico = (grafico, vettoreDati, vettoreColori) => {
   grafico.style.borderRadius = "50%";
 };
 CreaGrafico(grafico, vettoreDati, vettoreColori);
-
+/*
 // Make transactions globally accessible
 const transactions = [
   { name: "Ezra Federico", amount: "€45.00", type: "Da Cont." },
@@ -137,4 +137,4 @@ function updateGraphTotal(transactions) {
 document.addEventListener('DOMContentLoaded', function() {
   // Initial call
   updateGraphTotal(transactions);
-});
+});*/
