@@ -54,7 +54,7 @@
   flex-wrap: wrap;
 }
 
-.elementoFiltro {
+.elementoFiltroBilancio {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -232,7 +232,31 @@
   user-select: none;
 }
 
-/* spertimento - mobile schermi*/
+.pallinoFiltro {
+  background-color: #a9f5c1;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 0.5rem;
+  aspect-ratio: 1;
+}
+
+/* Evidenzia filtro selezionato */
+.filtro-evidenziato {
+  background: #f3e6f8 !important;
+  color: #222 !important;
+  border-radius: 2rem;
+  padding: 0.5rem;
+}
+
+/* Evidenzia filtro al passaggio */
+.filtro-hover {
+  background: #f3e6f8 !important;
+  color: #222 !important;
+  border-radius: 2rem;
+  padding: 0.5rem;
+}
+
+/* esperimento - mobile schermi*/
 
 @media screen and (max-width: 992px) {
   /* Tablet in giù */
