@@ -8,16 +8,62 @@
   flex-wrap: wrap;
 }
 
-.anteprimaFatture {
-  height: 40rem; /* Imposta l'altezza desiderata */
-  width: 32rem;
-  background-color: white;
-  box-shadow: 0 0 1rem #888888;
-  overflow-y: auto; /* Aggiunge lo scroll verticale se il contenuto è troppo grande */
+.anteprimaFattureWrapper{
+
+  background: white;
   border-radius: 2rem; /* Aggiunge un bordo arrotondato per un aspetto migliore */
+  padding: 2rem 0rem ; /* Aggiunge un padding per evitare che il contenuto tocchi i bordi */
+  box-shadow: 0 0 1rem #888888;
+}
+
+.anteprimaFatture {
+  height: 38rem; /* Imposta l'altezza desiderata */
+  width: 32rem;
   display: flex; /* Cambia da inline-flex a flex */
   flex-direction: column; /* Dispone gli elementi in colonna */
   align-items: center; /* Centra gli elementi figli orizzontalmente */
+  gap: 2rem; /* Spazio tra gli elementi figli */
+
+  overflow-y: auto;  /*Aggiunge lo scroll verticale se il contenuto è troppo grande */
+  box-sizing: border-box; /* Include il padding e il bordo nella larghezza e altezza totali */
+  padding-right: 0.5rem;
+
+    /* width */
+::-webkit-scrollbar {
+  width: 15px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+}
+
+/* Chrome, Edge, Safari */
+.anteprimaFatture::-webkit-scrollbar {
+  margin-left: -0.5rem; /* Sposta la scrollbar verso sinistra */
+  width: 10px;
+}
+
+.anteprimaFatture::-webkit-scrollbar-track {
+  background: lightgray;
+  border-radius: 2rem;
+}
+
+.anteprimaFatture::-webkit-scrollbar-thumb {
+  background-color: darkgray;
+  border-radius: 10px;
+  border: 2px solid lightgray;
 }
 
 .specificaFattura {
@@ -32,16 +78,17 @@
 }
 
 .anteprimaSpec {
-  height: 8rem;
-  width: 30rem;
-  background-color: #c6adcf /* #A764BD */;
+  width: 28rem;
+  min-height: 8rem;
+  min-width: 28rem;
+  background-color: #f3e6f8;
   cursor: pointer;
   color: black;
   border-radius: 2rem;
   display: flex; /* Aggiunto per centrare il contenuto interno */
   justify-content: center; /* Centra orizzontalmente il contenuto interno */
   align-items: center; /* Centra verticalmente il contenuto interno */
-  margin: 1.5rem auto 0 auto; /* Sposta il div un po' in basso e lo centra orizzontalmente */
+
 }
 
 .anteprimaSpec.active {
@@ -108,4 +155,11 @@ ul{
 .iconaMoney{
   width: 2rem;
   height: 2rem;
+}
+
+.arrowIcon{
+  width: 2rem;
+  height: 2rem;
+  display: inline-block;
+  margin: auto;
 }
