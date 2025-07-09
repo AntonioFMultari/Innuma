@@ -255,21 +255,6 @@
   user-select: none;
 }
 
-.spanFiltriBil {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 100px;
-  height: 34px;
-  font-size: 1rem;
-  border-radius: 1.2rem;
-  background: #f8f8f8;
-  margin: 0 4px;
-  padding: 0 10px;
-  box-sizing: border-box;
-  white-space: nowrap;
-}
-
 /* spertimento - mobile schermi*/
 
 @media screen and (max-width: 992px) {
@@ -361,4 +346,19 @@
     margin-left: auto;
     margin-right: auto;
   }
+}
+
+.spanFiltriBil {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 34px;
+  font-size: 1rem;
+  border-radius: 1.2rem;
+  background: #f8f8f8;
+  margin: 0 4px;
+  padding: 0 10px;
+  box-sizing: border-box;
+  white-space: nowrap;
 }
