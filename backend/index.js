@@ -137,3 +137,21 @@ app.delete("/db-events/:id", async (req, res) => {
       .json({ error: "Errore durante l'eliminazione dell'evento" });
   }
 });
+
+// PUT -> AGGIORNA UN EVENTO
+app.put("/db-events/:id", express.json(), async (req, res) => {
+  const eventId = req.params.id;
+  const updatedEvent = req.body;
+  try {
+    await db.promiseConnection.query(
+      "UPDATE events SET start = ?, end = ? WHERE id = ?",
+      [updatedEvent.start, updatedEvent.end, eventId]
+    );
+    res.status(200).json({ success: true });
+  } catch (err) {
+    console.error("Errore durante l'aggiornamento dell'evento:", err);
+    res
+      .status(500)
+      .json({ error: "Errore durante l'aggiornamento dell'evento" });
+  }
+});

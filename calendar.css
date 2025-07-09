@@ -29,49 +29,50 @@
 }
 .spanFiltro {
   font-size: 12pt;
-  user-select: none;
 }
 
+/* Wrapper per la barra filtri */
+.divFiltri {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 2rem 0 3rem 2rem;
+  width: 100%;
+}
+
+/* Container dei filtri: scrollabile orizzontale */
 .containerFiltri {
   box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.25);
   display: flex;
   align-items: center;
-  justify-content: space-around;
   padding: 1rem;
-  height: 1.5rem;
+  height: 2.5rem;
   border-radius: 2.5rem;
-}
-.elementoFiltro {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.btnFiltro {
-  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.25);
-  width: 3.5rem;
-  height: 3.5rem;
-  border-radius: 1.75rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 1rem;
-  user-select: none;
+  overflow-x: auto;
+  max-width: 700px;
+  min-width: 0;
+  gap: 1rem;
+  background: #fff;
+  scrollbar-width: thin;
 }
 
-.btnFiltro:hover {
-  cursor: pointer;
-  background-color: whitesmoke;
+/* Scrollbar sottile per Chrome/Safari */
+.containerFiltri::-webkit-scrollbar {
+  height: 6px;
+}
+.containerFiltri::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
 }
 
-.divFiltri {
-  display: flex;
-  margin: 1.5rem;
-
-  span {
-    cursor: default;
-    margin-right: 2rem;
-  }
+/* Limita la larghezza del testo nei filtri */
+.elementoFiltro .spanFiltro {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 #imgFiltroEvento {
@@ -299,6 +300,14 @@
     max-width: 95%;
   }
 
+  .divFiltri {
+    max-width: 95%;
+  }
+
+  .btnFiltro {
+    display: none;
+  }
+
   .btnFiltro {
     display: none;
   }
@@ -339,28 +348,65 @@
     display: flex;
   }
 }
+@media screen and (width < 825px) {
+  .divFiltri {
+    max-width: 95%;
+    margin-left: 2%;
+  }
+}
 
+/* Bottone per aprire la tendina filtri */
+.btnFiltro {
+  background: white;
+  border: none;
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.25);
+}
+.btnFiltro:hover {
+  background: #854f97;
+}
+
+/* Bottone deseleziona */
 #btn-deseleziona-filtro {
   display: none;
+  background: #a764bd;
+  border: none;
+  border-radius: 5rem;
+  width: 3rem;
+  height: 3rem;
+  aspect-ratio: 1;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-left: 1rem;
+  color: white;
+  font-weight: bold;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: 1.5rem;
+    height: 1.5rem;
+    aspect-ratio: 1;
+  }
 }
 #btn-deseleziona-filtro.visibile {
   display: inline-block;
 }
-#btn-deseleziona-filtro {
-  background: #a764bd;
-  border: none;
-  border-radius: 5rem;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  transition: background 0.2s;
-  margin: 0 1rem;
-
-  img {
-    width: 1.5rem;
-    aspect-ratio: 1;
-  }
-}
 #btn-deseleziona-filtro:hover {
-  background: #a764bd;
+  background: #854f97;
   color: white;
+}
+
+.dettaglioEvento {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
 }

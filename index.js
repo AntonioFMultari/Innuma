@@ -106,6 +106,18 @@ if (window.location.pathname === "./Innuma/index.html") {
   selezioneElementoHamburger();
 }
 
+const FormattaData = (data) => {
+  const anno = data.getFullYear();
+  const mese = String(data.getMonth() + 1).padStart(2, "0");
+  const giorno = String(data.getDate()).padStart(2, "0");
+
+  const ore = String(data.getHours()).padStart(2, "0");
+  const minuti = String(data.getMinutes()).padStart(2, "0");
+  const secondi = String(data.getSeconds()).padStart(2, "0");
+
+  return `${anno}-${mese}-${giorno} ${ore}:${minuti}:${secondi}`;
+};
+
 //Inizializzazione del calendario
 var calendar;
 document.addEventListener("DOMContentLoaded", function () {
@@ -162,19 +174,26 @@ document.addEventListener("DOMContentLoaded", function () {
       box.style.minWidth = "200px";
 
       // Genera dinamicamente i dettagli dell'evento
-      let dettagli = `<strong>${info.event.title}</strong><br><br>`;
-      dettagli += `<span><b>Inizio:</b> ${
+      let dettagli = `<strong style="font-size:2rem;">${info.event.title}</strong><br><br>`;
+      dettagli += `<div class="dettaglioEvento"><span><b>Inizio:</b> ${
         info.event.start?.toLocaleString() || ""
-      }</span><br>`;
+      }</span></div>`;
       if (info.event.end) {
-        dettagli += `<span><b>Fine:</b> ${info.event.end.toLocaleString()}</span><br>`;
+        dettagli += `<div class="dettaglioEvento"><span><b>Fine:</b> ${info.event.end.toLocaleString()}</span></div>`;
       }
 
       // Mostra tutte le proprietà di extendedProps
       if (info.event.extendedProps) {
         for (const [key, value] of Object.entries(info.event.extendedProps)) {
           if (value !== null && value !== undefined && value !== "") {
-            dettagli += `<span><b>${key}:</b> ${value}</span><br>`;
+            const label = key
+              .replace(/_/g, " ")
+              .replace(/\b\w/g, (l) => l.toUpperCase());
+            let displayValue = value;
+            if (key === "rivalsa_inps") {
+              displayValue = value == 1 ? "Sì" : "No";
+            }
+            dettagli += `<div class="dettaglioEvento"><span><b>${label}:</b> ${displayValue}</span></div>`;
           }
         }
       }
@@ -291,6 +310,23 @@ document.addEventListener("DOMContentLoaded", function () {
     eventSources: {
       url: `${_URL}/db-events`,
     },
+    eventDrop: function (info) {
+      if (confirm("Sei sicuro di voler spostare questo evento?")) {
+        inviaRichiesta("PUT", `/db-events/${info.event.id}`, {
+          start: FormattaData(info.event.start),
+          end: info.event.end ? FormattaData(info.event.end) : null,
+        })
+          .then(() => {
+            calendar.refetchEvents();
+          })
+          .catch((err) => {
+            alert("Errore durante l'aggiornamento dell'evento!");
+            info.revert();
+          });
+      } else {
+        info.revert();
+      }
+    },
   });
   calendar.render();
 });
@@ -361,6 +397,8 @@ document.addEventListener("DOMContentLoaded", function () {
       filtro.innerHTML = `<div class="pallino" style="background:${colore};"></div>
         <span class="spanFiltro">${nome}</span>`;
       containerFiltri.prepend(filtro);
+      aggiungiListenerFiltro(filtro); // <-- aggiungi subito il listener!
+
       const nuovoEvento = {
         title: nome,
         start: orarioInizioInput.value,
@@ -486,69 +524,117 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+  // Funzione per mostrare/nascondere il bottone "Deseleziona filtro"
   const btnDeseleziona = document.getElementById("btn-deseleziona-filtro");
-
-  // Funzione di utilità per aggiornare la visibilità del bottone
   function aggiornaBottoneDeseleziona() {
-    const almenoUnoSelezionato = Array.from(filtri).some((f) =>
-      f.classList.contains("filtro-evidenziato")
-    );
+    const almenoUnoSelezionato = Array.from(
+      document.querySelectorAll(".elementoFiltro")
+    ).some((f) => f.classList.contains("filtro-evidenziato"));
     if (btnDeseleziona) {
       btnDeseleziona.classList.toggle("visibile", almenoUnoSelezionato);
     }
   }
+  if (btnDeseleziona) {
+    btnDeseleziona.addEventListener("click", function () {
+      document
+        .querySelectorAll(".fc-event")
+        .forEach((ev) => ev.classList.remove("evento-evidenziato"));
+      document
+        .querySelectorAll(".elementoFiltro")
+        .forEach((f) => f.classList.remove("filtro-evidenziato"));
+      aggiornaBottoneDeseleziona();
+    });
+  }
 
-  filtri.forEach((filtro) => {
-    // Evidenzia eventi al click sul filtro
+  // Funzione per aggiungere i listener a un filtro
+  function aggiungiListenerFiltro(filtro) {
     filtro.addEventListener("click", function () {
       const nomeFiltro = filtro.querySelector(".spanFiltro").innerText.trim();
-
-      // Rimuovi evidenziazione da tutti gli eventi
-      document.querySelectorAll(".fc-event").forEach((ev) => {
-        ev.classList.remove("evento-evidenziato");
-      });
-
-      // Evidenzia solo quelli con lo stesso nome_cliente
+      document
+        .querySelectorAll(".fc-event")
+        .forEach((ev) => ev.classList.remove("evento-evidenziato"));
       document.querySelectorAll(".fc-event").forEach((ev) => {
         const title = ev.querySelector(".fc-event-title")?.innerText || "";
         if (title.includes(nomeFiltro)) {
           ev.classList.add("evento-evidenziato");
         }
       });
-
-      // Evidenzia il filtro selezionato
-      filtri.forEach((f) => f.classList.remove("filtro-evidenziato"));
+      document
+        .querySelectorAll(".elementoFiltro")
+        .forEach((f) => f.classList.remove("filtro-evidenziato"));
       filtro.classList.add("filtro-evidenziato");
       aggiornaBottoneDeseleziona();
     });
-
-    // Hover: evidenzia filtro
     filtro.addEventListener("mouseenter", function () {
       filtro.classList.add("filtro-hover");
     });
     filtro.addEventListener("mouseleave", function () {
       filtro.classList.remove("filtro-hover");
     });
-  });
-
-  if (btnDeseleziona) {
-    btnDeseleziona.addEventListener("click", function () {
-      // Rimuovi evidenziazione da tutti gli eventi
-      document.querySelectorAll(".fc-event").forEach((ev) => {
-        ev.classList.remove("evento-evidenziato");
-      });
-      // Rimuovi evidenziazione da tutti i filtri
-      filtri.forEach((f) => f.classList.remove("filtro-evidenziato"));
-      aggiornaBottoneDeseleziona();
-    });
   }
 
-  // All'avvio, assicura che il bottone sia nascosto
-  aggiornaBottoneDeseleziona();
+  // Funzione per creare un filtro solo se non esiste già
+  function creaFiltroSeNonEsiste(nome, colore = "#a9f5c1") {
+    const esiste = Array.from(
+      document.querySelectorAll(".elementoFiltro .spanFiltro")
+    ).some((span) => span.innerText.trim() === nome.trim());
+    if (esiste) return;
+    const filtro = document.createElement("div");
+    filtro.className = "elementoFiltro";
+    filtro.innerHTML = `<div class="pallino" style="background:${colore};"></div>
+      <span class="spanFiltro">${nome}</span>`;
+    document.querySelector(".containerFiltri").prepend(filtro);
+    aggiungiListenerFiltro(filtro);
+  }
+
+  // Applica i listener ai filtri già presenti
+  document.querySelectorAll(".elementoFiltro").forEach(aggiungiListenerFiltro);
+
+  // Crea i filtri dagli eventi del backend
+  inviaRichiesta("GET", "/db-events")
+    .then((ris) => {
+      const eventi = ris.data || ris;
+      const nomiFiltriCreati = new Set();
+      eventi.forEach((ev) => {
+        const nome = ev.title || ev.nome_cliente || "";
+        if (nome && !nomiFiltriCreati.has(nome)) {
+          creaFiltroSeNonEsiste(nome, ev.color || "#a9f5c1");
+          nomiFiltriCreati.add(nome);
+        }
+      });
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 });
+
+function creaFiltroSeNonEsiste(nome, colore = "#a9f5c1") {
+  // Controlla se esiste già un filtro con questo nome
+  const esiste = Array.from(
+    document.querySelectorAll(".elementoFiltro .spanFiltro")
+  ).some((span) => span.innerText.trim() === nome.trim());
+  if (esiste) return;
+  // Crea nuovo filtro
+  const filtro = document.createElement("div");
+  filtro.className = "elementoFiltro";
+  filtro.innerHTML = `<div class="pallino" style="background:${colore};"></div>
+    <span class="spanFiltro">${nome}</span>`;
+  document.querySelector(".containerFiltri").prepend(filtro);
+  aggiungiListenerFiltro(filtro);
+}
 
 inviaRichiesta("GET", "/db-events")
   .then((ris) => {
+    // Crea filtri unici per ogni nome evento
+    const eventi = ris.data || ris; // dipende da come arriva la risposta
+    const nomiFiltriCreati = new Set();
+    eventi.forEach((ev) => {
+      const nome = ev.title || ev.nome_cliente || "";
+      if (nome && !nomiFiltriCreati.has(nome)) {
+        creaFiltroSeNonEsiste(nome, ev.color || "#a9f5c1");
+        nomiFiltriCreati.add(nome);
+      }
+    });
     console.log(ris.data);
   })
   .catch((err) => {
