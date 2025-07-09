@@ -47,17 +47,8 @@ function BalancePage() {
   //l'elenco delle transazioni
   const elencoTransazioni = document.createElement("div");
   elencoTransazioni.classname = "listaTrans";
-
-  //esempio di data preso online (la struttura, il resto ho messo per comodita di vedere paragonandola con la Figma)
-  const transactions = [
-    { name: "Mario Rossi", amount: "€45.00", type: "Da Cont." },
-    { name: "ITS Accade...", amount: "€128.00", type: "Da Cont." },
-    { name: "Corso Onlin...", amount: "€235.00", type: "Corrib." },
-    { name: "Mario Rossi", amount: "€45.00", type: "Da Cont." },
-    { name: "Corso Onlin...", amount: "€100.00", type: "Corrib." },
-    { name: "ITA Accade...", amount: "€90.00", type: "Corrib." },
-  ];
-
+  /*
+*/
   //fa un loop e crea un elemento per ogni transactions (questo anche ma studierò, sembra molto utile)
   transactions.forEach((tx) => {
     const item = document.createElement("div");
@@ -116,3 +107,35 @@ const CreaGrafico = (grafico, vettoreDati, vettoreColori) => {
   grafico.style.borderRadius = "50%";
 };
 CreaGrafico(grafico, vettoreDati, vettoreColori);
+
+// Make transactions globally accessible
+const transactions = [
+  { name: "Ezra Federico", amount: "€45.00", type: "Da Cont." },
+  { name: "Ezra Federico", amount: "€45.00", type: "Da Cont." },
+  { name: "Marco Delfinis", amount: "€45.00", type: "Da Cont." },
+  { name: "Mario Ross", amount: "€45.00", type: "Da Cont." },
+  { name: "Mario Rossi", amount: "€45.00", type: "Contab." },
+];
+
+function getTransactionTotal(transactions) {
+  // Parse amounts, remove euro sign and commas, convert to float
+  return transactions.reduce((sum, tx) => {
+    let amt = parseFloat(String(tx.amount).replace(/[^\d.-]+/g, ''));
+    return sum + (isNaN(amt) ? 0 : amt);
+  }, 0);
+}
+
+function updateGraphTotal(transactions) {
+  const total = getTransactionTotal(transactions);
+  const graficoTotal = document.getElementById('grafico-total');
+  if (graficoTotal) {
+    graficoTotal.textContent = `€${total.toLocaleString('it-IT', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Initial call
+  updateGraphTotal(transactions);
+});
+
+
