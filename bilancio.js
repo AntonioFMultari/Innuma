@@ -69,7 +69,7 @@ function BalancePage() {
 
 // Funzione per creare un grafico a torta con gradienti
 let vettoreDati = [20, 30, 50];
-let vettoreColori = ["red", "green", "blue"];
+let vettoreColori = ["#ffcd05", "#ade27b", "#49b4ff"];
 const grafico = document.getElementById("grafico");
 const CreaGrafico = (grafico, vettoreDati, vettoreColori) => {
   const somma = vettoreDati.reduce((acc, val) => acc + val, 0);
