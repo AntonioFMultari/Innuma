@@ -98,9 +98,8 @@ const CreaGrafico = (grafico, vettoreDati, vettoreColori) => {
     const finePercent = (angoloFinale / 360) * 100;
     angoloIniziale = angoloFinale;
 
-    return `${
-      vettoreColori[i % vettoreColori.length]
-    } ${inizioPercent}% ${finePercent}%`;
+    return `${vettoreColori[i % vettoreColori.length]
+      } ${inizioPercent}% ${finePercent}%`;
   });
 
   const gradient = `conic-gradient(${fasiGradient.join(", ")})`;
@@ -295,34 +294,103 @@ inviaRichiesta("GET", "/db-events")
     console.error(err);
   });*/
 
-const transactions = [
+/*const transactions = [
   { name: "Ezra Federico", amount: "€45.00", type: "Da Cont." },
   { name: "Ezra Federico", amount: "€45.00", type: "Da Cont." },
   { name: "Marco Delfinis", amount: "€45.00", type: "Da Cont." },
   { name: "Mario Rossi", amount: "€45.00", type: "Da Cont." },
   { name: "Mario Rossi", amount: "€45.00", type: "Contab." },
-];
+];*/
 
-function getTransactionTotal(transactions) {
-  // Parse amounts, remove euro sign and commas, convert to float
-  return transactions.reduce((sum, tx) => {
-    let amt = parseFloat(String(tx.amount).replace(/[^\d.-]+/g, ""));
-    return sum + (isNaN(amt) ? 0 : amt);
-  }, 0);
-}
+// sostisuisce con transactions ricevute dall'API
+function renderTransactions(eventi) {
+  const lista = document.querySelector(".listaBil");
+  lista.innerHTML = ""; // Clear existing
+  eventi.forEach((ev) => {
+    const div = document.createElement("div");
+    div.className = "transazioneOgetto";
+    div.innerHTML = `
+      <div class="transazionePallino1"></div>
+      <span class="transazioneNome">${ev.title || ev.nome_cliente || ""}</span>
+      <span class="transazioneEntrata">${ev.importo || ev.tariffa_oraria ? "€" + (ev.importo || ev.tariffa_oraria) : ""}</span>
+      <span class="transazioneStato">${ev.tipo || "Da Cont."}</span>
+      <button class="deleteTransazione" data-id="${ev.id}">Elimina</button>
+    `;
+    lista.appendChild(div);
+  });
 
-function updateGraphTotal(transactions) {
-  const total = getTransactionTotal(transactions);
-  const graficoTotal = document.getElementById("grafico-total");
-  if (graficoTotal) {
-    graficoTotal.textContent = `€${total.toLocaleString("it-IT", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    })}`;
+  function getTransactionTotal(transactions) {
+    // Parse amounts, remove euro sign and commas, convert to float
+    return transactions.reduce((sum, tx) => {
+      let amt = parseFloat(String(tx.amount).replace(/[^\d.-]+/g, ""));
+      return sum + (isNaN(amt) ? 0 : amt);
+    }, 0);
   }
+
+  function updateGraphTotal(transactions) {
+    const total = getTransactionTotal(transactions);
+    const graficoTotal = document.getElementById("grafico-total");
+    if (graficoTotal) {
+      graficoTotal.textContent = `€${total.toLocaleString("it-IT", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })}`;
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    // Initial call
+    updateGraphTotal(transactions);
+  });
+
+  // GET
+  function fetchAndRenderTransactions() {
+    inviaRichiesta("GET", "/db-events")
+      .then((ris) => {
+        const eventi = ris.data || ris;
+        renderTransactions(eventi);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+
+  // DELETE
+  document.querySelectorAll(".deleteTransazione").forEach((btn) => {
+    btn.onclick = function () {
+      const id = this.getAttribute("data-id");
+      if (confirm("Eliminare questa transazione?")) {
+        inviaRichiesta("DELETE", `/db-events/${id}`)
+          .then(() => fetchAndRenderTransactions())
+          .catch((err) => alert("Errore durante l'eliminazione"));
+      }
+    };
+  });
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  // Initial call
-  updateGraphTotal(transactions);
-});
+// scarica pagina bilancio
+document.addEventListener("DOMContentLoaded", fetchAndRenderTransactions);
+
+// POST
+document.getElementById("salva-evento").onclick = function (e) {
+  e.preventDefault();
+  const nome = document.getElementById("nome-evento").value;
+  const orarioInizio = document.getElementById("orario-inizio-evento").value;
+  const orarioFine = document.getElementById("orario-fine-evento").value;
+  const colore = document.getElementById("colore-evento").value;
+
+  const nuovoEvento = {
+    title: nome,
+    start: orarioInizio,
+    end: orarioFine,
+    color: colore,
+  };
+
+    inviaRichiesta("POST", "/db-events", nuovoEvento)
+    .then(() => {
+      fetchAndRenderTransactions();
+      document.getElementById("modal-evento").close();
+    })
+    .catch((err) => alert("Errore durante il salvataggio"));
+    
+  };
