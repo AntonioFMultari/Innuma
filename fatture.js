@@ -136,6 +136,11 @@ function mostraSpecificaFattura(fattura) {
         <td>
           <span class="Money">${fattura.importo ?? "Importo non disponibile"}</span>
         </td>
+        <td>
+          <button class="Delete">
+            <img src="assets/delete.png" alt="Delete Icon" class="IconaPanoramica">
+          </button>
+        </td>
       </tr>
     </table>
   `;

@@ -124,8 +124,11 @@
 .IconaPanoramica {
   width: 3rem;
   height: 3rem;
-  display: inline-block;
+  display: flex;
   margin: auto;
+  justify-content: center;
+  text-align: center;
+  
 }
 
 ul{
@@ -144,7 +147,7 @@ ul{
 .pre {
   white-space: pre;
   font-weight: bold;
-  width: 15rem;
+  /*width: 15rem;*/
 }
 
 .Money{
@@ -163,3 +166,26 @@ ul{
   display: inline-block;
   margin: auto;
 }
+
+button.Delete {
+  background-color: #D83C66;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  transform: translateY(0.5rem);
+  border-radius: 50%;
+  width: 4rem;
+  height: 4rem;
+  box-shadow: 0 2px 4px darkslategray;
+}
+
+/*button.Delete:hover {
+  box-shadow: 0 0 4px darkslategray;
+  transform: translateY(0);
+}
+*/
+button.Delete:active {
+  box-shadow: 0 0 2px darkslategray;
+  transform: translateY(0.5rem);
+}
+
