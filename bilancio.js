@@ -18,11 +18,11 @@ function BalancePage() {
   const contenutoFiltri = document.createElement("div");
   contenutoFiltri.classname = "contFiltri";
   contenutoFiltri.innerHTML =
-    '<div class="pallino"><span class="spanFiltro">Scuola Fisica</span></div>';
+    '<div class="pallino"><span class="spanFiltriBil">Scuola Fisica</span></div>';
   contenutoFiltri.innerHTML =
-    '<div class="pallino"><span class="spanFiltro">Scuola Online</span></div>';
+    '<div class="pallino"><span class="spanFiltriBil">Scuola Online</span></div>';
   contenutoFiltri.innerHTML =
-    '<div class="pallino"><span class="spanFiltro">Ripetizioni</span></div>';
+    '<div class="pallino"><span class="spanFiltriBil">Ripetizioni</span></div>';
   cartBilSinistra.appendChild(contenutoFiltri);
 
   //bottone per entrata e uscita
