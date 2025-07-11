@@ -10,13 +10,14 @@
   padding: 1.5rem;
 }
 
-.cartSinitra {
+/* tolto l's per distaccare che con non funziona per qualche ragione */
+.cartSinistra {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
   flex-basis: 0;
-  max-width: 0;
+  max-width: 500px;
   justify-content: center;
 }
 
@@ -69,7 +70,7 @@
   font-size: 1.1rem;
   cursor: pointer;
   margin-top: 1rem;
-  margin-left: 100px;
+  margin-left: 124px;
   width: 80%;
   max-width: 15rem;
   user-select: none;
@@ -124,14 +125,11 @@
 .transazioneUscita {
   font-weight: bold;
   white-space: nowrap; /* evita line-breaking */
+  color: #e74c3c;
 }
 
 .transazioneEntrata {
   color: #2c3e50;
-}
-
-.transazioneUscita {
-  color: #e74c3c;
 }
 
 .transazioneStato {
@@ -283,7 +281,7 @@
     padding: 1.5rem 1rem;
   }
 
-  .cartSinitra {
+  .cartSinistra {
     width: 100%;
     max-width: 550px; /* per leggibilità */
   }

@@ -2,70 +2,87 @@
 function BalancePage() {
   //la cartella dove mettiamo tutte i contenuti della pagina bilancio
   const wrapperBilancio = document.createElement("div");
-  wrapperBilancio.classname = "contenitoreBilancio";
+  wrapperBilancio.className = "contenitoreBilancio";
 
   //la cartella per il chart e transazioni
   const cartellaBilancio = document.createElement("div");
-  cartellaBilancio.classname = "cartellaBilancio";
-
+  cartellaBilancio.className = "cartBil";
+  wrapperBilancio.appendChild(cartellaBilancio);
   //parte chart
   const cartBilSinistra = document.createElement("div");
-  cartBilSinistra.classname = "cartellaSinitra";
+  cartBilSinistra.className = "cartSinistra";
+  cartellaBilancio.appendChild(cartBilSinistra);
 
   //chart codice preso da Pietro Bosio
+  const grafaBilancio = document.createElement("div");
+  grafaBilancio.className = "grafaBil";
+  cartBilSinistra.appendChild(grafaBilancio);
+
+  const grafico = document.createElement("div");
+  grafico.id = "grafico";
+  grafaBilancio.appendChild(grafico);
+
+  const graficoTotale = document.createElement("div");
+  graficoTotale.id = "grafico-total";
+  graficoTotale.textContent = "€0.00";
+  grafico.appendChild(graficoTotale);
 
   //filtri sotto il chart (copiando come si scrive su HTML per i filtri sopra il calendario)
   const contenutoFiltri = document.createElement("div");
-  contenutoFiltri.classname = "contFiltri";
-  contenutoFiltri.innerHTML =
-    '<div class="pallino"><span class="spanFiltriBil">Scuola Fisica</span></div>';
-  contenutoFiltri.innerHTML =
-    '<div class="pallino"><span class="spanFiltriBil">Scuola Online</span></div>';
-  contenutoFiltri.innerHTML =
-    '<div class="pallino"><span class="spanFiltriBil">Ripetizioni</span></div>';
+  contenutoFiltri.className = "divBilancioFiltri";
   cartBilSinistra.appendChild(contenutoFiltri);
 
+  function creaFiltro(nome) {
+    const filtro = document.createElement("div");
+    filtro.className = "elementoFiltro";
+    filtro.innerHTML = `<div class="pallino"></div><span class="spanFiltriBil">${nome}</span>`;
+    return filtro;
+  }
+
+  contenutoFiltri.appendChild(creaFiltro("Scuola Fisica"));
+  contenutoFiltri.appendChild(creaFiltro("Scuola Online"));
+  contenutoFiltri.appendChild(creaFiltro("Ripetizioni"));
+
   //bottone per entrata e uscita
+  const linkEntraUscita = document.createElement("a");
+  linkEntraUscita.href = "bilancioEU.html";
   const entraUscita = document.createElement("button");
+  entraUscita.className = "entrateUscita";
   entraUscita.textContent = "Entrate/Uscite";
-  entraUscita.classname = "btnEntUsc";
-  cartBilSinistra.appendChild(entraUscita);
+  linkEntraUscita.appendChild(entraUscita); // Assicurati che 'entraUscita' sia stato creato prima
+  cartBilSinistra.appendChild(linkEntraUscita);
 
   //collega la parte sinistra sulla cartella principiale
   cartellaBilancio.appendChild(cartBilSinistra);
 
   //parte transazioni
   const cartBilDestra = document.createElement("div");
-  cartBilDestra.classname = "cartellaDestra";
+  cartBilDestra.className = "cartDestra";
 
   //dove mettiamo il titolo (o transizioni o Scuola Online) per es.
   const titolo = document.createElement("h1");
-  titolo.textContent = "Transazioni";
-  titolo.classname = "headerTransazione";
-  cartBilDestra.appendChild(title);
+  titolo.textContent = "Contabilità";
+  titolo.className = "headerTransazione";
+  cartBilDestra.appendChild(titolo);
 
   //l'elenco delle transazioni
-  const elencoTransazioni = document.createElement("div");
-  elencoTransazioni.classname = "listaTrans";
-  /*
-   */
-  //fa un loop e crea un elemento per ogni transactions (questo anche ma studierò, sembra molto utile)
-  transactions.forEach((tx) => {
-    const item = document.createElement("div");
-    item.classname = "transaction-item";
-    item.innerHTML = '<span class="tx-name">${tx.name}</span>';
-    item.innerHTML = '<span class="tx-amount">${tx.amount}</span>';
-    item.innerHTML = '<span class="tx-type">${tx.type}</span>';
-    elencoTransazioni.appendChild(item);
-  });
+  const listaBil = document.createElement("div");
+  listaBil.className = "listaBil";
 
   //penultima funzione, aganciare destra con cartella (sinistra e destra finalmente fatto)
-  cartBilDestra.appendChild(elencoTransazioni);
+  cartBilDestra.appendChild(listaBil);
   cartellaBilancio.appendChild(cartBilDestra);
 
   //agganciare tutto sulla cartella di bilancio
   wrapperBilancio.appendChild(cartellaBilancio);
+
+  document.body.appendChild(wrapperBilancio);
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  BalancePage();
+  fetchAndRenderTransactions();
+});
 
 // Funzione per creare un grafico a torta con gradienti
 //vettore tariffe orarie ricevute dall'API
@@ -109,17 +126,12 @@ const CreaGrafico = (grafico, vettoreDati, vettoreColori) => {
   grafico.style.background = gradient;
   grafico.style.borderRadius = "50%";
 };
-//
-//
-//
-//
-//
-//
+
 // Crea nuovo filtro
 const filtro = document.createElement("div");
 filtro.className = "elementoFiltroBilancio";
 filtro.innerHTML = `<div class="pallinoFiltro" style="background:${colore};"></div>
-        <span class="spanFiltro">${nome}</span>`;
+        <span class="spanFiltriBil">${nome}</span>`;
 divBilancioFiltri.prepend(filtro);
 aggiungiListenerFiltro(filtro); // <-- aggiungi subito il listener!
 // Evidenzia eventi e filtro al click e hover
@@ -128,7 +140,7 @@ const filtri = document.querySelectorAll(".elementoFiltroBilancio");
 filtri.forEach((filtro) => {
   // Evidenzia eventi al click sul filtro
   filtro.addEventListener("click", function () {
-    const nomeFiltro = filtro.querySelector(".spanFiltro").innerText.trim();
+    const nomeFiltro = filtro.querySelector(".spanFiltriBil").innerText.trim();
 
     // Rimuovi evidenziazione da tutti gli eventi
     document.querySelectorAll(".fc-event").forEach((ev) => {
@@ -182,7 +194,7 @@ if (btnDeseleziona) {
 // Funzione per aggiungere i listener a un filtro
 function aggiungiListenerFiltro(filtro) {
   filtro.addEventListener("click", function () {
-    const nomeFiltro = filtro.querySelector(".spanFiltro").innerText.trim();
+    const nomeFiltro = filtro.querySelector(".spanFiltriBil").innerText.trim();
     document
       .querySelectorAll(".fc-event")
       .forEach((ev) => ev.classList.remove("evento-evidenziato"));
@@ -209,13 +221,13 @@ function aggiungiListenerFiltro(filtro) {
 // Funzione per creare un filtro solo se non esiste già
 function creaFiltroSeNonEsiste(nome, colore = "#a9f5c1") {
   const esiste = Array.from(
-    document.querySelectorAll(".elementoFiltro .spanFiltro")
+    document.querySelectorAll(".elementoFiltro .spanFiltriBil")
   ).some((span) => span.innerText.trim() === nome.trim());
   if (esiste) return;
   const filtro = document.createElement("div");
   filtro.className = "elementoFiltro";
   filtro.innerHTML = `<div class="pallino" style="background:${colore};"></div>
-      <span class="spanFiltro">${nome}</span>`;
+      <span class="spanFiltriBil">${nome}</span>`;
   document.querySelector(".containerFiltri").prepend(filtro);
   aggiungiListenerFiltro(filtro);
 }
@@ -243,14 +255,14 @@ inviaRichiesta("GET", "/db-events")
 function creaFiltroSeNonEsiste(nome, colore = "#a9f5c1") {
   // Controlla se esiste già un filtro con questo nome
   const esiste = Array.from(
-    document.querySelectorAll(".elementoFiltro .spanFiltro")
+    document.querySelectorAll(".elementoFiltro .spanFiltriBil")
   ).some((span) => span.innerText.trim() === nome.trim());
   if (esiste) return;
   // Crea nuovo filtro
   const filtro = document.createElement("div");
   filtro.className = "elementoFiltro";
   filtro.innerHTML = `<div class="pallino" style="background:${colore};"></div>
-    <span class="spanFiltro">${nome}</span>`;
+    <span class="spanFiltriBil">${nome}</span>`;
   document.querySelector(".containerFiltri").prepend(filtro);
   aggiungiListenerFiltro(filtro);
 }
@@ -386,11 +398,11 @@ document.getElementById("salva-evento").onclick = function (e) {
     color: colore,
   };
 
-    inviaRichiesta("POST", "/db-events", nuovoEvento)
+  inviaRichiesta("POST", "/db-events", nuovoEvento)
     .then(() => {
       fetchAndRenderTransactions();
       document.getElementById("modal-evento").close();
     })
     .catch((err) => alert("Errore durante il salvataggio"));
-    
-  };
+
+};
