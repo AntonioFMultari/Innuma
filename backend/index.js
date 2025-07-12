@@ -41,7 +41,7 @@ async function getEvents() {
   try {
     // Esegui una query SELECT
     const [rows, fields] = await db.promiseConnection.query(
-      "SELECT * FROM events"
+      "SELECT * FROM evento"
     );
     console.log("Eventi:", rows, fields);
     return rows;

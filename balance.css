@@ -236,7 +236,7 @@
   justify-content: center;
   width: 100px;
   height: 34px;
-  font-size: 1rem;  
+  font-size: 1rem;
   border-radius: 1.2rem;
   background: #f8f8f8;
   margin: 0 4px;
@@ -269,9 +269,45 @@
   padding: 0.5rem;
 }
 
+/* Modifica bottone aggingi Spese*/
+.btnAggiungiSpese {
+  position: relative;
+  z-index: 10;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 2rem;
+  border-style: none;
+  background-color: #e74c3c;
+  color: white;
+  font-size: 20pt;
+  font-weight: 700;
+  position: fixed;
+  align-items: center;
+  justify-content: center;
+  right: 2rem;
+  bottom: 2rem;
+  user-select: none;
+  display: flex;
+  justify-content: center;
+
+  &:hover {
+    background-color: #c04032;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  img {
+    width: 2rem;
+  }
+}
+
+#secondButtonSpese {
+  display: none;
+}
+
 /* esperimento - mobile schermi*/
 
-@media screen and (max-width: 992px) {
+@media screen and (width < 992px) {
   /* Tablet in giù */
   .cartBil {
     flex-direction: column;
@@ -302,7 +338,7 @@
 }
 
 /* adesso telefoni */
-@media screen and (max-width: 480px) {
+@media screen and (width < 480px) {
   html {
     font-size: 13px; /* aggiustare per più leggibilità sullo schermo */
   }
@@ -358,5 +394,24 @@
     max-width: 80%;
     margin-left: auto;
     margin-right: auto;
+  }
+
+  /*Bottone aggiungi spesa responsive*/
+  #secondButtonSpese {
+    display: flex;
+  }
+
+  #firstButtonSpese {
+    display: none;
+  }
+
+  .btnAggiungiSpese {
+    top: 0.75rem;
+    right: 5rem;
+    position: absolute;
+    font-size: 1rem;
+    font-weight: 500;
+    width: 10rem;
+    height: 3rem;
   }
 }
