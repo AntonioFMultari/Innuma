@@ -1,0 +1,147 @@
+.contActi { /*container attivita*/
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.25);
+  max-width: 1000px;
+  margin: 1.5rem auto;
+  border-radius: 2rem;
+  padding: 1.5rem;
+  
+}
+.AggAct{ /*bottone agg attivita*/
+  padding: 0.8rem;
+  background-color: #a764bd;
+  color: #ffffff;
+  border: none;
+  border-radius: 1.5rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+    display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+  max-width: 15rem;
+  user-select: none;
+  box-sizing: border-box;
+
+}
+
+.AggAct:active {
+  background-color: #53305e;
+} 
+.titolo{
+    margin-top: 1rem;
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+.sottotitoli{
+  display: grid;
+ grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 1rem;
+
+}
+.sottotitolo1{
+  font-size: 1.2rem;
+  font-weight: 500;
+  user-select: none;
+  margin-left: 1rem;
+}
+.sottotitolo2{
+  font-size: 1.2rem;
+  font-weight: 500;
+  user-select: none;
+  margin-right: 1rem;
+  text-align: right;
+}
+/* Stile per la lista delle attività */
+.AttOgetto {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 1rem;
+}
+.ListaAtt{
+  flex-wrap: 1;
+  flex-direction: column;
+  overflow-y: auto;
+  border-radius: 1.5rem;
+  padding: 1rem;
+  width: 95%;
+  min-height: 26rem;
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.25);
+  gap: 0.8rem;
+  display: flex;
+  margin-left: 25px;
+}
+
+.AttNome {
+  font-weight: 500;
+  text-align: left;
+}
+
+/* Pallini attivitá + Tariffa */
+
+.AttTar {
+  color: #7f8c8d;
+  font-size: 0.9rem;
+  text-align: roght;
+  white-space: nowrap;
+}
+.AttPallino1{
+ background-color: #3498db;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 50%;
+}
+.AttPallino2{
+ background-color: #e74c3c;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 50%;
+}
+.AttPallino3{
+ background-color: #2ecc71;;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 50%;
+}
+/* Bottone per eliminare le attivita */
+.DeleteBtn{
+  background-color: #e74c3c;
+  color: #ffffff;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.25rem 0.25rem;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: none;
+  transition: background 0.2s;
+    user-select: none;
+}
+.DeleteBtn:active {
+  background-color: #73301e;
+}
+.Deleteimg{
+   width: 1.2rem;
+  height: 1.2rem;
+  object-fit: contain;
+  display: block;
+  margin: 0;
+  padding: 0;
+    user-select: none;
+}
