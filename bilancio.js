@@ -1,389 +1,290 @@
-// Pagina Bilancio
+// Balance Page
 function BalancePage() {
-  //la cartella dove mettiamo tutte i contenuti della pagina bilancio
+  // The wrapper for all balance page content
   const wrapperBilancio = document.createElement("div");
   wrapperBilancio.className = "contenitoreBilancio";
 
-  //la cartella per il chart e transazioni
+  // The main container for chart and transactions
   const cartellaBilancio = document.createElement("div");
   cartellaBilancio.className = "cartBil";
   wrapperBilancio.appendChild(cartellaBilancio);
-  //parte chart
+
+  // Left part: Chart
   const cartBilSinistra = document.createElement("div");
   cartBilSinistra.className = "cartSinistra";
   cartellaBilancio.appendChild(cartBilSinistra);
 
-  //chart codice preso da Pietro Bosio
+  // Chart code (from Pietro Bosio)
   const grafaBilancio = document.createElement("div");
   grafaBilancio.className = "grafaBil";
   cartBilSinistra.appendChild(grafaBilancio);
 
-  const grafico = document.createElement("div");
-  grafico.id = "grafico";
-  grafaBilancio.appendChild(grafico);
+  const graficoCanvas = document.createElement("canvas");
+  graficoCanvas.id = "graficoCanvas";
+  graficoCanvas.className = "graficoCanvas";
+  // The chart canvas is now appended directly to grafaBilancio
+  grafaBilancio.appendChild(graficoCanvas);
 
   const graficoTotale = document.createElement("div");
   graficoTotale.id = "grafico-total";
   graficoTotale.textContent = "€0.00";
-  grafico.appendChild(graficoTotale);
+  // The total amount display is now appended directly to grafaBilancio
+  grafaBilancio.appendChild(graficoTotale);
 
-  //filtri sotto il chart (copiando come si scrive su HTML per i filtri sopra il calendario)
+  // Filters below the chart
   const contenutoFiltri = document.createElement("div");
   contenutoFiltri.className = "divBilancioFiltri";
   cartBilSinistra.appendChild(contenutoFiltri);
 
-  function creaFiltro(nome) {
-    const filtro = document.createElement("div");
-    filtro.className = "elementoFiltro";
-    filtro.innerHTML = `<div class="pallino"></div><span class="spanFiltriBil">${nome}</span>`;
-    return filtro;
-  }
+  const containerFiltriBilancio = document.createElement("div");
+  containerFiltriBilancio.className = "containerFiltriBilancio";
+  contenutoFiltri.appendChild(containerFiltriBilancio);
 
-  contenutoFiltri.appendChild(creaFiltro("Scuola Fisica"));
-  contenutoFiltri.appendChild(creaFiltro("Scuola Online"));
-  contenutoFiltri.appendChild(creaFiltro("Ripetizioni"));
+  const tendinaFiltriBilancio = document.createElement("div");
+  tendinaFiltriBilancio.id = "tendinaFiltriBilancio";
+  tendinaFiltriBilancio.className = "tendinaFiltriBilancio";
+  containerFiltriBilancio.appendChild(tendinaFiltriBilancio);
 
-  //bottone per entrata e uscita
-  const linkEntraUscita = document.createElement("a");
-  linkEntraUscita.href = "bilancioEU.html";
-  const entraUscita = document.createElement("button");
-  entraUscita.className = "entrateUscita";
-  entraUscita.textContent = "Entrate/Uscite";
-  linkEntraUscita.appendChild(entraUscita); // Assicurati che 'entraUscita' sia stato creato prima
-  cartBilSinistra.appendChild(linkEntraUscita);
-
-  //collega la parte sinistra sulla cartella principiale
-  cartellaBilancio.appendChild(cartBilSinistra);
-
-  //parte transazioni
+  // Right part: Transactions
   const cartBilDestra = document.createElement("div");
   cartBilDestra.className = "cartDestra";
-
-  //dove mettiamo il titolo (o transizioni o Scuola Online) per es.
-  const titolo = document.createElement("h1");
-  titolo.textContent = "Contabilità";
-  titolo.className = "headerTransazione";
-  cartBilDestra.appendChild(titolo);
-
-  //l'elenco delle transazioni
-  const listaBil = document.createElement("div");
-  listaBil.className = "listaBil";
-
-  //penultima funzione, aganciare destra con cartella (sinistra e destra finalmente fatto)
-  cartBilDestra.appendChild(listaBil);
   cartellaBilancio.appendChild(cartBilDestra);
 
-  //agganciare tutto sulla cartella di bilancio
-  wrapperBilancio.appendChild(cartellaBilancio);
+  const titoloBilancio = document.createElement("h2");
+  titoloBilancio.className = "titoloBil";
+  titoloBilancio.textContent = "Contabilità";
+  cartBilDestra.appendChild(titoloBilancio);
 
-  document.body.appendChild(wrapperBilancio);
+  const listaBil = document.createElement("div");
+  listaBil.className = "listaBil";
+  cartBilDestra.appendChild(listaBil);
+
+  return wrapperBilancio;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  BalancePage();
-  fetchAndRenderTransactions();
-});
+// Initialize the pie chart
+let balanceChart = null; // Variable to hold the Chart.js instance
 
-// Funzione per creare un grafico a torta con gradienti
-//vettore tariffe orarie ricevute dall'API
-let vettoreDati = [];
-let vettoreColori = [];
-inviaRichiesta("GET", "/db-events").then((response) => {
-  response.data.forEach((element) => {
-    vettoreDati.push(Number(element.tariffa_oraria));
-    vettoreColori.push(element.color);
-  });
-  const somma = vettoreDati.reduce((acc, val) => acc + val, 0);
-  const datoPercentuale = vettoreDati.map((val) => (val / somma) * 100);
+function renderBalanceChart(transactions) {
+  const ctx = document.getElementById('graficoCanvas').getContext('2d');
+  const graficoTotale = document.getElementById('grafico-total');
 
-  const grafico = document.getElementById("grafico");
-  CreaGrafico(grafico, datoPercentuale, vettoreColori);
-});
-const CreaGrafico = (grafico, vettoreDati, vettoreColori) => {
-  if (vettoreDati.length !== vettoreColori.length) {
-    console.warn("Il numero di dati e colori è diverso");
+  const totalIn = transactions
+    .filter(t => t.transazioneEntrata)
+    .reduce((sum, t) => sum + parseFloat(t.transazioneEntrata), 0);
+
+  const totalOut = transactions
+    .filter(t => t.transazioneUscita)
+    .reduce((sum, t) => sum + parseFloat(t.transazioneUscita), 0);
+
+  const balance = totalIn - totalOut;
+
+  graficoTotale.textContent = `€${balance.toFixed(2)}`;
+
+  if (balanceChart) {
+    balanceChart.destroy(); // Destroy existing chart instance
   }
 
-  const angoli = vettoreDati.map((val) => (val / 100) * 360);
-
-  const OFFSET_GRAFICO = 0;
-  let angoloIniziale = 0 + OFFSET_GRAFICO;
-
-  const fasiGradient = angoli.map((angle, i) => {
-    const angoloFinale = angoloIniziale + angle;
-    const inizioPercent = (angoloIniziale / 360) * 100;
-    const finePercent = (angoloFinale / 360) * 100;
-    angoloIniziale = angoloFinale;
-
-    return `${vettoreColori[i % vettoreColori.length]
-      } ${inizioPercent}% ${finePercent}%`;
-  });
-
-  const gradient = `conic-gradient(${fasiGradient.join(", ")})`;
-
-  if (!grafico) return;
-
-  grafico.style.background = gradient;
-  grafico.style.borderRadius = "50%";
-};
-
-// Crea nuovo filtro
-const filtro = document.createElement("div");
-filtro.className = "elementoFiltroBilancio";
-filtro.innerHTML = `<div class="pallinoFiltro" style="background:${colore};"></div>
-        <span class="spanFiltriBil">${nome}</span>`;
-divBilancioFiltri.prepend(filtro);
-aggiungiListenerFiltro(filtro); // <-- aggiungi subito il listener!
-// Evidenzia eventi e filtro al click e hover
-const filtri = document.querySelectorAll(".elementoFiltroBilancio");
-
-filtri.forEach((filtro) => {
-  // Evidenzia eventi al click sul filtro
-  filtro.addEventListener("click", function () {
-    const nomeFiltro = filtro.querySelector(".spanFiltriBil").innerText.trim();
-
-    // Rimuovi evidenziazione da tutti gli eventi
-    document.querySelectorAll(".fc-event").forEach((ev) => {
-      ev.classList.remove("evento-evidenziato");
-    });
-
-    // Evidenzia solo quelli con lo stesso nome_cliente
-    document.querySelectorAll(".fc-event").forEach((ev) => {
-      const title = ev.querySelector(".fc-event-title")?.innerText || "";
-      if (title.includes(nomeFiltro)) {
-        ev.classList.add("evento-evidenziato");
+  balanceChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Entrate', 'Uscite'],
+      datasets: [{
+        data: [totalIn, totalOut],
+        backgroundColor: ['#ade27b', '#ff4645'], // Green for In, Red for Out
+        hoverOffset: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '80%', // Makes it a ring chart
+      plugins: {
+        legend: {
+          display: false // No legend as total is in the center
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              let label = context.label || '';
+              if (label) {
+                label += ': ';
+              }
+              if (context.parsed) {
+                label += '€' + context.parsed.toFixed(2);
+              }
+              return label;
+            }
+          }
+        }
       }
-    });
-
-    // Evidenzia il filtro selezionato
-    filtri.forEach((f) => f.classList.remove("filtro-evidenziato"));
-    filtro.classList.add("filtro-evidenziato");
-  });
-
-  // Hover: evidenzia filtro
-  filtro.addEventListener("mouseenter", function () {
-    filtro.classList.add("filtro-hover");
-  });
-  filtro.addEventListener("mouseleave", function () {
-    filtro.classList.remove("filtro-hover");
-  });
-});
-
-// Funzione per mostrare/nascondere il bottone "Deseleziona filtro"
-const btnDeseleziona = document.getElementById("btn-deseleziona-filtro");
-function aggiornaBottoneDeseleziona() {
-  const almenoUnoSelezionato = Array.from(
-    document.querySelectorAll(".elementoFiltro")
-  ).some((f) => f.classList.contains("filtro-evidenziato"));
-  if (btnDeseleziona) {
-    btnDeseleziona.classList.toggle("visibile", almenoUnoSelezionato);
-  }
-}
-if (btnDeseleziona) {
-  btnDeseleziona.addEventListener("click", function () {
-    document
-      .querySelectorAll(".fc-event")
-      .forEach((ev) => ev.classList.remove("evento-evidenziato"));
-    document
-      .querySelectorAll(".elementoFiltro")
-      .forEach((f) => f.classList.remove("filtro-evidenziato"));
-    aggiornaBottoneDeseleziona();
-  });
-}
-
-// Funzione per aggiungere i listener a un filtro
-function aggiungiListenerFiltro(filtro) {
-  filtro.addEventListener("click", function () {
-    const nomeFiltro = filtro.querySelector(".spanFiltriBil").innerText.trim();
-    document
-      .querySelectorAll(".fc-event")
-      .forEach((ev) => ev.classList.remove("evento-evidenziato"));
-    document.querySelectorAll(".fc-event").forEach((ev) => {
-      const title = ev.querySelector(".fc-event-title")?.innerText || "";
-      if (title.includes(nomeFiltro)) {
-        ev.classList.add("evento-evidenziato");
-      }
-    });
-    document
-      .querySelectorAll(".elementoFiltro")
-      .forEach((f) => f.classList.remove("filtro-evidenziato"));
-    filtro.classList.add("filtro-evidenziato");
-    aggiornaBottoneDeseleziona();
-  });
-  filtro.addEventListener("mouseenter", function () {
-    filtro.classList.add("filtro-hover");
-  });
-  filtro.addEventListener("mouseleave", function () {
-    filtro.classList.remove("filtro-hover");
-  });
-}
-
-// Funzione per creare un filtro solo se non esiste già
-function creaFiltroSeNonEsiste(nome, colore = "#a9f5c1") {
-  const esiste = Array.from(
-    document.querySelectorAll(".elementoFiltro .spanFiltriBil")
-  ).some((span) => span.innerText.trim() === nome.trim());
-  if (esiste) return;
-  const filtro = document.createElement("div");
-  filtro.className = "elementoFiltro";
-  filtro.innerHTML = `<div class="pallino" style="background:${colore};"></div>
-      <span class="spanFiltriBil">${nome}</span>`;
-  document.querySelector(".containerFiltri").prepend(filtro);
-  aggiungiListenerFiltro(filtro);
-}
-
-// Applica i listener ai filtri già presenti
-document.querySelectorAll(".elementoFiltro").forEach(aggiungiListenerFiltro);
-
-// Crea i filtri dagli eventi del backend
-inviaRichiesta("GET", "/db-events")
-  .then((ris) => {
-    const eventi = ris.data || ris;
-    const nomiFiltriCreati = new Set();
-    eventi.forEach((ev) => {
-      const nome = ev.title || ev.nome_cliente || "";
-      if (nome && !nomiFiltriCreati.has(nome)) {
-        creaFiltroSeNonEsiste(nome, ev.color || "#a9f5c1");
-        nomiFiltriCreati.add(nome);
-      }
-    });
-  })
-  .catch((err) => {
-    console.error(err);
-  });
-
-function creaFiltroSeNonEsiste(nome, colore = "#a9f5c1") {
-  // Controlla se esiste già un filtro con questo nome
-  const esiste = Array.from(
-    document.querySelectorAll(".elementoFiltro .spanFiltriBil")
-  ).some((span) => span.innerText.trim() === nome.trim());
-  if (esiste) return;
-  // Crea nuovo filtro
-  const filtro = document.createElement("div");
-  filtro.className = "elementoFiltro";
-  filtro.innerHTML = `<div class="pallino" style="background:${colore};"></div>
-    <span class="spanFiltriBil">${nome}</span>`;
-  document.querySelector(".containerFiltri").prepend(filtro);
-  aggiungiListenerFiltro(filtro);
-}
-
-inviaRichiesta("GET", "/db-events")
-  .then((ris) => {
-    // Crea filtri unici per ogni nome evento
-    const eventi = ris.data || ris; // dipende da come arriva la risposta
-    const nomiFiltriCreati = new Set();
-    eventi.forEach((ev) => {
-      const nome = ev.title || ev.nome_cliente || "";
-      if (nome && !nomiFiltriCreati.has(nome)) {
-        creaFiltroSeNonEsiste(nome, ev.color || "#a9f5c1");
-        nomiFiltriCreati.add(nome);
-      }
-    });
-    console.log(ris.data);
-  })
-  .catch((err) => {
-    console.error(err);
-  });
-//
-//
-//
-//
-//
-//
-// Make transactions globally accessible
-/*const transactions = [];
-inviaRichiesta("GET", "/db-events")
-  .then((ris) => {
-    const eventi = ris.data || ris;
-    transactions = eventi.map((ev) => ({
-      name: ev.title || ev.nome_cliente || "",
-      amount: ev.importo || "€0.00",
-      type: ev.tipo || "Da Cont.",
-    }));
-    console.log(transactions);
-  })
-  .catch((err) => {
-    console.error(err);
-  });*/
-
-/*const transactions = [
-  { name: "Ezra Federico", amount: "€45.00", type: "Da Cont." },
-  { name: "Ezra Federico", amount: "€45.00", type: "Da Cont." },
-  { name: "Marco Delfinis", amount: "€45.00", type: "Da Cont." },
-  { name: "Mario Rossi", amount: "€45.00", type: "Da Cont." },
-  { name: "Mario Rossi", amount: "€45.00", type: "Contab." },
-];*/
-
-// sostisuisce con transactions ricevute dall'API
-function renderTransactions(eventi) {
-  const lista = document.querySelector(".listaBil");
-  lista.innerHTML = ""; // Clear existing
-  eventi.forEach((ev) => {
-    const div = document.createElement("div");
-    div.className = "transazioneOgetto";
-    div.innerHTML = `
-      <div class="transazionePallino1"></div>
-      <span class="transazioneNome">${ev.title || ev.nome_cliente || ""}</span>
-      <span class="transazioneEntrata">${ev.importo || ev.tariffa_oraria ? "€" + (ev.importo || ev.tariffa_oraria) : ""}</span>
-      <span class="transazioneStato">${ev.tipo || "Da Cont."}</span>
-      <button class="deleteTransazione" data-id="${ev.id}">Elimina</button>
-    `;
-    lista.appendChild(div);
-  });
-
-  function getTransactionTotal(transactions) {
-    // Parse amounts, remove euro sign and commas, convert to float
-    return transactions.reduce((sum, tx) => {
-      let amt = parseFloat(String(tx.amount).replace(/[^\d.-]+/g, ""));
-      return sum + (isNaN(amt) ? 0 : amt);
-    }, 0);
-  }
-
-  function updateGraphTotal(transactions) {
-    const total = getTransactionTotal(transactions);
-    const graficoTotal = document.getElementById("grafico-total");
-    if (graficoTotal) {
-      graficoTotal.textContent = `€${total.toLocaleString("it-IT", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })}`;
     }
-  }
-
-  document.addEventListener("DOMContentLoaded", function () {
-    // Initial call
-    updateGraphTotal(transactions);
-  });
-
-  // GET
-  function fetchAndRenderTransactions() {
-    inviaRichiesta("GET", "/db-events")
-      .then((ris) => {
-        const eventi = ris.data || ris;
-        renderTransactions(eventi);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }
-
-  // DELETE
-  document.querySelectorAll(".deleteTransazione").forEach((btn) => {
-    btn.onclick = function () {
-      const id = this.getAttribute("data-id");
-      if (confirm("Eliminare questa transazione?")) {
-        inviaRichiesta("DELETE", `/db-events/${id}`)
-          .then(() => fetchAndRenderTransactions())
-          .catch((err) => alert("Errore durante l'eliminazione"));
-      }
-    };
   });
 }
 
-// scarica pagina bilancio
-document.addEventListener("DOMContentLoaded", fetchAndRenderTransactions);
 
-// POST
+function updateGraphTotal(transactions) {
+  const graficoTotale = document.getElementById("grafico-total");
+  if (graficoTotale) {
+    const totalIn = transactions
+      .filter((t) => t.transazioneEntrata)
+      .reduce((sum, t) => sum + parseFloat(t.transazioneEntrata), 0);
+    const totalOut = transactions
+      .filter((t) => t.transazioneUscita)
+      .reduce((sum, t) => sum + parseFloat(t.transazioneUscita), 0);
+    const total = totalIn - totalOut;
+    graficoTotale.textContent = `€${total.toFixed(2)}`;
+  }
+}
+
+function renderTransactions(transactions) {
+  const listaBil = document.querySelector(".listaBil");
+  listaBil.innerHTML = ""; // Clear existing list
+
+  if (!transactions || transactions.length === 0) {
+    listaBil.innerHTML = "<p>Nessuna transazione trovata.</p>";
+    updateGraphTotal([]);
+    renderBalanceChart([]);
+    return;
+  }
+
+  transactions.forEach((t) => {
+    const elementoTransazione = document.createElement("div");
+    elementoTransazione.className = "elementoTransazione"; // This will be the "card"
+
+    let pallinoClass = "";
+    let amountText = "";
+    let statusText = t.stato_transazione || 'N/A'; // Capture the status
+    let transactionTypeClass = ''; // For specific styling based on type
+
+    if (t.transazioneEntrata) {
+      pallinoClass = "pallinoEntrate";
+      amountText = `€${parseFloat(t.transazioneEntrata).toFixed(2)}`;
+      elementoTransazione.classList.add("entrata");
+      transactionTypeClass = 'transazioneEntrata'; // Class for the amount
+    } else if (t.transazioneUscita) {
+      pallinoClass = "pallinoUscite";
+      amountText = `-€${parseFloat(t.transazioneUscita).toFixed(2)}`;
+      elementoTransazione.classList.add("uscita");
+      transactionTypeClass = 'transazioneUscita'; // Class for the amount
+    } else {
+      // Fallback for transactions that are neither 'entrata' nor 'uscita' but might have 'importo_transazione'
+      pallinoClass = "pallinoDaCont";
+      amountText = `€${parseFloat(t.importo_transazione || 0).toFixed(2)}`;
+      elementoTransazione.classList.add("da-contabilizzare");
+      transactionTypeClass = 'transazioneNeutro'; // Example: class for neutral amounts
+    }
+
+    // Using data_transazione as a simple description/subtitle for now
+    const transactionDescription = `Data: ${new Date(t.data_transazione).toLocaleDateString('it-IT')}`;
+
+    elementoTransazione.innerHTML = `
+      <div class="transazioneIconaContenitore">
+        <div class="pallino ${pallinoClass}"></div>
+      </div>
+      <div class="transazioneInfoPrincipale">
+        <span class="transazioneTitolo">${t.transazioneNome || t.title || 'N/A'}</span>
+        <span class="transazioneDescrizione">${transactionDescription}</span>
+      </div>
+      <div class="transazioneDettagliDestra">
+        <span class="transazioneImporto ${transactionTypeClass}">${amountText}</span>
+        <span class="transazioneTestoTotale">totale</span>
+        <span class="transazioneStatoNuovo">${statusText}</span>
+      </div>
+    `;
+    listaBil.appendChild(elementoTransazione);
+  });
+  updateGraphTotal(transactions);
+  renderBalanceChart(transactions);
+}
+
+
+// Fetch transactions (using hardcoded data for testing)
+function fetchAndRenderTransactions() {
+  // Hardcoded test data for immediate display
+  const testData = [
+    {
+      id: "1",
+      transazioneNome: "Affitto",
+      data_transazione: "2025-07-01T10:00:00",
+      transazioneUscita: "750.00",
+      stato_transazione: "Contab.",
+      color: "#ff4645" // Example color for 'Uscita'
+    },
+    {
+      id: "2",
+      transazioneNome: "Stipendio",
+      data_transazione: "2025-07-05T12:00:00",
+      transazioneEntrata: "1500.00",
+      stato_transazione: "Contab.",
+      color: "#ade27b" // Example color for 'Entrata'
+    },
+    {
+      id: "3",
+      transazioneNome: "Spesa Supermercato",
+      data_transazione: "2025-07-07T08:30:00",
+      transazioneUscita: "85.50",
+      stato_transazione: "Contab.",
+      color: "#ff4645"
+    },
+    {
+      id: "4",
+      transazioneNome: "Rimborso",
+      data_transazione: "2025-07-10T15:00:00",
+      transazioneEntrata: "50.00",
+      stato_transazione: "Contab.",
+      color: "#ade27b"
+    },
+    {
+      id: "5",
+      transazioneNome: "Bolletta Luce",
+      data_transazione: "2025-07-12T09:00:00",
+      transazioneUscita: "120.00",
+      stato_transazione: "In attesa",
+      color: "#ff4645"
+    },
+    {
+      id: "6",
+      transazioneNome: "Vendita Online",
+      data_transazione: "2025-07-11T14:00:00",
+      transazioneEntrata: "200.00",
+      stato_transazione: "Contab.",
+      color: "#ade27b"
+    }
+  ];
+  renderTransactions(testData);
+  // Uncomment the following lines when you have a backend to fetch real data
+  /*
+  inviaRichiesta("GET", "/db-events")
+    .then((ris) => {
+      const eventi = ris.data || ris;
+      renderTransactions(eventi);
+    })
+    .catch((err) => {
+      console.error(err);
+      // Fallback to test data if fetching fails, or display an error message
+      renderTransactions(testData);
+    });
+  */
+}
+
+// The event listener for the delete button is commented out as the button is removed.
+// You can safely remove this block if you are sure you won't re-add the delete button.
+/*
+document.querySelectorAll(".deleteTransazione").forEach((btn) => {
+  btn.onclick = function () {
+    const id = this.getAttribute("data-id");
+    if (confirm("Eliminare questa transazione?")) {
+      inviaRichiesta("DELETE", `/db-events/${id}`)
+        .then(() => fetchAndRenderTransactions())
+        .catch((err) => alert("Errore durante l'eliminazione"));
+    }
+  };
+});
+*/
+
+
+// Listener for adding new events
 document.getElementById("salva-evento").onclick = function (e) {
   e.preventDefault();
   const nome = document.getElementById("nome-evento").value;
@@ -398,11 +299,69 @@ document.getElementById("salva-evento").onclick = function (e) {
     color: colore,
   };
 
+  // Using test data logic for adding new event as well
+  // In a real application, you would send this to your backend
+  console.log("Adding new event (test mode):", nuovoEvento);
+  // Add the new event to your testData array and re-render if you want to see it immediately
+  // For now, it just logs, as we don't have a mutable global testData array.
+  // When backend is integrated, uncomment the inviaRichiesta below
+  /*
   inviaRichiesta("POST", "/db-events", nuovoEvento)
     .then(() => {
-      fetchAndRenderTransactions();
+      fetchAndRenderTransactions(); // Re-fetch to include the new event
       document.getElementById("modal-evento").close();
     })
     .catch((err) => alert("Errore durante il salvataggio"));
-
+  */
+  fetchAndRenderTransactions(); // Re-render to simulate addition, will show hardcoded data
+  document.getElementById("modal-evento").close();
 };
+
+
+document.addEventListener('DOMContentLoaded', function () {
+  // Append the BalancePage content to the body
+  document.body.appendChild(BalancePage());
+
+  const filterBar = document.querySelector('.divBilancioFiltri');
+
+  if (filterBar) {
+    let isDragging = false;
+    let startX;
+    let scrollLeft;
+
+    // Mouse Wheel Scroll
+    filterBar.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      filterBar.scrollLeft += e.deltaY;
+    });
+
+    // Click and Drag
+    filterBar.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      filterBar.classList.add('is-dragging');
+      startX = e.pageX - filterBar.offsetLeft;
+      scrollLeft = filterBar.scrollLeft;
+    });
+
+    filterBar.addEventListener('mouseleave', () => {
+      isDragging = false;
+      filterBar.classList.remove('is-dragging');
+    });
+
+    filterBar.addEventListener('mouseup', () => {
+      isDragging = false;
+      filterBar.classList.remove('is-dragging');
+    });
+
+    filterBar.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      e.preventDefault();
+      const x = e.pageX - filterBar.offsetLeft;
+      const walk = (x - startX) * 1.5; // Multiplier for scroll speed
+      filterBar.scrollLeft = scrollLeft - walk;
+    });
+  }
+
+  // Initial fetch and render of transactions when the DOM is loaded
+  fetchAndRenderTransactions();
+});

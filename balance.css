@@ -1,3 +1,4 @@
+/* General layout for the balance card */
 .cartBil {
   gap: 25px;
   display: flex;
@@ -10,7 +11,7 @@
   padding: 1.5rem;
 }
 
-/* tolto l's per distaccare che con non funziona per qualche ragione */
+/* Left part of the balance card (chart and filters) */
 .cartSinistra {
   flex: 1;
   display: flex;
@@ -21,296 +22,267 @@
   justify-content: center;
 }
 
+/* Chart container with relative positioning for total overlay */
 .grafaBil {
+  position: relative; /* Essential for positioning #grafico-total absolutely within it */
   display: flex;
   justify-content: center;
   align-items: center;
   flex-grow: 1;
-  max-width: 250px;
+  max-width: 250px; /* Adjust as needed */
   aspect-ratio: 1 / 1;
-  margin: 0 auto; /* centra il contenitore nella colonna */
+  margin: 0 auto; /* Centers the container in the column */
 }
 
-.grafaEs {
-  height: 18rem;
-  width: 18rem;
-  padding-left: 7.2rem;
-  padding-top: 2rem;
+/* Chart canvas dimensions */
+#graficoCanvas {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 250px; /* Matches grafaBil max-width */
+  max-height: 250px; /* Matches grafaBil height/width for aspect-ratio */
 }
 
-.divBilancioFiltri {
-  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.25);
-  display: flex;
-  justify-content: flex-start;
-  padding: 1rem;
-  width: 100%;
-  max-width: 27rem;
-  height: auto;
-  min-height: 1.2rem;
-  border-radius: 2.5rem;
-  margin-top: 1rem;
-  margin-left: auto;
-  margin-right: auto;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.elementoFiltro {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.entrateUscita {
-  padding: 0.8rem;
-  background-color: #a764bd;
-  color: #ffffff;
-  border: none;
-  border-radius: 1.5rem;
-  font-size: 1.1rem;
-  cursor: pointer;
-  margin-top: 1rem;
-  margin-left: 124px;
-  width: 80%;
-  max-width: 15rem;
-  user-select: none;
-}
-
-.cartDestra {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-}
-
-.titoloBil {
-  margin-top: 1rem;
-  text-align: center;
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: #2c3e50;
-}
-
-.listaBil {
-  /* Stesso placeholder come grafa 
-    è nero solo per vedere la dimensione, fammi sapere se la dimensione va bene*/
-  flex-wrap: 1;
-  flex-direction: column;
-  overflow-y: auto;
-  border-radius: 1.5rem;
-  padding: 1rem;
-  width: 95%;
-  min-height: 26rem;
-  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.25);
-  gap: 0.8rem;
-  display: flex;
-  margin-left: 25px;
-}
-
-.transazioneOgetto {
-  /* contenitore per ogni transazione in righe*/
-  display: grid;
-  grid-template-columns: auto 1fr auto auto;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.25rem 0.5rem;
-  font-size: 1rem;
-}
-
-.transazioneNome {
-  font-weight: 500;
-  text-align: left;
-}
-
-.transazioneUscita {
-  font-weight: bold;
-  white-space: nowrap; /* evita line-breaking */
-  color: #e74c3c;
-}
-
-.transazioneEntrata {
-  color: #2c3e50;
-}
-
-.transazioneStato {
-  color: #7f8c8d;
-  font-size: 0.9rem;
-  text-align: roght;
-  white-space: nowrap;
-}
-
-/* da migliorare lo farò */
-.transazionePallino1 {
-  background-color: #3498db;
-  width: 1.1rem;
-  height: 1.1rem;
-  border-radius: 50%;
-}
-
-.transazionePallino2 {
-  background-color: #e74c3c;
-  width: 1.1rem;
-  height: 1.1rem;
-  border-radius: 50%;
-}
-
-.transazionePallino3 {
-  background-color: #3498db;
-  width: 1.1rem;
-  height: 1.1rem;
-  border-radius: 50%;
-}
-
-.transazionePallino4 {
-  background-color: #3498db;
-  width: 1.1rem;
-  height: 1.1rem;
-  border-radius: 50%;
-}
-
-.transazionePallino5 {
-  background-color: #e74c3c;
-  width: 1.1rem;
-  height: 1.1rem;
-  border-radius: 50%;
-}
-
-.transazionePallino6 {
-  background-color: #3498db;
-  width: 1.1rem;
-  height: 1.1rem;
-  border-radius: 50%;
-}
-
-.transazionePallino7 {
-  background-color: #2ecc71;
-  width: 1.1rem;
-  height: 1.1rem;
-  border-radius: 50%;
-}
-
-#grafico {
-  width: 100%;
-  max-width: 22rem;
-  aspect-ratio: 1 / 1;
-  height: auto;
-  position: relative;
-  display: block;
-  margin: 3rem auto; /* centra il grafico nel contenitore */
-}
-
-#grafico::after {
-  content: "";
-  position: absolute;
-  inset: 3rem;
-  border-radius: 100vw;
-  background: white;
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
+/* Total amount displayed in the center of the chart */
 #grafico-total {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 2; /* Ensures it's above the canvas */
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Filter bar styling */
+.divBilancioFiltri {
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  height: 2.5rem;
+  border-radius: 2.5rem;
+  overflow-x: auto;
+  max-width: 700px;
+  min-width: 0;
+  gap: 1rem;
+  background: #fff;
+  scrollbar-width: thin; /* For Firefox */
+}
+
+/* Scrollbar styling for Webkit browsers (Chrome, Safari) */
+.divBilancioFiltri::-webkit-scrollbar {
+  height: 6px;
+}
+
+.divBilancioFiltri::-webkit-scrollbar-thumb {
+  background-color: #d1d1d1;
+  border-radius: 10px;
+}
+
+/* Individual filter element */
+.elementoFiltro {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 1.5rem;
+  white-space: nowrap; /* Prevent text wrapping */
+  background-color: #f0f0f0;
+  color: #555;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.elementoFiltro:hover {
+  background-color: #e0e0e0;
+}
+
+.elementoFiltro.attivo {
+  background-color: #007bff; /* Active filter background */
+  color: #fff; /* Active filter text color */
+}
+
+.elementoFiltro.attivo .pallino {
+  background-color: #fff !important; /* White dot for active filter */
+}
+
+/* Right part of the balance card (transactions list) */
+.cartDestra {
+  flex: 1;
+  flex-basis: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 600px; /* Adjust as needed */
+  margin-left: 2rem; /* Space from left column */
+}
+
+.titoloBil {
   font-size: 2rem;
   font-weight: bold;
-  color: #2c3e50;
-  pointer-events: none;
-  z-index: 2;
-  text-align: center;
-  height: auto;
-  width: auto;
-  min-width: 4rem;
-  min-height: 2.5rem;
-  line-height: 1.2;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.listaBil {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem; /* Space between transaction cards */
+}
+
+/* --- NEW STYLES FOR TRANSACTION ITEMS (TO MATCH GOALER.PNG) --- */
+
+/* Style for the individual transaction card */
+.elementoTransazione {
+  display: flex;
+  align-items: center; /* Vertically align items in the row */
+  gap: 1rem; /* Space between the main columns (icon, info, details) */
+  background-color: #fff;
+  padding: 1rem 1.5rem; /* Inner padding of the card */
+  border-radius: 0.75rem; /* Rounded corners */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  margin-bottom: 0.75rem; /* Space between cards */
+  justify-content: space-between; /* Pushes elements to left and right edges */
+}
+
+/* Container for the icon/dot */
+.transazioneIconaContenitore {
+  flex-shrink: 0; /* Prevents it from shrinking */
   display: flex;
   align-items: center;
   justify-content: center;
-  user-select: none;
+  width: 2.5rem; /* Size of the icon container */
+  height: 2.5rem;
+  border-radius: 50%;
+  /* If you want a background color for this container, uncomment below */
+  /* background-color: #f0f0f0; */
 }
 
-.spanFiltriBil {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 100px;
-  height: 34px;
-  font-size: 1rem;  
-  border-radius: 1.2rem;
-  background: #f8f8f8;
-  margin: 0 4px;
-  padding: 0 10px;
-  box-sizing: border-box;
-  white-space: nowrap;
-}
-
-.pallinoFiltro {
-  background-color: #a9f5c1;
-  width: 1rem;
-  height: 1rem;
-  border-radius: 0.5rem;
+/* Styles for the color dots (from balanceEU.css, now within balance.css) */
+.pallino {
+  width: 1.2rem; /* Make the dot slightly larger as per goaler.png style */
+  height: 1.2rem;
+  border-radius: 50%; /* Make them perfectly round */
   aspect-ratio: 1;
+  flex-shrink: 0; /* Prevent dots from shrinking */
 }
 
-/* Evidenzia filtro selezionato */
-.filtro-evidenziato {
-  background: #f3e6f8 !important;
-  color: #222 !important;
-  border-radius: 2rem;
-  padding: 0.5rem;
+.pallinoEntrate {
+  background-color: #ade27b; /* Green for Income */
 }
 
-/* Evidenzia filtro al passaggio */
-.filtro-hover {
-  background: #f3e6f8 !important;
-  color: #222 !important;
-  border-radius: 2rem;
-  padding: 0.5rem;
+.pallinoUscite {
+  background-color: #ff4645; /* Red for Expenses */
 }
 
-/* esperimento - mobile schermi*/
+.pallinoDaCont {
+  background-color: #49b4ff; /* Blue for "Da Contabilizzare" (To Be Accounted) */
+}
 
-@media screen and (max-width: 992px) {
-  /* Tablet in giù */
+
+/* Container for Title and Description */
+.transazioneInfoPrincipale {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Allows it to take up available space */
+  margin-right: 1rem; /* Space before the right-aligned details */
+}
+
+.transazioneTitolo {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #333; /* Darker color for the title */
+}
+
+.transazioneDescrizione {
+  font-size: 0.9rem;
+  color: #777; /* Lighter color for the description */
+  margin-top: 0.2rem;
+}
+
+/* Container for Amount, "total" text, and Status */
+.transazioneDettagliDestra {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* Align text to the right */
+  flex-shrink: 0; /* Prevents it from shrinking */
+}
+
+/* Amount (Income/Expense) */
+.transazioneImporto {
+  font-weight: bold;
+  font-size: 1.2rem;
+  /* Specific colors are applied by .transazioneEntrata and .transazioneUscita classes */
+}
+
+/* Colors for transaction amounts */
+.transazioneEntrata {
+  color: #ade27b; /* Green for income amounts */
+}
+
+.transazioneUscita {
+  color: #ff4645; /* Red for expense amounts */
+}
+
+/* "total" text below the amount */
+.transazioneTestoTotale {
+  font-size: 0.8rem;
+  color: #999; /* Gray color for "total" */
+  margin-top: 0.1rem;
+}
+
+/* Transaction Status (new style) */
+.transazioneStatoNuovo {
+  font-size: 0.75rem;
+  color: #555; /* Color for the status text */
+  background-color: #f0f0f0; /* Light background */
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.5rem;
+  margin-top: 0.3rem;
+  display: inline-block; /* Ensures padding and background work correctly */
+}
+
+/* Specific style for 'In attesa' status */
+.transazioneStatoNuovo.In-attesa {
+  background-color: #ffcc80; /* Light orange */
+  color: #e65100; /* Darker orange */
+}
+
+
+/* --- MEDIA QUERIES FOR RESPONSIVENESS --- */
+
+/* Tablet styles */
+@media screen and (max-width: 1024px) {
   .cartBil {
-    flex-direction: column;
-    height: auto;
-    width: 95%;
-    align-items: center;
-    padding: 1.5rem 1rem;
+    gap: 1rem; /* Reduced gap for smaller screens */
+    width: 95%; /* More width on tablet */
+    padding: 1rem;
   }
 
   .cartSinistra {
-    width: 100%;
-    max-width: 550px; /* per leggibilità */
+    max-width: 400px; /* Shrink chart column a bit */
   }
 
   .cartDestra {
-    width: 100%;
-    max-width: 550px;
-    margin-top: 2rem;
+    margin-left: 1rem; /* Reduced margin */
   }
 
   .titoloBil {
-    margin-top: 0; /* interesante, fa reset per stacked view */
-  }
-
-  #grafico {
-    max-width: 18rem; /* shirnk-a la grafa un pochino */
+    font-size: 1.8rem; /* Smaller title */
   }
 }
 
-/* adesso telefoni */
+/* Mobile styles (max-width: 480px) - from balanceEU.css and balance.css */
 @media screen and (max-width: 480px) {
   html {
-    font-size: 13px; /* aggiustare per più leggibilità sullo schermo */
+    font-size: 13px; /* Adjust font size for better readability on small screens */
   }
 
   .cartBil {
-    flex-direction: column;
+    flex-direction: column; /* Stack columns vertically */
     width: 100%;
-    border-radius: 0; /* carta completo su mobile forse(?) fammi sapere */
+    border-radius: 0; /* Full width card on mobile */
     box-shadow: none;
     margin-top: 0.5rem;
     padding-left: 0.5rem;
@@ -318,7 +290,6 @@
   }
 
   .divBilancioFiltri {
-    /*flex-direction: column;*/ /* stack verticale per accessibilità */
     height: auto;
     display: flex;
     gap: 1rem;
@@ -326,37 +297,59 @@
     margin-left: auto;
     margin-right: auto;
     width: 100%;
-    max-width: 22rem;
+    max-width: 22rem; /* Limit width */
     justify-content: flex-start;
+    min-width: 406px; /* Ensure min-width for filter items */
   }
 
   .spanSaluto {
-    display: none; /* salva spazio forse? */
+    display: none; /* Hide greeting to save space */
   }
 
-  #grafico {
-    max-width: 20rem;
+  /* Adjust chart size for mobile */
+  .grafaBil {
+    max-width: 20rem; /* Shrink chart a bit */
+    margin-bottom: 1rem;
   }
 
-  #grafico::after {
-    inset: 3rem;
+  /* The total should still be centered on the chart */
+  #grafico-total {
+    font-size: 1.5rem; /* Smaller total font size */
   }
 
-  .entrateUscita {
-    margin-left: 0;
-    margin-right: 0;
-    display: block;
+  .cartDestra {
     width: 100%;
-    max-width: 15rem;
-    margin: 1.5rem auto 0 auto; /* centra il bottone */
-    text-align: center;
+    max-width: 550px; /* Still allow a max-width for the list */
+    margin-top: 2rem;
+    margin-left: 0; /* Remove left margin when stacked */
   }
 
-  .listaBil {
-    padding-left: 1rem;
-    padding-right: 1rem;
-    max-width: 80%;
-    margin-left: auto;
-    margin-right: auto;
+  .titoloBil {
+    margin-top: 0; /* Reset margin for stacked view */
+  }
+
+  /* Further adjustments for transaction items on mobile if needed */
+  .elementoTransazione {
+    flex-wrap: wrap; /* Allow items to wrap if screen is very small */
+    padding: 0.75rem 1rem;
+  }
+
+  .transazioneInfoPrincipale {
+    flex-grow: 1;
+    margin-right: 0; /* Remove right margin */
+    width: 100%; /* Take full width if wrapped */
+  }
+
+  .transazioneDettagliDestra {
+    width: 100%; /* Take full width if wrapped */
+    align-items: flex-start; /* Align details to the left if wrapped */
+    margin-top: 0.5rem; /* Space after info principal */
+    flex-direction: row; /* Display amount and status in a row */
+    justify-content: space-between; /* Space out amount and status */
+    align-items: center;
+  }
+
+  .transazioneTestoTotale {
+    display: none; /* Hide 'total' text on very small screens to save space */
   }
 }
