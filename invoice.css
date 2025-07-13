@@ -189,3 +189,92 @@ button.Delete:active {
   transform: translateY(0.5rem);
 }
 
+
+@media screen and (width < 480px) {
+  .ContainerFatture {
+    flex-direction: column; /* Cambia la direzione del flex container in colonna */
+    align-items: center; /* Centra gli elementi figli orizzontalmente */
+    margin-left: 0; /* Rimuove il margine sinistro per centrare */
+    max-width:100%;
+    min-height: auto; /* Imposta un'altezza minima per il contenitore */
+  }
+
+  .anteprimaFattureWrapper {
+    width: 100%; /* Imposta la larghezza al 100% per schermi piccoli */
+    min-height: auto; /* Rimuove l'altezza minima per schermi piccoli */
+  }
+
+  .anteprimaFatture {
+    max-width: 100%; /* Imposta la larghezza al 95% per schermi piccoli */
+    min-height: auto;
+  }
+
+  .specificaFattura {
+    width: 100%; /* Imposta la larghezza al 95% per schermi piccoli */
+    min-height: auto; /* Rimuove l'altezza minima per schermi piccoli */;
+    grid-template-columns: 5rem 1fr; /* Due colonne: la prima di 5rem, la seconda occupa lo spazio rimanente */
+  }
+
+  .TitoloFattura {
+    font-size: 1rem;
+    padding-right: 1rem;
+  }
+
+  .sottoTitolo {
+    font-size: 1rem;
+  }
+
+  ul {
+    font-size: 0.8rem;
+    padding-left: 0.5rem;
+  }
+  .IconaPanoramica {
+    max-width: 1rem;
+    height: auto;
+  }
+  .Panoramica {
+    margin-top: 2rem;
+  }
+  .pre {
+    font-size: 0.8rem;
+  }
+  .Money {
+    font-size: 1rem;
+  }
+
+  .iconaMoney {
+    aspect-ratio: 1; /* Mantiene l'aspetto quadrato */
+    width: 1rem; /* Riduce la dimensione per schermi piccoli */
+  }
+  .arrowIcon {
+    width: 1rem;
+    aspect-ratio: 1; /* Mantiene l'aspetto quadrato */
+  }
+  .anteprimaSpec {
+    width: 100%; /* Imposta la larghezza al 100% per schermi piccoli */
+    min-width: 20rem; /* Limita la larghezza minima */
+  }
+  .anteprimaSpec.active {
+    background-color: #a764bd;
+  }
+  .dot {
+    height: 1.5rem;
+    width: 1.5rem;
+    background-color: #a764bd;
+    border-radius: 50%;
+    display: inline-block;  
+    margin: auto;
+  }
+
+  button.Delete {
+    width: 2rem;
+    height: 2rem;
+    font-size: 1rem; /* Riduce la dimensione del testo per schermi piccoli */
+  }
+
+  
+  button.Delete:active {
+    box-shadow: 0 0 2px darkslategray;
+    transform: translateY(0.5rem);
+  }
+}
