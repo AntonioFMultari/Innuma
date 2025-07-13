@@ -173,7 +173,7 @@ document.addEventListener("DOMContentLoaded", function () {
       box.style.borderRadius = "10px";
       box.style.padding = "1rem";
       box.style.boxShadow = "0 2px 10px rgba(0,0,0,0.2)";
-      box.style.minWidth = "200px";
+      box.style.maxWidth = "25rem";
 
       // Genera dinamicamente i dettagli dell'evento
       let dettagli = `<strong style="font-size:2rem;">${info.event.title}</strong><br><br>`;
@@ -192,8 +192,11 @@ document.addEventListener("DOMContentLoaded", function () {
               .replace(/_/g, " ")
               .replace(/\b\w/g, (l) => l.toUpperCase());
             let displayValue = value;
+            if (key === "tariffa_oraria") {
+              displayValue = value + " €/h";
+            }
             if (key === "rivalsa_inps") {
-              displayValue = value == 1 ? "Sì" : "No";
+              displayValue = value ? "Sì" : "No";
             }
             dettagli += `<div class="dettaglioEvento"><span><b>${label}:</b> ${displayValue}</span></div>`;
           }
@@ -256,6 +259,7 @@ document.addEventListener("DOMContentLoaded", function () {
       };
 
       // Elimina l'evento al click su "Elimina"
+      console.log("Eliminazione evento:", info.event.id);
       document.getElementById("elimina-evento").onclick = () => {
         if (confirm("Sei sicuro di voler eliminare questo evento?")) {
           inviaRichiesta("DELETE", `/db-events/${info.event.id}`)
@@ -419,6 +423,7 @@ document.addEventListener("DOMContentLoaded", function () {
         end: orarioFineInput.value,
         title: nome,
         nome_cliente: document.getElementById("nome-cliente-evento").value,
+        descrizione_evento: document.getElementById("descrizione-evento").value,
         id_attivita: attivitaID, // <-- ID dell'attività selezionata
       };
 
@@ -467,7 +472,6 @@ document.addEventListener("DOMContentLoaded", function () {
           lastEnd = nextEnd;
         }
       }
-      return;
       // Salva tutti gli eventi (uno alla volta)
       Promise.all(
         eventiDaSalvare.map((ev) => inviaRichiesta("POST", "/db-events", ev))

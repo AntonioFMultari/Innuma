@@ -41,7 +41,7 @@ async function getEvents() {
   try {
     // Esegui una query SELECT
     const [rows, fields] = await db.promiseConnection.query(
-      "SELECT e.Titolo AS title, e._dataInizio AS start, e._dataFine AS end, a.Colore AS color, e.NomeCliente AS nome_cliente, a.Tariffa AS tariffa_oraria, e.Titolo AS descrizione_evento, a.INPS AS rivalsa_inps FROM evento e JOIN evento_attivita ea ON e.ID = ea.ID_Evento JOIN attività a ON ea.ID_Attivita = a.ID;"
+      "SELECT e.ID, e.Titolo AS title, e._dataInizio AS start, e._dataFine AS end, a.Colore AS color, e.NomeCliente AS nome_cliente, e.Descrizione AS descrizione_evento, a.Tariffa AS tariffa_oraria, a.INPS AS rivalsa_inps FROM evento e JOIN evento_attivita ea ON e.ID = ea.ID_Evento JOIN attività a ON ea.ID_Attivita = a.ID;"
     );
     console.log("Eventi:", rows, fields);
     return rows;
@@ -109,18 +109,29 @@ app.post("/db-events", express.json(), async (req, res) => {
       newEvent.end,
       newEvent.title,
       newEvent.nome_cliente,
+      newEvent.descrizione_evento,
       newEvent.id_attivita,
     ]);
 
-    const [result] = await db.promiseConnection.query(
-      "START TRANSACTION; INSERT INTO evento (_dataInizio, _dataFine, Titolo, NomeCliente, Fattura) VALUES (?, ?, ?, ?, 1); SET @last_evento_id = LAST_INSERT_ID(); INSERT INTO evento_attivita (ID_Evento, ID_Attivita) VALUES (@last_evento_id, ?); COMMIT;",
+    // Prima: inserisci il nuovo evento
+    const [insertEventoResult] = await db.promiseConnection.query(
+      "INSERT INTO evento (_dataInizio, _dataFine, Titolo, NomeCliente, Descrizione, Fattura) VALUES (?, ?, ?, ?, ?, 1)",
       [
         newEvent.start,
         newEvent.end,
         newEvent.title,
         newEvent.nome_cliente,
-        newEvent.id_attivita,
+        newEvent.descrizione_evento,
       ]
+    );
+
+    // Ottieni l'ID dell'evento appena inserito
+    const lastEventoId = insertEventoResult.insertId;
+
+    // Poi: inserisci la relazione evento-attività
+    await db.promiseConnection.query(
+      "INSERT INTO evento_attivita (ID_Evento, ID_Attivita) VALUES (?, ?)",
+      [lastEventoId, newEvent.id_attivita]
     );
     res.status(201).json(newEvent);
   } catch (err) {
@@ -136,6 +147,10 @@ app.delete("/db-events/:id", async (req, res) => {
 
   try {
     // Esegui una query DELETE
+    await db.promiseConnection.query(
+      "DELETE FROM evento_attivita WHERE ID_Evento = ?",
+      [eventId]
+    );
     await db.promiseConnection.query("DELETE FROM evento WHERE id = ?", [
       eventId,
     ]);
