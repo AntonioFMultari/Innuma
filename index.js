@@ -66,6 +66,8 @@ function selezioneElementoHamburger(e) {
     // Determina la pagina attuale dall'URL
     if (window.location.pathname.endsWith("index.html")) {
       page = "calendario";
+    } else if (window.location.pathname.endsWith("activities.html")) {
+      page = "attività";
     } else if (window.location.pathname.endsWith("bilancio.html")) {
       page = "bilancio";
     } else if (window.location.pathname.endsWith("fatture.html")) {
@@ -339,7 +341,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const nomeInput = document.getElementById("nome-evento");
   const orarioInizioInput = document.getElementById("orario-inizio-evento");
   const orarioFineInput = document.getElementById("orario-fine-evento");
-  const coloreInput = document.getElementById("colore-evento");
   const containerFiltri = document.querySelector(".containerFiltri");
 
   orarioInizioInput.addEventListener("change", () => {
@@ -353,22 +354,39 @@ document.addEventListener("DOMContentLoaded", function () {
       orarioFineInput.value = stringaAggiunta;
     }
   });
-
+  let attivitaID = 0; // Inizializza l'ID dell'attività
   if (btnEvent[0] && btnEvent[1] && modal) {
     btnEvent[0].onclick = () => {
       nomeInput.value = "";
       orarioInizioInput.value = "";
       orarioFineInput.value = "";
-      coloreInput.value = "#a9f5c1";
       modal.showModal();
     };
     btnEvent[1].onclick = () => {
       nomeInput.value = "";
       orarioInizioInput.value = "";
       orarioFineInput.value = "";
-      coloreInput.value = "#a9f5c1";
       modal.showModal();
     };
+
+    //Importa e setta le attività nella tendina attività
+    const attivitaSelect = document.getElementById("attivita-evento");
+    if (attivitaSelect) {
+      inviaRichiesta("GET", "/db-attivita")
+        .then((ris) => {
+          const attivita = ris.data || ris;
+          attivita.forEach((attivita) => {
+            const option = document.createElement("option");
+            option.value = attivita.ID + "- " + attivita.Descrizione;
+            option.textContent = attivita.ID + "- " + attivita.Descrizione;
+            attivitaSelect.appendChild(option);
+          });
+        })
+        .catch((err) => {
+          console.error(err);
+          alert("Errore durante il caricamento delle attività.");
+        });
+    }
   }
 
   if (chiudi && modal) {
@@ -381,16 +399,12 @@ document.addEventListener("DOMContentLoaded", function () {
       e.preventDefault();
       const nome = nomeInput.value.trim();
       const orarioInizio = orarioInizioInput.value;
-      const colore = coloreInput.value;
-      const rivalsa_inps = document.getElementById("rivalsa-inps-evento")
-        .checked
-        ? 1
-        : 0;
       const ripetizione = document.getElementById("ripetizione-evento").value;
 
       if (!nome) return alert("Inserisci un nome all'evento!");
       if (!orarioInizio)
         return alert("Inserisci un orario di inizio all'evento!");
+      /* MAGARI SERVE MAGARI NO, BOH 
       // Crea nuovo filtro
       const filtro = document.createElement("div");
       filtro.className = "elementoFiltro";
@@ -398,19 +412,14 @@ document.addEventListener("DOMContentLoaded", function () {
         <span class="spanFiltro">${nome}</span>`;
       containerFiltri.prepend(filtro);
       aggiungiListenerFiltro(filtro); // <-- aggiungi subito il listener!
-
+      */
+      attivitaID = document.getElementById("attivita-evento").value[0]; // Prendi l'ID dell'attività selezionata
       const nuovoEvento = {
-        title: nome,
         start: orarioInizioInput.value,
         end: orarioFineInput.value,
-        color: colore,
-        nome_cliente: document.getElementById("nome-cliente-evento").value, // <-- input testo
-        tariffa_oraria: Number(
-          document.getElementById("tariffa-oraria-evento").value
-        ).toFixed(2), // <-- input numero
-        descrizione_evento: document.getElementById("descrizione-evento").value, // <-- textarea
-        rivalsa_inps: rivalsa_inps,
-        tipo_attivita: document.getElementById("tipo-attivita-evento").value, // <-- select o input
+        title: nome,
+        nome_cliente: document.getElementById("nome-cliente-evento").value,
+        id_attivita: attivitaID, // <-- ID dell'attività selezionata
       };
 
       console.log("Nuovo evento che sto per inviare:", nuovoEvento);
@@ -458,7 +467,7 @@ document.addEventListener("DOMContentLoaded", function () {
           lastEnd = nextEnd;
         }
       }
-
+      return;
       // Salva tutti gli eventi (uno alla volta)
       Promise.all(
         eventiDaSalvare.map((ev) => inviaRichiesta("POST", "/db-events", ev))

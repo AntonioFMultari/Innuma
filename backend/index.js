@@ -41,12 +41,26 @@ async function getEvents() {
   try {
     // Esegui una query SELECT
     const [rows, fields] = await db.promiseConnection.query(
-      "SELECT * FROM evento"
+      "SELECT e.Titolo AS title, e._dataInizio AS start, e._dataFine AS end, a.Colore AS color, e.NomeCliente AS nome_cliente, a.Tariffa AS tariffa_oraria, e.Titolo AS descrizione_evento, a.INPS AS rivalsa_inps FROM evento e JOIN evento_attivita ea ON e.ID = ea.ID_Evento JOIN attività a ON ea.ID_Attivita = a.ID;"
     );
     console.log("Eventi:", rows, fields);
     return rows;
   } catch (err) {
     console.error("Errore durante il recupero degli eventi:", err);
+    throw err;
+  }
+}
+
+async function getAttivita() {
+  try {
+    // Esegui una query SELECT
+    const [rows, fields] = await db.promiseConnection.query(
+      "SELECT * FROM attività;"
+    );
+    console.log("Attività:", rows, fields);
+    return rows;
+  } catch (err) {
+    console.error("Errore durante il recupero delle attività:", err);
     throw err;
   }
 }
@@ -62,6 +76,18 @@ app.get("/db-events", async (req, res) => {
   }
 });
 
+//GET -> PRENDI TUTTE LE ATTIVITA'
+app.get("/db-attivita", async (req, res) => {
+  try {
+    const attivita = await getAttivita();
+    res.json(attivita);
+  } catch (err) {
+    res
+      .status(500)
+      .json({ error: "Errore durante il recupero delle attività" });
+  }
+});
+
 //POST -> INSERISCI UN NUOVO EVENTO
 // Assicurati che il body della richiesta sia in formato JSON
 app.post("/db-events", express.json(), async (req, res) => {
@@ -69,8 +95,6 @@ app.post("/db-events", express.json(), async (req, res) => {
   console.log("Nuovo evento ricevuto:", newEvent);
 
   try {
-    newEvent.rivalsa_inps = newEvent.rivalsa_inps ? 1 : 0;
-    newEvent.tariffa_oraria = Number(newEvent.tariffa_oraria).toFixed(2);
     newEvent.start = new Date(newEvent.start)
       .toISOString()
       .slice(0, 19)
@@ -81,35 +105,23 @@ app.post("/db-events", express.json(), async (req, res) => {
       .replace("T", " ");
 
     console.log("Dati che sto per inserire:", [
-      newEvent.title,
       newEvent.start,
       newEvent.end,
-      newEvent.color,
+      newEvent.title,
       newEvent.nome_cliente,
-      newEvent.tariffa_oraria,
-      newEvent.descrizione_evento,
-      newEvent.rivalsa_inps,
-      2,
-      newEvent.tipo_attivita,
+      newEvent.id_attivita,
     ]);
 
     const [result] = await db.promiseConnection.query(
-      "INSERT INTO events (title, start, end, color, nome_cliente, tariffa_oraria, descrizione_evento, rivalsa_inps, marca_da_bollo, tipo_attivita) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      "START TRANSACTION; INSERT INTO evento (_dataInizio, _dataFine, Titolo, NomeCliente, Fattura) VALUES (?, ?, ?, ?, 1); SET @last_evento_id = LAST_INSERT_ID(); INSERT INTO evento_attivita (ID_Evento, ID_Attivita) VALUES (@last_evento_id, ?); COMMIT;",
       [
-        newEvent.title,
         newEvent.start,
         newEvent.end,
-        newEvent.color,
+        newEvent.title,
         newEvent.nome_cliente,
-        newEvent.tariffa_oraria,
-        newEvent.descrizione_evento,
-        newEvent.rivalsa_inps,
-        2,
-        newEvent.tipo_attivita,
+        newEvent.id_attivita,
       ]
     );
-    newEvent.id = result.insertId;
-    newEvent.marca_da_bollo = 2;
     res.status(201).json(newEvent);
   } catch (err) {
     console.error("Errore durante l'inserimento dell'evento:", err);
@@ -124,7 +136,7 @@ app.delete("/db-events/:id", async (req, res) => {
 
   try {
     // Esegui una query DELETE
-    await db.promiseConnection.query("DELETE FROM events WHERE id = ?", [
+    await db.promiseConnection.query("DELETE FROM evento WHERE id = ?", [
       eventId,
     ]);
     res.status(204).send();
