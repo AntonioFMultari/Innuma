@@ -20,6 +20,8 @@
   flex-basis: 0;
   max-width: 500px;
   justify-content: center;
+  margin-left: 65px;
+  margin-right: 11px;
 }
 
 /* Chart container with relative positioning for total overlay */
@@ -36,10 +38,10 @@
 
 /* Chart canvas dimensions */
 #graficoCanvas {
-  width: 100% !important;
-  height: 100% !important;
-  max-width: 250px; /* Matches grafaBil max-width */
-  max-height: 250px; /* Matches grafaBil height/width for aspect-ratio */
+  width: 100% ;
+  height: 100% ;
+  max-width: 400px; /* Matches grafaBil max-width */
+  max-height: 400px; /* Matches grafaBil height/width for aspect-ratio */
 }
 
 /* Total amount displayed in the center of the chart */
@@ -60,14 +62,14 @@
   display: flex;
   align-items: center;
   padding: 1rem;
-  height: 2.5rem;
+  /*height: 2.5rem;*/
   border-radius: 2.5rem;
-  overflow-x: auto;
+  /*overflow-x: auto;*/
   max-width: 700px;
   min-width: 0;
   gap: 1rem;
   background: #fff;
-  scrollbar-width: thin; /* For Firefox */
+  /*scrollbar-width: thin;  For Firefox */
 }
 
 /* Scrollbar styling for Webkit browsers (Chrome, Safari) */
@@ -107,6 +109,22 @@
   background-color: #fff !important; /* White dot for active filter */
 }
 
+.entrateUscita {
+  padding: 0.8rem;
+  background-color: #a764bd;
+  color: #ffffff;
+  border: none;
+  border-radius: 1.5rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  margin-left: 124px;
+  width: 80%;
+  max-width: 15rem;
+  user-select: none;
+  margin-bottom: 74px;
+}
+
 /* Right part of the balance card (transactions list) */
 .cartDestra {
   flex: 1;
@@ -114,7 +132,7 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  max-width: 600px; /* Adjust as needed */
+  max-width: 700px; /* Adjust as needed */
   margin-left: 2rem; /* Space from left column */
 }
 
@@ -180,6 +198,31 @@
   background-color: #49b4ff; /* Blue for "Da Contabilizzare" (To Be Accounted) */
 }
 
+#tendinaFiltriBilancio,
+.tendinaFiltriBilancio {
+  display: flex;           /* Ensures items are in a row */
+  flex-wrap: nowrap;       /* Prevents items from wrapping to the next line */
+  overflow-x: auto;        /* Enables horizontal scrolling when content overflows */
+  overflow-y: hidden;      /* Hides any vertical scrollbar */
+  -webkit-overflow-scrolling: touch; /* For smooth scrolling on iOS */
+  gap: 10px;               /* Adds space between filter items */
+  padding: 10px 0;         /* Add padding for visual spacing */
+  height: auto;            /* Allow height to adjust to content, don't fix it unless necessary */
+  align-items: center;     /* Vertically align items */
+  justify-content: flex-start; /* Align items to the start */
+  width: 100%; /* Make sure it takes up available horizontal space */
+  box-sizing: border-box;
+}
+
+/* Optional: To hide the scrollbar visually but keep its functionality for this element */
+#tendinaFiltriBilancio::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and newer Edge */
+}
+
+#tendinaFiltriBilancio {
+  -ms-overflow-style: none;  /* For Internet Explorer and older Edge */
+  scrollbar-width: none;     /* For Firefox */
+}
 
 /* Container for Title and Description */
 .transazioneInfoPrincipale {
@@ -229,7 +272,7 @@
   height: 34px;
   font-size: 1rem;  
   border-radius: 1.2rem;
-  background: #f8f8f8;
+  /*background: #f8f8f8;*/
   margin: 0 4px;
   padding: 0 10px;
   box-sizing: border-box;
@@ -349,4 +392,17 @@
     justify-content: space-between; /* Space out amount and status */
     align-items: center;
   }
+}
+
+
+/* Green for income numbers */
+.elementoTransazione.entrata .transazioneImporto.transazioneEntrata,
+.transazioneImporto.transazioneEntrata { /* The span itself */
+  color: #ade27b;
+}
+
+/* Red for expense numbers */
+.elementoTransazione.uscita .transazioneImporto.transazioneUscita,
+.transazioneImporto.transazioneUscita { /* The span itself */
+  color: #ff4645;
 }

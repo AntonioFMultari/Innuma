@@ -35,19 +35,63 @@ function BalancePage() {
   const contenutoFiltri = document.createElement("div");
   contenutoFiltri.className = "divBilancioFiltri";
   cartBilSinistra.appendChild(contenutoFiltri);
+  
 
+  
   const containerFiltriBilancio = document.createElement("div");
   containerFiltriBilancio.className = "containerFiltriBilancio";
   contenutoFiltri.appendChild(containerFiltriBilancio);
+  
 
+  
   const tendinaFiltriBilancio = document.createElement("div");
   tendinaFiltriBilancio.id = "tendinaFiltriBilancio";
   tendinaFiltriBilancio.className = "tendinaFiltriBilancio";
   containerFiltriBilancio.appendChild(tendinaFiltriBilancio);
 
+  const filters = [
+    { label: 'Tutti', colorClass: 'pallinoFiltro', type: 'all' },
+    { label: 'Entrate', colorClass: 'pallinoEntrate', type: 'entrata' },
+    { label: 'Uscite', colorClass: 'pallinoUscite', type: 'uscita' },
+    { label: 'Da Cont.', colorClass: 'pallinoDaCont', type: 'pending' }
+  ];
+
+  filters.forEach((filter, index) => {
+    const filtroEl = document.createElement('div');
+    filtroEl.classList.add('elementoFiltro');
+    filtroEl.dataset.filter = filter.type;
+    if (index === 0) filtroEl.classList.add('attivo');
+
+    const dot = document.createElement('span');
+    dot.classList.add('pallino', filter.colorClass);
+
+    const label = document.createElement('span');
+    label.textContent = filter.label;
+
+    filtroEl.appendChild(dot);
+    filtroEl.appendChild(label);
+    tendinaFiltriBilancio.appendChild(filtroEl); // Append directly to the created tendinaFiltriBilancio
+  });
+  
+/*
+  const filtroContainer = document.createElement('div');
+  filtroContainer.classList.add('divBilancioFiltri');
+  filtroContainer.id = 'filtroContainer';
+  
+
+   const cartSinistra = document.querySelector('.cartSinistra');
+  if (cartSinistra) {
+    cartSinistra.insertBefore(filtroContainer, cartSinistra.firstChild); // Add it at the top
+  }*/
+
+  const link = document.createElement("a");
+  link.href = "bilancioEU.html";
+
   const bottoneTransazione = document.createElement("button");
-  bottoneTransazione.class= "entrataUsita"
-  containerFiltriBilancio.appendChild(bottoneTransazione);
+  bottoneTransazione.className = "entrateUscita"
+  bottoneTransazione.textContent = "Entrate/Uscite";
+  link.appendChild(bottoneTransazione);
+  cartBilSinistra.appendChild(link);
 
   const cartBilDestra = document.createElement("div");
   cartBilDestra.className = "cartDestra";
@@ -210,7 +254,7 @@ function fetchAndRenderTransactions() {
       id: "1",
       transazioneNome: "Affitto",
       data_transazione: "2025-07-01T10:00:00",
-      transazioneUscita: "750.00",
+      transazioneUscita: "750.00", // Expense
       stato_transazione: "Contab.",
       color: "#ff4645" // Example color for 'Uscita'
     },
@@ -218,7 +262,7 @@ function fetchAndRenderTransactions() {
       id: "2",
       transazioneNome: "Stipendio",
       data_transazione: "2025-07-05T12:00:00",
-      transazioneEntrata: "1500.00",
+      transazioneEntrata: "1500.00", // Income
       stato_transazione: "Contab.",
       color: "#ade27b" // Example color for 'Entrata'
     },
@@ -226,7 +270,7 @@ function fetchAndRenderTransactions() {
       id: "3",
       transazioneNome: "Spesa Supermercato",
       data_transazione: "2025-07-07T08:30:00",
-      transazioneUscita: "85.50",
+      transazioneUscita: "85.50", // Expense
       stato_transazione: "Contab.",
       color: "#ff4645"
     },
@@ -234,7 +278,7 @@ function fetchAndRenderTransactions() {
       id: "4",
       transazioneNome: "Rimborso",
       data_transazione: "2025-07-10T15:00:00",
-      transazioneEntrata: "50.00",
+      transazioneEntrata: "50.00", // Income
       stato_transazione: "Contab.",
       color: "#ade27b"
     },
@@ -242,7 +286,7 @@ function fetchAndRenderTransactions() {
       id: "5",
       transazioneNome: "Bolletta Luce",
       data_transazione: "2025-07-12T09:00:00",
-      transazioneUscita: "120.00",
+      transazioneUscita: "120.00", // Expense
       stato_transazione: "In attesa",
       color: "#ff4645"
     },
@@ -250,7 +294,7 @@ function fetchAndRenderTransactions() {
       id: "6",
       transazioneNome: "Vendita Online",
       data_transazione: "2025-07-11T14:00:00",
-      transazioneEntrata: "200.00",
+      transazioneEntrata: "200.00", // Income
       stato_transazione: "Contab.",
       color: "#ade27b"
     }
@@ -325,7 +369,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Append the BalancePage content to the body
   document.body.appendChild(BalancePage());
 
-  const filterBar = document.querySelector('.divBilancioFiltri');
+  const filterBar = document.getElementById('tendinaFiltriBilancio');
 
   if (filterBar) {
     let isDragging = false;
@@ -367,4 +411,98 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Initial fetch and render of transactions when the DOM is loaded
   fetchAndRenderTransactions();
+
+  setupFiltroInterazione();
 });
+
+/*
+document.addEventListener('DOMContentLoaded', () => {
+  const filters = [
+    { label: 'Entrate', colorClass: 'pallinoEntrate' },
+    { label: 'Uscite', colorClass: 'pallinoUscite' },
+    { label: 'Da Cont.', colorClass: 'pallinoDaCont' }
+    // Add more filters here if needed
+  ];
+
+  const container = document.getElementById('filtroContainer');
+
+  filters.forEach((filter, index) => {
+    const filtroEl = document.createElement('div');
+    filtroEl.classList.add('elementoFiltro');
+    if (index === 0) filtroEl.classList.add('attivo'); // Make first one active by default
+
+    // Create the dot
+    const dot = document.createElement('span');
+    dot.classList.add('pallino', filter.colorClass);
+
+    // Create the label
+    const label = document.createElement('span');
+    label.textContent = filter.label;
+
+    // Append dot and label to the filter element
+    filtroEl.appendChild(dot);
+    filtroEl.appendChild(label);
+
+    // Optionally add click event to toggle "attivo" class
+    filtroEl.addEventListener('click', () => {
+      document.querySelectorAll('.elementoFiltro').forEach(el => el.classList.remove('attivo'));
+      filtroEl.classList.add('attivo');
+      // Add filter logic here if needed
+    });
+
+    // Add the filter to the container
+    container.appendChild(filtroEl);
+  });
+});*/
+
+//  const filters = [
+//     { label: 'Tutti', colorClass: 'pallinoFiltro', type: 'all' },
+//     { label: 'Entrate', colorClass: 'pallinoEntrate', type: 'entrata' },
+//     { label: 'Uscite', colorClass: 'pallinoUscite', type: 'uscita' },
+//     { label: 'Da Cont.', colorClass: 'pallinoDaCont', type: 'pending' }
+//   ];
+
+//   filters.forEach((filter, index) => {
+//     const filtroEl = document.createElement('div');
+//     filtroEl.classList.add('elementoFiltro');
+//     filtroEl.dataset.filter = filter.type;
+//     if (index === 0) filtroEl.classList.add('attivo');
+
+//     const dot = document.createElement('span');
+//     dot.classList.add('pallino', filter.colorClass);
+
+//     const label = document.createElement('span');
+//     label.textContent = filter.label;
+
+//     label.classList.add('spanFiltriBil');
+
+//     filtroEl.appendChild(dot);
+//     filtroEl.appendChild(label);
+//     document.getElementById('tendinaFiltriBilancio').appendChild(filtroEl);
+//   });
+
+  setupFiltroInterazione();
+
+  function setupFiltroInterazione() {
+  const filters = document.querySelectorAll('.elementoFiltro');
+  const transazioni = document.querySelectorAll('.elementoTransazione');
+
+  filters.forEach(filtro => {
+    filtro.addEventListener('click', () => {
+      // Update active state
+      filters.forEach(el => el.classList.remove('attivo'));
+      filtro.classList.add('attivo');
+
+      const selectedFilter = filtro.dataset.filter;
+
+      // Show/hide transactions
+      transazioni.forEach(tx => {
+        if (selectedFilter === 'all') {
+          tx.style.display = '';
+        } else {
+          tx.style.display = tx.classList.contains(selectedFilter) ? '' : 'none';
+        }
+      });
+    });
+  });
+}
