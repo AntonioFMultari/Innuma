@@ -203,6 +203,47 @@ app.delete("/db-events/:id", async (req, res) => {
   }
 });
 
+app.delete("/db-attivita/:id", async (req, res) => {
+  const AttId = req.params.id;
+  console.log("ID Attività da eliminare:", AttId);
+
+  try {
+    // Trova tutti gli eventi collegati a questa attività
+    const [eventiCollegati] = await db.promiseConnection.query(
+      "SELECT ID_Evento FROM evento_attivita WHERE ID_Attivita = ?",
+      [AttId]
+    );
+
+    // Elimina tutte le relazioni evento-attività per questa attività
+    await db.promiseConnection.query(
+      "DELETE FROM evento_attivita WHERE ID_Attivita = ?",
+      [AttId]
+    );
+
+    // Elimina tutti gli eventi collegati (se ce ne sono)
+    if (eventiCollegati.length > 0) {
+      const idsEventi = eventiCollegati.map((ev) => ev.ID_Evento);
+      await db.promiseConnection.query(
+        `DELETE FROM evento WHERE ID IN (${idsEventi.map(() => "?").join(",")})`,
+        idsEventi
+      );
+    }
+
+    // Elimina l'attività
+    await db.promiseConnection.query(
+      "DELETE FROM attività WHERE ID = ?",
+      [AttId]
+    );
+
+    res.status(204).send();
+  } catch (err) {
+    console.error("Errore durante l'eliminazione dell'attività:", err);
+    res
+      .status(500)
+      .json({ error: "Errore durante l'eliminazione dell'attività" });
+  }
+});
+
 // PUT -> AGGIORNA UN EVENTO
 app.put("/db-events/:id", express.json(), async (req, res) => {
   const eventId = req.params.id;

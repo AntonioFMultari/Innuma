@@ -150,3 +150,69 @@
   padding: 0;
   user-select: none;
 }
+
+#modal-attivita {
+  border: none;
+  border-radius: 1.5rem;
+  padding: 2rem;
+  min-width: 260px;
+  max-width: 90vw;
+  margin: auto;
+
+  &::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+}
+
+#formDialog {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+#h2Dialog {
+  margin-top: 0;
+}
+
+#menuDialog {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+#chiudi-modal-attivita {
+  color: white;
+  border: none;
+  border-radius: 5rem;
+  background-color: #999999;
+  width: 6rem;
+  height: 2.5rem;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+#salva-attivita {
+  color: white;
+  border: none;
+  border-radius: 5rem;
+  background-color: #56b1fb;
+  width: 6rem;
+  height: 2.5rem;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    cursor: pointer;
+  }
+}

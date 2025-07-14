@@ -160,16 +160,6 @@ document.addEventListener("DOMContentLoaded", function () {
       list: "Lista",
     },
     eventClick: function (info) {
-      inviaRichiesta("GET", `/db-events`)
-        .then((ris) => {
-          const PORCODDIO = ris;
-          c(PORCODDIO);
-        })
-        .catch((err) => {
-          console.error(err);
-          alert("Errore");
-        });
-
       // Rimuovi eventuali box già presenti
       const oldBox = document.getElementById("popup-evento");
       if (oldBox) oldBox.remove();
@@ -274,7 +264,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (confirm("Sei sicuro di voler eliminare questo evento?")) {
           inviaRichiesta(
             "DELETE",
-            `/db-events/${info.event._def.extendedProps.ID}`
+            `/db-events/${info.event.id}`
           )
             .then((ris) => {
               console.log(ris);
@@ -287,6 +277,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
         document.removeEventListener("keydown", handleBackspace);
+        document.removeEventListener("mousedown", handleClickOutside);
       };
 
       // Chiudi il box al click all'esterno
@@ -310,7 +301,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (confirm("Sei sicuro di voler eliminare questo evento?")) {
           inviaRichiesta(
             "DELETE",
-            `/db-events/${info.event._def.extendedProps.id}`
+            `/db-events/${info.event.id}`
           )
             .then((ris) => {
               console.log(ris);

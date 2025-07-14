@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     activities.forEach((activity) => {
       const attivitaDiv = document.createElement("div");
       attivitaDiv.classList.add("AttOggetto");
+      attivitaDiv.setAttribute("data-id", activity.ID); // <-- aggiungi questa riga
       console.log("Attività:", activity.Colore);
       attivitaDiv.innerHTML = `
                 <div class="AttPallino" style="background: ${
@@ -73,6 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         <button class="DeleteBtn"><img src="assets/delete.png" alt="Delete Icon" class="Deleteimg"></button>
                     `;
             document.querySelector(".listaAtt").appendChild(attivitaDiv);
+            //window.location.reload();
           });
         }
       };
@@ -80,18 +82,17 @@ document.addEventListener("DOMContentLoaded", function () {
       document.querySelectorAll(".DeleteBtn").forEach((btn) => {
         btn.addEventListener("click", function () {
           const attivitaDiv = this.closest(".AttOggetto");
+          const idAttivita = attivitaDiv.getAttribute("data-id");
           const nomeAttivita =
             attivitaDiv.querySelector(".AttNome").textContent;
           if (
             confirm(
-              `Sei sicuro di voler eliminare l'attività "${nomeAttivita}"?`
+              `Sei sicuro di voler eliminare l'attività "${nomeAttivita}"? Perderai tutti gli eventi connessi a questa attività`
             )
           ) {
-            inviaRichiesta("DELETE", `/db-activities/${nomeAttivita}`).then(
-              () => {
-                attivitaDiv.remove();
-              }
-            );
+            inviaRichiesta("DELETE", `/db-attivita/${idAttivita}`).then(() => {
+              attivitaDiv.remove();
+            });
           }
         });
       });
