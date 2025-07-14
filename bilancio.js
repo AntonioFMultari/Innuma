@@ -45,7 +45,10 @@ function BalancePage() {
   tendinaFiltriBilancio.className = "tendinaFiltriBilancio";
   containerFiltriBilancio.appendChild(tendinaFiltriBilancio);
 
-  // Right part: Transactions
+  const bottoneTransazione = document.createElement("button");
+  bottoneTransazione.class= "entrataUsita"
+  containerFiltriBilancio.appendChild(bottoneTransazione);
+
   const cartBilDestra = document.createElement("div");
   cartBilDestra.className = "cartDestra";
   cartellaBilancio.appendChild(cartBilDestra);

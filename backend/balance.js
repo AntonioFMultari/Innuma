@@ -34,7 +34,7 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../index.html"));
 });
 
-//query sul database
+// Query sul database
 const db = require("./database.js"); // Supponendo che tu abbia salvato il tuo pool in database.js
 
 async function getEvents() {
