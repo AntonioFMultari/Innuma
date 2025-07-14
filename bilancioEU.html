@@ -33,6 +33,20 @@
           <span class="spanElementoHamburger">Calendario</span>
         </div>
       </a>
+      <a href="./activities.html">
+          <div
+            class="divElementoHamburger"
+            data-page="attività"
+            onclick="selezioneElementoHamburger(event)"
+          >
+            <img
+              src="./assets/attività.png"
+              alt="immagine bottone attività"
+              class="icoElementiHamburger"
+            />
+            <span class="spanElementoHamburger">Attività</span>
+          </div>
+        </a>
       <a href="./bilancio.html">
         <div class="divElementoHamburger" data-page="bilancio" onclick="selezioneElementoHamburger(event)">
           <img src="./assets/bilancio.png" alt="immagine bottone bilancio" class="icoElementiHamburger" />
@@ -69,10 +83,10 @@
 
     <!--Bottone aggiungi spese-->
     <div class="bottoneNuovoElemento">
-      <button class="bottoneCreaElemento">
+      <button id="firstButtonSpese" class="btnAggiungiSpese">
       <img src="./assets/spese.png" alt="Bottone aggiungi spese">
       </button>
-      <button id="secondButtonEvento" class="bottoneCreaElemento">
+      <button id="secondButtonSpese" class="btnAggiungiSpese">
         Aggiungi Spese
       </button>
     </div>
