@@ -45,7 +45,17 @@
 }
 
 /* Limita la larghezza del testo nei filtri */
+.elementoFiltro {
+  cursor: pointer;
+  &:hover > span {
+    width: fit-content;
+    max-width: none;
+  }
+}
+
 .elementoFiltro .spanFiltro {
+  interpolate-size: allow-keywords;
+  transition: min-width 0.3s linear;
   max-width: 120px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -389,4 +399,28 @@
 .dettaglioEvento {
   margin-bottom: 0.5rem;
   font-size: 1rem;
+}
+
+.event-content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem;
+  max-width: 100%;
+
+  .titolo-evento {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
+  &::before {
+    content: "a";
+    color: #0000;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background-color: var(--colore-attivita, #a9f5c1);
+  }
 }

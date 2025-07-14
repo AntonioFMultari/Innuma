@@ -1,32 +1,50 @@
 <!DOCTYPE html>
 <html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="./assets/logo.ico" />
+    <link rel="stylesheet" href="global.css" />
+    <link rel="stylesheet" href="calendar.css" />
+    <link rel="stylesheet" href="activities.css" />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/x-icon" href="./assets/logo.ico" />
-  <link rel="stylesheet" href="global.css" />
-  <link rel="stylesheet" href="calendar.css" />
-  <link rel="stylesheet" href="activities.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="index.js" defer></script>
+    <script src="activities.js" defer></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.10.0/axios.min.js"
+      integrity="sha512-WkZrEcQ5LMyNy6Y2PQf+Tu3vMcsmKKRKuPXtJSTHQJ3mpuvLRlA5dlDDhrrcXfyWr6Z/y3wIMfjfqVFO/gDZYQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="./richieste.js"></script>
 
-  <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&display=swap" rel="stylesheet" />
-  <script src="index.js" defer></script>
-  <title>Innuma</title>
-</head>
+    <title>Innuma</title>
+  </head>
 
-<body>
-  <!--Header con logo, Saluto e menu hamburger-->
-  <header>
-    <!--Tendina HamburgerMenu-->
-    <div class="tendinaHamburger">
-      <a href="./index.html">
-        <div class="divElementoHamburger elementoSelezionato" data-page="calendario"
-          onclick="selezioneElementoHamburger(event)">
-          <img src="./assets/calendario.png" alt="immagine bottone calendario" class="icoElementiHamburger" />
-          <span class="spanElementoHamburger">Calendario</span>
-        </div>
-      </a>
-      <a href="./activities.html">
+  <body>
+    <!--Header con logo, Saluto e menu hamburger-->
+    <header>
+      <!--Tendina HamburgerMenu-->
+      <div class="tendinaHamburger">
+        <a href="./index.html">
+          <div
+            class="divElementoHamburger elementoSelezionato"
+            data-page="calendario"
+            onclick="selezioneElementoHamburger(event)"
+          >
+            <img
+              src="./assets/calendario.png"
+              alt="immagine bottone calendario"
+              class="icoElementiHamburger"
+            />
+            <span class="spanElementoHamburger">Calendario</span>
+          </div>
+        </a>
+        <a href="./activities.html">
           <div
             class="divElementoHamburger"
             data-page="attività"
@@ -40,93 +58,123 @@
             <span class="spanElementoHamburger">Attività</span>
           </div>
         </a>
-      <a href="./bilancio.html">
-        <div class="divElementoHamburger" data-page="bilancio" onclick="selezioneElementoHamburger(event)">
-          <img src="./assets/bilancio.png" alt="immagine bottone bilancio" class="icoElementiHamburger" />
-          <span class="spanElementoHamburger">Bilancio</span>
-        </div>
-      </a>
-      <a href="./fatture.html">
-        <div class="divElementoHamburger" data-page="fatture" onclick="selezioneElementoHamburger(event)">
-          <img src="./assets/fattura.png" alt="immagine bottone bilancio" class="icoElementiHamburger" />
-          <span class="spanElementoHamburger">Fatture</span>
-        </div>
-      </a>
-    </div>
-
-    <!--header-->
-    <div id="header">
-      <div class="divLogo-saluto">
-        <a href="./index.html">
-          <img src="./assets/logo.png" alt="Logo del sito web" class="imgLogo" onclick="tornaAllaHome()" />
+        <a href="./bilancio.html">
+          <div
+            class="divElementoHamburger"
+            data-page="bilancio"
+            onclick="selezioneElementoHamburger(event)"
+          >
+            <img
+              src="./assets/bilancio.png"
+              alt="immagine bottone bilancio"
+              class="icoElementiHamburger"
+            />
+            <span class="spanElementoHamburger">Bilancio</span>
+          </div>
         </a>
-        <span class="spanSaluto">Buongiorno ☀️</span>
+        <a href="./fatture.html">
+          <div
+            class="divElementoHamburger"
+            data-page="fatture"
+            onclick="selezioneElementoHamburger(event)"
+          >
+            <img
+              src="./assets/fattura.png"
+              alt="immagine bottone bilancio"
+              class="icoElementiHamburger"
+            />
+            <span class="spanElementoHamburger">Fatture</span>
+          </div>
+        </a>
       </div>
-      <img src="./assets/menuHamburger.png" onclick="tendinaHamburger()" alt="icona menu a tendina"
-        class="hamburgerMenu" />
+
+      <!--header-->
+      <div id="header">
+        <div class="divLogo-saluto">
+          <a href="./index.html">
+            <img
+              src="./assets/logo.png"
+              alt="Logo del sito web"
+              class="imgLogo"
+              onclick="tornaAllaHome()"
+            />
+          </a>
+          <span class="spanSaluto">Buongiorno ☀️</span>
+        </div>
+        <img
+          src="./assets/menuHamburger.png"
+          onclick="tendinaHamburger()"
+          alt="icona menu a tendina"
+          class="hamburgerMenu"
+        />
+      </div>
+    </header>
+
+    <!--Scheda Attivitá-->
+
+    <div class="contActi">
+      <h1 class="titolo">Gestione delle tue attivitá</h1>
+
+      <div class="sottotitoli">
+        <span class="sottotitolo1">Nome</span>
+        <span class="sottotitoloInps">Rivalsa INPS</span>
+        <span class="sottotitolo2">Tariffa</span>
+      </div>
+
+      <div class="listaAtt">
+        <!-- Le attività verranno aggiunte qui dinamicamente -->
+      </div>
+      <button id="AggAct">Aggiungi Attivitá</button>
     </div>
-  </header>
 
-
-  <!--Scheda Attivitá-->
-
-
-  <div class="contActi">
-    <h1 class="titolo">Gestione delle tue attivitá</h1>
-
-    <div class="sottotitoli">
-      <span class="sottotitolo1">Nome</span>
-      <span class="sottotitolo2">Tariffa</span>
-    </div>
-    
-    <div class="listaAtt">
-      <div class="AttOgetto">
-        <div class="AttPallino1"></div>
-        <span class="AttNome">ITS academy</span>
-        <span class="AttTar">50 EUR/h</span>
-        <button class="DeleteBtn"><img src="assets/delete.png" alt="Delete Icon" class="Deleteimg"></button>
-      </div>
-      <div class="AttOgetto">
-        <div class="AttPallino2"></div>
-        <span class="AttNome">Ripetizioni Priv.</span>
-        <span class="AttTar">15 EUR/h</span>
-        <button class="DeleteBtn"><img src="assets/delete.png" alt="Delete Icon" class="Deleteimg"></button>
-      </div>
-      <div class="AttOgetto">
-        <div class="AttPallino3"></div>
-        <span class="AttNome">Scuola Pubblica</span>
-        <span class="AttTar">30 EUR/h</span>
-        <button class="DeleteBtn"><img src="assets/delete.png" alt="Delete Icon" class="Deleteimg"></button>
-      </div>
-      <div class="AttOgetto">
-        <div class="AttPallino3"></div>
-        <span class="AttNome">ITS academy</span>
-        <span class="AttTar">50 EUR/h</span>
-        <button class="DeleteBtn"><img src="assets/delete.png" alt="Delete Icon" class="Deleteimg"></button>
-      </div>
-      <div class="AttOgetto">
-        <div class="AttPallino1"></div>
-        <span class="AttNome">ITS academy</span>
-        <span class="AttTar">50 EUR/h</span>
-        <button class="DeleteBtn"><img src="assets/delete.png" alt="Delete Icon" class="Deleteimg"></button>
-      </div>
-      <div class="AttOgetto">
-        <div class="AttPallino2"></div>
-        <span class="AttNome">Ripetizioni Priv.</span>
-        <span class="AttTar">15 EUR/h</span>
-        <button class="DeleteBtn"><img src="assets/delete.png" alt="Delete Icon" class="Deleteimg"></button>
-      </div>
-      <div class="AttOgetto">
-        <div class="AttPallino3"></div>
-        <span class="AttNome">Scuola Pubblica</span>
-        <span class="AttTar">30 EUR/h</span>
-        <button class="DeleteBtn"><img src="assets/delete.png" alt="Delete Icon" class="Deleteimg"></button>
-      </div>
-      <div class="AttOgetto">
-        <div class="AttPallino3"></div>
-        <span class="AttNome">ITS academy</span>
-        <span class="AttTar">50 EUR/h</span>
-        <button class="DeleteBtn"><img src="assets/delete.png" alt="Delete Icon" class="Deleteimg"></button>
-      </div>
-      <button class="AggAct">Aggiungi Attivitá
-    </div>
+    <!--Modale aggiunta Attività-->
+    <dialog id="modal-attivita">
+      <form method="dialog" id="formDialog">
+        <h2 id="h2Dialog">Aggiungi Attività</h2>
+        <label>
+          Nome Attività:
+          <input id="nome-attivita" name="nome-attivita" type="text" required />
+        </label>
+        <label>
+          Tariffa oraria:
+          <input
+            id="tariffa-attivita"
+            name="tariffa-attivita"
+            type="number"
+            step="0.01"
+            required
+          />
+        </label>
+        <label>
+          Rivalsa INPS:
+          <input id="rivalsa-inps" name="rivalsa-inps" type="checkbox" />
+        </label>
+        <label>
+          Colore:
+          <input
+            id="colore-attivita"
+            name="colore-attivita"
+            type="color"
+            required
+          />
+        </label>
+        <menu id="menuDialog">
+          <button id="salva-attivita" value="default">
+            <img
+              id="imgPopupEvent"
+              src="./assets/salva.png"
+              alt="Bottone salva attività"
+            />Salva
+          </button>
+          <button id="chiudi-modal-attivita" value="cancel" type="button">
+            <img
+              id="imgPopupEvent"
+              src="./assets/chiudi.png"
+              alt="Bottone chiudi attività"
+            />Chiudi
+          </button>
+        </menu>
+      </form>
+    </dialog>
+  </body>
+</html>

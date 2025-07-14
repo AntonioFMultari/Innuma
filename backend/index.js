@@ -41,7 +41,22 @@ async function getEvents() {
   try {
     // Esegui una query SELECT
     const [rows, fields] = await db.promiseConnection.query(
-      "SELECT e.ID, e.Titolo AS title, e._dataInizio AS start, e._dataFine AS end, a.Colore AS color, e.NomeCliente AS nome_cliente, e.Descrizione AS descrizione_evento, a.Tariffa AS tariffa_oraria, a.INPS AS rivalsa_inps FROM evento e JOIN evento_attivita ea ON e.ID = ea.ID_Evento JOIN attività a ON ea.ID_Attivita = a.ID;"
+      `SELECT 
+       e.ID AS id,
+        e.Titolo AS title,
+        e._dataInizio AS start,
+        e._dataFine AS end,
+        a.Colore AS color,
+        e.NomeCliente AS nome_cliente,
+        e.descrizione AS descrizione_evento,
+        a.Tariffa AS tariffa_oraria,
+        e.Titolo AS descrizione_evento,
+        a.INPS AS rivalsa_inps,
+        a.descrizione AS descrizione_attivita
+      FROM evento e
+      JOIN evento_attivita ea ON e.ID = ea.ID_Evento
+      JOIN attività a ON ea.ID_Attivita = a.ID
+      ORDER BY e._dataInizio;`
     );
     console.log("Eventi:", rows, fields);
     return rows;
@@ -140,10 +155,35 @@ app.post("/db-events", express.json(), async (req, res) => {
   }
 });
 
+app.post("/db-attivita", express.json(), async (req, res) => {
+  const newActivity = req.body;
+  console.log("Nuova attività ricevuta:", newActivity);
+  try {
+    // Esegui una query INSERT
+    const [result] = await db.promiseConnection.query(
+      "INSERT INTO attività (Descrizione, Tariffa, Colore, INPS) VALUES (?, ?, ?, ?)",
+      [
+        newActivity.Descrizione,
+        newActivity.Tariffa,
+        newActivity.Colore,
+        newActivity.INPS,
+      ]
+    );
+    newActivity.ID = result.insertId; // Aggiungi l'ID generato all'oggetto dell'attività
+    res.status(201).json(newActivity);
+  } catch (err) {
+    console.error("Errore durante l'inserimento dell'attività:", err);
+    res
+      .status(500)
+      .json({ error: "Errore durante l'inserimento dell'attività" });
+  }
+});
+
 //DELETE -> ELIMINA UN EVENTO
 // Assicurati che l'ID dell'evento sia passato come parametro nella URL
 app.delete("/db-events/:id", async (req, res) => {
   const eventId = req.params.id;
+  console.log("ID evento da eliminare:", eventId);
 
   try {
     // Esegui una query DELETE

@@ -1,4 +1,5 @@
 //Inizializzazione del codice JavaScript
+
 // Questo codice viene eseguito quando la pagina è completamente caricata.
 window.addEventListener("load", init);
 
@@ -159,6 +160,16 @@ document.addEventListener("DOMContentLoaded", function () {
       list: "Lista",
     },
     eventClick: function (info) {
+      inviaRichiesta("GET", `/db-events`)
+        .then((ris) => {
+          const PORCODDIO = ris;
+          c(PORCODDIO);
+        })
+        .catch((err) => {
+          console.error(err);
+          alert("Errore");
+        });
+
       // Rimuovi eventuali box già presenti
       const oldBox = document.getElementById("popup-evento");
       if (oldBox) oldBox.remove();
@@ -185,6 +196,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       // Mostra tutte le proprietà di extendedProps
+
       if (info.event.extendedProps) {
         for (const [key, value] of Object.entries(info.event.extendedProps)) {
           if (value !== null && value !== undefined && value !== "") {
@@ -257,12 +269,13 @@ document.addEventListener("DOMContentLoaded", function () {
         box.remove();
         document.removeEventListener("keydown", handleBackspace);
       };
-
       // Elimina l'evento al click su "Elimina"
-      console.log("Eliminazione evento:", info.event.id);
       document.getElementById("elimina-evento").onclick = () => {
         if (confirm("Sei sicuro di voler eliminare questo evento?")) {
-          inviaRichiesta("DELETE", `/db-events/${info.event.id}`)
+          inviaRichiesta(
+            "DELETE",
+            `/db-events/${info.event._def.extendedProps.ID}`
+          )
             .then((ris) => {
               console.log(ris);
               box.remove();
@@ -295,7 +308,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
       document.getElementById("elimina-evento").onclick = () => {
         if (confirm("Sei sicuro di voler eliminare questo evento?")) {
-          inviaRichiesta("DELETE", `/db-events/${info.event.id}`)
+          inviaRichiesta(
+            "DELETE",
+            `/db-events/${info.event._def.extendedProps.id}`
+          )
             .then((ris) => {
               console.log(ris);
               box.remove();
@@ -315,6 +331,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
     eventSources: {
       url: `${_URL}/db-events`,
+    },
+    eventContent: (args) => {
+      const colore = args.backgroundColor;
+      const { event } = args;
+      const { title, start, end, extendedProps } = event;
+      const { descrizione_attivita } = extendedProps || {};
+
+      const cont = document.createElement("div");
+      cont.className = "event-content";
+      cont.style.setProperty("--colore-attivita", colore);
+      cont.setAttribute("data-attivita", descrizione_attivita ?? "");
+
+      const ora = document.createElement("div");
+      ora.className = "event-time";
+      ora.textContent = start.toLocaleTimeString([], {
+        hour: "2-digit",
+      });
+
+      const titolo = document.createElement("div");
+      titolo.classList.add("titolo-evento");
+      titolo.innerText = title;
+
+      cont.append(ora, titolo);
+
+      return {
+        domNodes: [cont],
+      };
     },
     eventDrop: function (info) {
       if (confirm("Sei sicuro di voler spostare questo evento?")) {
@@ -515,10 +558,10 @@ document.addEventListener("DOMContentLoaded", function () {
         ev.classList.remove("evento-evidenziato");
       });
 
-      // Evidenzia solo quelli con lo stesso nome_cliente
+      // Evidenzia solo quelli con la stessa attività
       document.querySelectorAll(".fc-event").forEach((ev) => {
-        const title = ev.querySelector(".fc-event-title")?.innerText || "";
-        if (title.includes(nomeFiltro)) {
+        const attivita = ev.getAttribute("data-attivita") || "";
+        if (attivita.includes(nomeFiltro)) {
           ev.classList.add("evento-evidenziato");
         }
       });
@@ -566,12 +609,17 @@ document.addEventListener("DOMContentLoaded", function () {
       document
         .querySelectorAll(".fc-event")
         .forEach((ev) => ev.classList.remove("evento-evidenziato"));
-      document.querySelectorAll(".fc-event").forEach((ev) => {
-        const title = ev.querySelector(".fc-event-title")?.innerText || "";
-        if (title.includes(nomeFiltro)) {
-          ev.classList.add("evento-evidenziato");
-        }
+      const ev = [...document.querySelectorAll(".fc-event")].map(
+        (e) => e.children[0]
+      );
+
+      ev.filter((evento) => {
+        const attivita = evento.getAttribute("data-attivita") || "";
+        return attivita.toLocaleLowerCase() === nomeFiltro.toLocaleLowerCase();
+      }).forEach((evento) => {
+        evento.parentElement.classList.add("evento-evidenziato");
       });
+
       document
         .querySelectorAll(".elementoFiltro")
         .forEach((f) => f.classList.remove("filtro-evidenziato"));
@@ -604,14 +652,14 @@ document.addEventListener("DOMContentLoaded", function () {
   document.querySelectorAll(".elementoFiltro").forEach(aggiungiListenerFiltro);
 
   // Crea i filtri dagli eventi del backend
-  inviaRichiesta("GET", "/db-events")
+  inviaRichiesta("GET", "/db-attivita")
     .then((ris) => {
       const eventi = ris.data || ris;
       const nomiFiltriCreati = new Set();
       eventi.forEach((ev) => {
-        const nome = ev.title || ev.nome_cliente || "";
+        const nome = ev.Descrizione || "";
         if (nome && !nomiFiltriCreati.has(nome)) {
-          creaFiltroSeNonEsiste(nome, ev.color || "#a9f5c1");
+          creaFiltroSeNonEsiste(nome, ev.Colore || "#a9f5c1");
           nomiFiltriCreati.add(nome);
         }
       });
@@ -636,15 +684,15 @@ function creaFiltroSeNonEsiste(nome, colore = "#a9f5c1") {
   aggiungiListenerFiltro(filtro);
 }
 
-inviaRichiesta("GET", "/db-events")
+inviaRichiesta("GET", "/db-attivita")
   .then((ris) => {
-    // Crea filtri unici per ogni nome evento
+    // Crea filtri unici per ogni attività
     const eventi = ris.data || ris; // dipende da come arriva la risposta
     const nomiFiltriCreati = new Set();
     eventi.forEach((ev) => {
-      const nome = ev.title || ev.nome_cliente || "";
+      const nome = ev.Descrizione || "";
       if (nome && !nomiFiltriCreati.has(nome)) {
-        creaFiltroSeNonEsiste(nome, ev.color || "#a9f5c1");
+        creaFiltroSeNonEsiste(nome, ev.Colore || "#a9f5c1");
         nomiFiltriCreati.add(nome);
       }
     });
