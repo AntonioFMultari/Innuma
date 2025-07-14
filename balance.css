@@ -221,23 +221,25 @@
   color: #ade27b; /* Green for income amounts */
 }
 
-.transazioneUscita {
-  color: #ff4645; /* Red for expense amounts */
+.spanFiltriBil {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 34px;
+  font-size: 1rem;  
+  border-radius: 1.2rem;
+  background: #f8f8f8;
+  margin: 0 4px;
+  padding: 0 10px;
+  box-sizing: border-box;
+  white-space: nowrap;
 }
 
-/* "total" text below the amount */
-.transazioneTestoTotale {
-  font-size: 0.8rem;
-  color: #999; /* Gray color for "total" */
-  margin-top: 0.1rem;
-}
-
-/* Transaction Status (new style) */
-.transazioneStatoNuovo {
-  font-size: 0.75rem;
-  color: #555; /* Color for the status text */
-  background-color: #f0f0f0; /* Light background */
-  padding: 0.2rem 0.5rem;
+.pallinoFiltro {
+  background-color: #a9f5c1;
+  width: 1rem;
+  height: 1rem;
   border-radius: 0.5rem;
   margin-top: 0.3rem;
   display: inline-block; /* Ensures padding and background work correctly */
@@ -249,11 +251,10 @@
   color: #e65100; /* Darker orange */
 }
 
+/* esperimento - mobile schermi*/
 
-/* --- MEDIA QUERIES FOR RESPONSIVENESS --- */
-
-/* Tablet styles */
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 992px) {
+  /* Tablet in giù */
   .cartBil {
     gap: 1rem; /* Reduced gap for smaller screens */
     width: 95%; /* More width on tablet */
@@ -273,7 +274,7 @@
   }
 }
 
-/* Mobile styles (max-width: 480px) - from balanceEU.css and balance.css */
+/* adesso telefoni */
 @media screen and (max-width: 480px) {
   html {
     font-size: 13px; /* Adjust font size for better readability on small screens */
@@ -347,9 +348,5 @@
     flex-direction: row; /* Display amount and status in a row */
     justify-content: space-between; /* Space out amount and status */
     align-items: center;
-  }
-
-  .transazioneTestoTotale {
-    display: none; /* Hide 'total' text on very small screens to save space */
   }
 }
