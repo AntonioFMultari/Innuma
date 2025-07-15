@@ -31,17 +31,17 @@
   justify-content: center;
   align-items: center;
   flex-grow: 1;
-  max-width: 250px; 
+  max-width: 250px;
   aspect-ratio: 1 / 1;
-  margin: 0 auto; 
+  margin: 0 auto;
 }
 
 /* Chart canvas dimensions */
 #graficoCanvas {
   width: 100%;
   height: 100%;
-  max-width: 400px; 
-  max-height: 400px; 
+  max-width: 400px;
+  max-height: 400px;
 }
 
 /* Total amount displayed in the center of the chart */
@@ -50,7 +50,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 2; 
+  z-index: 2;
   font-size: 1.8rem;
   font-weight: bold;
   color: #333;
@@ -86,7 +86,7 @@
   gap: 0.5rem;
   padding: 0.5rem 1rem;
   border-radius: 1.5rem;
-  white-space: nowrap; 
+  white-space: nowrap;
   background-color: #f0f0f0;
   color: #555;
   cursor: pointer;
@@ -104,8 +104,6 @@
   background-color: #808080;
   color: white;
 }
-
-
 
 .entrateUscita {
   padding: 0.8rem;
@@ -130,8 +128,8 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  max-width: 700px; 
-  margin-left: 2rem; 
+  max-width: 700px;
+  margin-left: 2rem;
 }
 
 .titoloBil {
@@ -144,106 +142,104 @@
 .listaBil {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem; 
+  gap: 0.75rem;
 }
-
-
 
 /* Style for the individual transaction card */
 .elementoTransazione {
   max-width: 25rem;
   display: flex;
-  align-items: center; 
+  align-items: center;
   gap: 1rem;
   background-color: #fff;
-  padding: 1rem 1.5rem; 
-  border-radius: 0.75rem; 
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
-  margin-bottom: 0.75rem; 
-  justify-content: space-between; 
+  padding: 1rem 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 0.75rem;
+  justify-content: space-between;
 }
 
 /* Container for the icon/dot */
 .transazioneIconaContenitore {
-  flex-shrink: 0; 
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.5rem; 
+  width: 2.5rem;
   height: 2.5rem;
   border-radius: 50%;
 }
 
 /* Styles for the color dots (from balanceEU.css, now within balance.css) */
 .pallino {
-  width: 1.2rem; 
+  width: 1.2rem;
   height: 1.2rem;
-  border-radius: 50%; 
+  border-radius: 50%;
   aspect-ratio: 1;
-  flex-shrink: 0; 
+  flex-shrink: 0;
 }
 
 .pallinoEntrate {
-  background-color: #ade27b; 
+  background-color: #ade27b;
 }
 
 .pallinoUscite {
-  background-color: #ff4645; 
+  background-color: #ff4645;
 }
 
 .pallinoDaCont {
-  background-color: #49b4ff; 
+  background-color: #49b4ff;
 }
 
 #tendinaFiltriBilancio,
 .tendinaFiltriBilancio {
-  display: flex; 
-  flex-wrap: nowrap; 
-  overflow-y: hidden; 
-  -webkit-overflow-scrolling: touch; 
-  gap: 10px; 
-  padding: 10px 0; 
-  height: auto; 
-  align-items: center; 
-  justify-content: flex-start; 
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  gap: 10px;
+  padding: 10px 0;
+  height: auto;
+  align-items: center;
+  justify-content: flex-start;
   width: 100%;
   box-sizing: border-box;
 }
 
 /* To hide the scrollbar visually but keep its functionality for this element */
 #tendinaFiltriBilancio::-webkit-scrollbar {
-  display: none; 
+  display: none;
 }
 
 #tendinaFiltriBilancio {
   -ms-overflow-style: none;
-  scrollbar-width: none; 
+  scrollbar-width: none;
 }
 
 #tendinaFiltriBilancio.is-dragging {
-  cursor: grabbing; 
-  user-select: none; 
+  cursor: grabbing;
+  user-select: none;
 }
 #tendinaFiltriBilancio {
-  cursor: grab; 
+  cursor: grab;
 }
 
 .transazioneInfoPrincipale {
   display: flex;
   flex-direction: column;
-  flex-grow: 1; 
-  margin-right: 1rem; 
+  flex-grow: 1;
+  margin-right: 1rem;
 }
 
 .transazioneTitolo {
   font-weight: bold;
   font-size: 1.1rem;
-  color: #333; 
+  color: #333;
 }
 
 .transazioneDescrizione {
   font-size: 0.9rem;
-  color: #777; 
+  color: #777;
   margin-top: 0.2rem;
 }
 
@@ -251,7 +247,7 @@
 .transazioneDettagliDestra {
   display: flex;
   flex-direction: column;
-  align-items: flex-end; 
+  align-items: flex-end;
   flex-shrink: 0;
 }
 
@@ -263,7 +259,7 @@
 
 /* Colors for transaction amounts */
 .transazioneEntrata {
-  color: #ade27b; 
+  color: #ade27b;
 }
 
 .spanFiltriBil {
@@ -286,7 +282,7 @@
   height: 1rem;
   border-radius: 0.5rem;
   margin-top: 0.3rem;
-  display: inline-block; 
+  display: inline-block;
 }
 
 /* Specific style for 'In attesa' status */
@@ -337,8 +333,8 @@
 @media screen and (max-width: 992px) {
   /* Tablet in giù */
   .cartBil {
-    gap: 1rem; 
-    width: 95%; 
+    gap: 1rem;
+    width: 95%;
     padding: 1rem;
   }
 
@@ -347,24 +343,24 @@
   }
 
   .cartDestra {
-    margin-left: 1rem; 
+    margin-left: 1rem;
   }
 
   .titoloBil {
-    font-size: 1.8rem; 
+    font-size: 1.8rem;
   }
 }
 
 /* e telefoni */
 @media screen and (width < 480px) {
   html {
-    font-size: 13px; 
+    font-size: 13px;
   }
 
   .cartBil {
-    flex-direction: column; 
+    flex-direction: column;
     width: 100%;
-    border-radius: 0; 
+    border-radius: 0;
     box-shadow: none;
     margin-top: 0.5rem;
     padding-left: 0.5rem;
@@ -379,55 +375,55 @@
     margin-left: auto;
     margin-right: auto;
     width: 100%;
-    max-width: 22rem; 
+    max-width: 22rem;
     justify-content: flex-start;
-    min-width: 406px; 
+    min-width: 406px;
   }
 
   .spanSaluto {
-    display: none; 
+    display: none;
   }
 
   /* Adjust chart size for mobile */
   .grafaBil {
-    max-width: 20rem; 
+    max-width: 20rem;
     margin-bottom: 1rem;
   }
 
   /* The total should still be centered on the chart */
   #grafico-total {
-    font-size: 1.5rem; 
+    font-size: 1.5rem;
   }
 
   .cartDestra {
     width: 100%;
-    max-width: 550px; 
+    max-width: 550px;
     margin-top: 2rem;
-    margin-left: 0; 
+    margin-left: 0;
   }
 
   .titoloBil {
-    margin-top: 0; 
+    margin-top: 0;
   }
 
   /* Further adjustments for transaction items on mobile if needed */
   .elementoTransazione {
-    flex-wrap: wrap; 
+    flex-wrap: wrap;
     padding: 0.75rem 1rem;
   }
 
   .transazioneInfoPrincipale {
     flex-grow: 1;
-    margin-right: 0; 
+    margin-right: 0;
     width: 100%;
   }
 
   .transazioneDettagliDestra {
     width: 100%;
-    align-items: flex-start; 
+    align-items: flex-start;
     margin-top: 0.5rem;
-    flex-direction: row; 
-    justify-content: space-between; 
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
   }
 

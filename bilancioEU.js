@@ -21,7 +21,7 @@ function BalancePage() {
 
   grafaBilancio.appendChild(graficoCanvas);
 
-  const graficoTotale = document.createElement("div");
+  const graficoTotale = document.createElement("span");
   graficoTotale.id = "grafico-total";
   graficoTotale.textContent = "€0.00";
 
@@ -155,17 +155,65 @@ function renderBalanceChart(transactions) {
 function updateGraphTotal(transactions) {
   const graficoTotale = document.getElementById("grafico-total");
   if (graficoTotale) {
-    const totalIn = transactions
-      .filter((t) => t.transazioneEntrata)
-      .reduce((sum, t) => sum + parseFloat(t.transazioneEntrata), 0);
-    const totalOut = transactions
-      .filter((t) => t.transazioneUscita)
-      .reduce((sum, t) => sum + parseFloat(t.transazioneUscita), 0);
-    const total = totalIn - totalOut;
-    graficoTotale.textContent = `€${total.toFixed(2)}`;
+    let totalIn = 0;
+    console.log(transactions);
+    for (const t of transactions) {
+      totalIn += parseFloat("-" + t.Uscita) || 0;
+    }
+    graficoTotale.textContent = `€${totalIn}`;
   }
 }
 
+//TONY: display transactions
+document.addEventListener("DOMContentLoaded", function () {
+  BalancePage();
+  inviaRichiesta("GET", "/db-spesa").then((response) => {
+    const spesa = response.data;
+    spesa.forEach((spesaItem) => {
+      const elementoTransazione = document.createElement("div");
+      elementoTransazione.classList.add("elementoTransazione", "uscita");
+      elementoTransazione.setAttribute("data-id", spesaItem.ID); // <-- aggiungi questa riga
+
+      const anno = String(spesaItem._data.split(" ")[0].split("-")[0]).padStart(
+        2,
+        "0"
+      );
+      const mese = String(spesaItem._data.split(" ")[0].split("-")[1]).padStart(
+        2,
+        "0"
+      );
+      const giorno = String(spesaItem._data.split(" ")[0].split("-")[2])
+        .padStart(2, "0")
+        .split("T")[0];
+
+      elementoTransazione.innerHTML = `
+                <div class="transazioneIconaContenitore">
+                            <div class="pallino" style="background-color: #ff4645;"></div>
+                        </div>
+                        <div class="transazioneInfoPrincipale">
+                            <span class="transazioneTitolo">${
+                              spesaItem.Descrizione || "N/A"
+                            }</span>
+                            <span class="transazioneDescrizione">Data: ${giorno}/${mese}/${anno}</span>
+                        </div>
+                        <div class="transazioneDettagliDestra">
+                            <span class="transazioneImporto transazioneUscita">-€${
+                              spesaItem.Uscita || "N/A"
+                            }</span>
+                            <span class="transazioneTestoTotale">totale</span>
+                        </div>
+            `;
+      console.log(spesaItem);
+      // Aggiungi l'element
+      document
+        .getElementsByClassName("listaBil")[0]
+        .appendChild(elementoTransazione);
+    });
+    updateGraphTotal(spesa);
+    renderBalanceChart(spesa);
+  });
+});
+/*
 function renderTransactions(transactions) {
   const listaBil = document.querySelector(".listaBil");
   listaBil.innerHTML = "";
@@ -227,15 +275,12 @@ function renderTransactions(transactions) {
   });
   updateGraphTotal(transactions);
   renderBalanceChart(transactions);
-}
-
+}*/
+/*
 // placeholder lista TONY
 function fetchAndRenderTransactions() {
   const testData = [
     {
-      /* 
-
-      */
       id: "1",
       transazioneNome: "Affitto",
       data_transazione: "2025-07-01T10:00:00",
@@ -277,7 +322,7 @@ function fetchAndRenderTransactions() {
     },
   ];
   renderTransactions(testData);
-}
+}*/
 
 // listener nuovi eventi
 /*
@@ -354,7 +399,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // chiamata iniziale per recuperare e renderizzare le transazioni quando il DOM è caricato
-  fetchAndRenderTransactions();
+  //fetchAndRenderTransactions();
 
   setupFiltroInterazione();
 });

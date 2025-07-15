@@ -1,48 +1,57 @@
 <!DOCTYPE html>
 <html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="./assets/logo.ico" />
+    <link rel="stylesheet" href="global.css" />
+    <link rel="stylesheet" href="calendar.css" />
+    <link rel="stylesheet" href="invoice.css" />
+    <link rel="stylesheet" href="balanceEU.css" />
+    <link rel="stylesheet" href="spesa.css" />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/x-icon" href="./assets/logo.ico" />
-  <link rel="stylesheet" href="global.css" />
-  <link rel="stylesheet" href="calendar.css" />
-  <link rel="stylesheet" href="invoice.css" />
-  <link rel="stylesheet" href="balanceEU.css">
-  <link rel="stylesheet" href="spesa.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&display=swap" rel="stylesheet" />
-
-  <script src="index.js" defer></script>
-  <script
+    <script src="index.js" defer></script>
+    <script
       src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.10.0/axios.min.js"
       integrity="sha512-WkZrEcQ5LMyNy6Y2PQf+Tu3vMcsmKKRKuPXtJSTHQJ3mpuvLRlA5dlDDhrrcXfyWr6Z/y3wIMfjfqVFO/gDZYQ=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
-  <script src="./richieste.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="bilancioEU.js" defer></script>
-  <script src="./spese.js" defer></script>
+    <script src="./richieste.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="bilancioEU.js" defer></script>
+    <script src="./spese.js" defer></script>
 
-  <title>Innuma</title>
-</head>
+    <title>Innuma</title>
+  </head>
 
-<body>
-  <!--Header con logo, Saluto e menu hamburger-->
-  <header>
-    <!--Tendina HamburgerMenu-->
-    <div class="tendinaHamburger">
-      <a href="./index.html">
-        <div class="divElementoHamburger elementoSelezionato" data-page="calendario"
-          onclick="selezioneElementoHamburger(event)">
-          <img src="./assets/calendario.png" alt="immagine bottone calendario" class="icoElementiHamburger" />
-          <span class="spanElementoHamburger">Calendario</span>
-        </div>
-      </a>
-      <a href="./activities.html">
+  <body>
+    <!--Header con logo, Saluto e menu hamburger-->
+    <header>
+      <!--Tendina HamburgerMenu-->
+      <div class="tendinaHamburger">
+        <a href="./index.html">
+          <div
+            class="divElementoHamburger elementoSelezionato"
+            data-page="calendario"
+            onclick="selezioneElementoHamburger(event)"
+          >
+            <img
+              src="./assets/calendario.png"
+              alt="immagine bottone calendario"
+              class="icoElementiHamburger"
+            />
+            <span class="spanElementoHamburger">Calendario</span>
+          </div>
+        </a>
+        <a href="./activities.html">
           <div
             class="divElementoHamburger"
             data-page="attività"
@@ -56,24 +65,40 @@
             <span class="spanElementoHamburger">Attività</span>
           </div>
         </a>
-      <a href="./bilancio.html">
-        <div class="divElementoHamburger" data-page="bilancio" onclick="selezioneElementoHamburger(event)">
-          <img src="./assets/bilancio.png" alt="immagine bottone bilancio" class="icoElementiHamburger" />
-          <span class="spanElementoHamburger">Bilancio</span>
-        </div>
-      </a>
-      <a href="./fatture.html">
-        <div class="divElementoHamburger" data-page="fatture" onclick="selezioneElementoHamburger(event)">
-          <img src="./assets/fattura.png" alt="immagine bottone bilancio" class="icoElementiHamburger" />
-          <span class="spanElementoHamburger">Fatture</span>
-        </div>
-      </a>
-    </div>
+        <a href="./bilancio.html">
+          <div
+            class="divElementoHamburger"
+            data-page="bilancio"
+            onclick="selezioneElementoHamburger(event)"
+          >
+            <img
+              src="./assets/bilancio.png"
+              alt="immagine bottone bilancio"
+              class="icoElementiHamburger"
+            />
+            <span class="spanElementoHamburger">Bilancio</span>
+          </div>
+        </a>
+        <a href="./fatture.html">
+          <div
+            class="divElementoHamburger"
+            data-page="fatture"
+            onclick="selezioneElementoHamburger(event)"
+          >
+            <img
+              src="./assets/fattura.png"
+              alt="immagine bottone bilancio"
+              class="icoElementiHamburger"
+            />
+            <span class="spanElementoHamburger">Fatture</span>
+          </div>
+        </a>
+      </div>
 
-    <!--header-->
-    <div id="header">
-      <div class="divLogo-saluto">
-        <a href="./index.html">
+      <!--header-->
+      <div id="header">
+        <div class="divLogo-saluto">
+          <a href="./index.html">
             <img
               src="./assets/logo.png"
               alt="Logo del sito web"
@@ -81,26 +106,26 @@
               onclick="tornaAllaHome()"
             />
           </a>
-        <span class="spanSaluto">Buongiorno ☀️</span>
+          <span class="spanSaluto">Buongiorno ☀️</span>
+        </div>
+        <img
+          src="./assets/menuHamburger.png"
+          onclick="tendinaHamburger()"
+          alt="icona menu a tendina"
+          class="hamburgerMenu"
+        />
       </div>
-      <img src="./assets/menuHamburger.png" onclick="tendinaHamburger()" alt="icona menu a tendina"
-        class="hamburgerMenu" />
-    </div>
-  </header>
-
-  <div class="divCalendarioFiltri">
+    </header>
 
     <!--Bottone aggiungi spese-->
     <div class="bottoneNuovoElemento">
       <button id="firstButtonSpese" class="btnAggiungiSpese">
-      <img src="./assets/spese.png" alt="Bottone aggiungi spese">
+        <img src="./assets/spese.png" alt="Bottone aggiungi spese" />
       </button>
       <button id="secondButtonSpese" class="btnAggiungiSpese">
         Aggiungi Spese
       </button>
     </div>
-
-    
 
     <!--Modale aggiunta Spese Bilancio-->
     <dialog id="modal-spesa">
@@ -146,7 +171,5 @@
         </menu>
       </form>
     </dialog>
-
-</body>
-
+  </body>
 </html>
