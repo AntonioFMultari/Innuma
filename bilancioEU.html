@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="calendar.css" />
   <link rel="stylesheet" href="invoice.css" />
   <link rel="stylesheet" href="balanceEU.css">
+  <link rel="stylesheet" href="spesa.css">
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -24,6 +25,8 @@
   <script src="./richieste.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="bilancioEU.js" defer></script>
+  <script src="./spese.js" defer></script>
+
   <title>Innuma</title>
 </head>
 
@@ -99,45 +102,46 @@
 
     
 
-    <!--Modale aggiunta Evento calendario-->
-    <dialog id="modal-evento">
+    <!--Modale aggiunta Spese Bilancio-->
+    <dialog id="modal-spesa">
       <form method="dialog" id="formDialog">
-        <h2 id="h2Dialog">Aggiungi Evento</h2>
+        <h2 id="h2Dialog">Aggiungi Spesa</h2>
         <label>
-          Nome Evento:
-          <input id="nome-evento" name="nome-evento" type="text" required />
-        </label>
-        <label>
-          Orario di inizio:
+          Importo:
           <input
-            id="orario-inizio-evento"
-            name="orario-inizio-evento"
-            type="datetime-local"
+            id="importo-spesa"
+            name="importo-spesa"
+            type="number"
+            step="0.05"
+            placeholder="Importo della spesa"
             required
           />
         </label>
-        <label>
-          Orario di fine:
-          <input
-            id="orario-fine-evento"
-            name="orario-fine-evento"
-            type="datetime-local"
-            required
-          />
-        </label>
-        <label>
-          Colore pallino:
-          <input
-            id="colore-evento"
-            name="colore-evento"
-            type="color"
-            value="#a9f5c1"
-          />
+        <label id="label-descrizione-spesa">
+          Descrizione:
+          <textarea
+            id="descrizione-spesa"
+            name="descrizione-spesa"
+            rows="4"
+            cols="50"
+            placeholder="Breve descrizione della spesa (max 250 caratteri)"
+            maxlength="250"
+          ></textarea>
         </label>
         <menu id="menuDialog">
-          <button id="salva-evento" value="default">Salva</button>
-          <button id="chiudi-modal-evento" value="cancel" type="button">
-            Annulla
+          <button id="salva-spesa" value="default">
+            <img
+              id="imgPopupEvent"
+              src="./assets/salva.png"
+              alt="Bottone salva spesa"
+            />Salva
+          </button>
+          <button id="chiudi-modal-spesa" value="cancel" type="button">
+            <img
+              id="imgPopupEvent"
+              src="./assets/chiudi.png"
+              alt="Bottone chiudi spesa"
+            />Chiudi
           </button>
         </menu>
       </form>

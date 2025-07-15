@@ -1,19 +1,15 @@
 // Balance Page
 function BalancePage() {
-
   const wrapperBilancio = document.createElement("div");
   wrapperBilancio.className = "contenitoreBilancio";
-
 
   const cartellaBilancio = document.createElement("div");
   cartellaBilancio.className = "cartBil";
   wrapperBilancio.appendChild(cartellaBilancio);
 
-
   const cartBilSinistra = document.createElement("div");
   cartBilSinistra.className = "cartSinistra";
   cartellaBilancio.appendChild(cartBilSinistra);
-
 
   const grafaBilancio = document.createElement("div");
   grafaBilancio.className = "grafaBil";
@@ -31,19 +27,14 @@ function BalancePage() {
 
   grafaBilancio.appendChild(graficoTotale);
 
-
   const contenutoFiltri = document.createElement("div");
   contenutoFiltri.className = "divBilancioFiltri";
   cartBilSinistra.appendChild(contenutoFiltri);
-  
 
-  
   const containerFiltriBilancio = document.createElement("div");
   containerFiltriBilancio.className = "containerFiltriBilancio";
   contenutoFiltri.appendChild(containerFiltriBilancio);
-  
 
-  
   const tendinaFiltriBilancio = document.createElement("div");
   tendinaFiltriBilancio.id = "tendinaFiltriBilancio";
   tendinaFiltriBilancio.className = "tendinaFiltriBilancio";
@@ -51,36 +42,34 @@ function BalancePage() {
 
   // placeholder filtri TONY
   const filters = [
-    { label: 'Tutti', colorClass: 'pallinoFiltro', type: 'all' },
-    { label: 'Entrate', colorClass: 'pallinoEntrate', type: 'entrata' },
-    { label: 'Uscite', colorClass: 'pallinoUscite', type: 'uscita' },
-    { label: 'Da Cont.', colorClass: 'pallinoDaCont', type: 'pending' }
+    { label: "Tutti", colorClass: "pallinoFiltro", type: "all" },
+    { label: "Entrate", colorClass: "pallinoEntrate", type: "entrata" },
+    { label: "Uscite", colorClass: "pallinoUscite", type: "uscita" },
+    { label: "Da Cont.", colorClass: "pallinoDaCont", type: "pending" },
   ];
 
   filters.forEach((filter, index) => {
-    const filtroEl = document.createElement('div');
-    filtroEl.classList.add('elementoFiltro');
+    const filtroEl = document.createElement("div");
+    filtroEl.classList.add("elementoFiltro");
     filtroEl.dataset.filter = filter.type;
-    if (index === 0) filtroEl.classList.add('attivo');
+    if (index === 0) filtroEl.classList.add("attivo");
 
-    const dot = document.createElement('span');
-    dot.classList.add('pallino', filter.colorClass);
+    const dot = document.createElement("span");
+    dot.classList.add("pallino", filter.colorClass);
 
-    const label = document.createElement('span');
+    const label = document.createElement("span");
     label.textContent = filter.label;
 
     filtroEl.appendChild(dot);
     filtroEl.appendChild(label);
-    tendinaFiltriBilancio.appendChild(filtroEl); 
+    tendinaFiltriBilancio.appendChild(filtroEl);
   });
-  
-
 
   const link = document.createElement("a");
   link.href = "bilancio.html";
 
   const bottoneTransazione = document.createElement("button");
-  bottoneTransazione.className = "entrateUscita"
+  bottoneTransazione.className = "entrateUscita";
   bottoneTransazione.textContent = "Entrate/Uscite";
   link.appendChild(bottoneTransazione);
   cartBilSinistra.appendChild(link);
@@ -102,18 +91,18 @@ function BalancePage() {
 }
 
 // inizializza chart doughnut
-let balanceChart = null; 
+let balanceChart = null;
 
 function renderBalanceChart(transactions) {
-  const ctx = document.getElementById('graficoCanvas').getContext('2d');
-  const graficoTotale = document.getElementById('grafico-total');
+  const ctx = document.getElementById("graficoCanvas").getContext("2d");
+  const graficoTotale = document.getElementById("grafico-total");
 
   const totalIn = transactions
-    .filter(t => t.transazioneEntrata)
+    .filter((t) => t.transazioneEntrata)
     .reduce((sum, t) => sum + parseFloat(t.transazioneEntrata), 0);
 
   const totalOut = transactions
-    .filter(t => t.transazioneUscita)
+    .filter((t) => t.transazioneUscita)
     .reduce((sum, t) => sum + parseFloat(t.transazioneUscita), 0);
 
   const balance = totalIn - totalOut;
@@ -121,46 +110,47 @@ function renderBalanceChart(transactions) {
   graficoTotale.textContent = `€${balance.toFixed(2)}`;
 
   if (balanceChart) {
-    balanceChart.destroy(); 
+    balanceChart.destroy();
   }
 
   balanceChart = new Chart(ctx, {
-    type: 'doughnut',
+    type: "doughnut",
     data: {
-      labels: ['Entrate', 'Uscite'],
-      datasets: [{
-        data: [totalIn, totalOut],
-        backgroundColor: ['#ade27b', '#ff4645'], 
-        hoverOffset: 4
-      }]
+      labels: ["Entrate", "Uscite"],
+      datasets: [
+        {
+          data: [totalIn, totalOut],
+          backgroundColor: ["#ade27b", "#ff4645"],
+          hoverOffset: 4,
+        },
+      ],
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      cutout: '80%', // crea doughnut
+      cutout: "80%", // crea doughnut
       plugins: {
         legend: {
-          display: false 
+          display: false,
         },
         tooltip: {
           callbacks: {
-            label: function(context) {
-              let label = context.label || '';
+            label: function (context) {
+              let label = context.label || "";
               if (label) {
-                label += ': ';
+                label += ": ";
               }
               if (context.parsed) {
-                label += '€' + context.parsed.toFixed(2);
+                label += "€" + context.parsed.toFixed(2);
               }
               return label;
-            }
-          }
-        }
-      }
-    }
+            },
+          },
+        },
+      },
+    },
   });
 }
-
 
 function updateGraphTotal(transactions) {
   const graficoTotale = document.getElementById("grafico-total");
@@ -178,7 +168,7 @@ function updateGraphTotal(transactions) {
 
 function renderTransactions(transactions) {
   const listaBil = document.querySelector(".listaBil");
-  listaBil.innerHTML = ""; 
+  listaBil.innerHTML = "";
 
   if (!transactions || transactions.length === 0) {
     listaBil.innerHTML = "<p>Nessuna transazione trovata.</p>";
@@ -189,38 +179,42 @@ function renderTransactions(transactions) {
 
   transactions.forEach((t) => {
     const elementoTransazione = document.createElement("div");
-    elementoTransazione.className = "elementoTransazione"; 
+    elementoTransazione.className = "elementoTransazione";
 
     let pallinoClass = "";
     let amountText = "";
-    let statusText = t.stato_transazione || 'N/A'; 
-    let transactionTypeClass = '';
+    let statusText = t.stato_transazione || "N/A";
+    let transactionTypeClass = "";
 
     if (t.transazioneEntrata) {
       pallinoClass = "pallinoEntrate";
       amountText = `€${parseFloat(t.transazioneEntrata).toFixed(2)}`;
       elementoTransazione.classList.add("entrata");
-      transactionTypeClass = 'transazioneEntrata'; 
+      transactionTypeClass = "transazioneEntrata";
     } else if (t.transazioneUscita) {
       pallinoClass = "pallinoUscite";
       amountText = `-€${parseFloat(t.transazioneUscita).toFixed(2)}`;
       elementoTransazione.classList.add("uscita");
-      transactionTypeClass = 'transazioneUscita'; 
+      transactionTypeClass = "transazioneUscita";
     } else {
       pallinoClass = "pallinoDaCont";
       amountText = `€${parseFloat(t.importo_transazione || 0).toFixed(2)}`;
       elementoTransazione.classList.add("da-contabilizzare");
-      transactionTypeClass = 'transazioneNeutro'; 
+      transactionTypeClass = "transazioneNeutro";
     }
 
-    const transactionDescription = `Data: ${new Date(t.data_transazione).toLocaleDateString('it-IT')}`;
+    const transactionDescription = `Data: ${new Date(
+      t.data_transazione
+    ).toLocaleDateString("it-IT")}`;
 
     elementoTransazione.innerHTML = `
       <div class="transazioneIconaContenitore">
         <div class="pallino ${pallinoClass}"></div>
       </div>
       <div class="transazioneInfoPrincipale">
-        <span class="transazioneTitolo">${t.transazioneNome || t.title || 'N/A'}</span>
+        <span class="transazioneTitolo">${
+          t.transazioneNome || t.title || "N/A"
+        }</span>
         <span class="transazioneDescrizione">${transactionDescription}</span>
       </div>
       <div class="transazioneDettagliDestra">
@@ -235,7 +229,6 @@ function renderTransactions(transactions) {
   renderBalanceChart(transactions);
 }
 
-
 // placeholder lista TONY
 function fetchAndRenderTransactions() {
   const testData = [
@@ -246,9 +239,9 @@ function fetchAndRenderTransactions() {
       id: "1",
       transazioneNome: "Affitto",
       data_transazione: "2025-07-01T10:00:00",
-      transazioneUscita: "750.00", 
+      transazioneUscita: "750.00",
       stato_transazione: "Contab.",
-      color: "#ff4645" 
+      color: "#ff4645",
     },
     {
       id: "2",
@@ -256,7 +249,7 @@ function fetchAndRenderTransactions() {
       data_transazione: "2025-07-05T12:00:00",
       transazioneEntrata: "1500.00",
       stato_transazione: "Contab.",
-      color: "#ade27b" 
+      color: "#ade27b",
     },
     {
       id: "3",
@@ -264,15 +257,15 @@ function fetchAndRenderTransactions() {
       data_transazione: "2025-07-07T08:30:00",
       transazioneUscita: "85.50",
       stato_transazione: "Contab.",
-      color: "#ff4645"
+      color: "#ff4645",
     },
     {
       id: "4",
       transazioneNome: "Rimborso",
       data_transazione: "2025-07-10T15:00:00",
-      transazioneEntrata: "50.00", 
+      transazioneEntrata: "50.00",
       stato_transazione: "Contab.",
-      color: "#ade27b"
+      color: "#ade27b",
     },
     {
       id: "6",
@@ -280,13 +273,14 @@ function fetchAndRenderTransactions() {
       data_transazione: "2025-07-11T14:00:00",
       transazioneEntrata: "200.00",
       stato_transazione: "Contab.",
-      color: "#ade27b"
-    }
+      color: "#ade27b",
+    },
   ];
   renderTransactions(testData);
 }
 
 // listener nuovi eventi
+/*
 document.getElementById("salva-evento").onclick = function (e) {
   e.preventDefault();
   const nome = document.getElementById("nome-evento").value;
@@ -305,13 +299,13 @@ document.getElementById("salva-evento").onclick = function (e) {
   
   fetchAndRenderTransactions(); 
   document.getElementById("modal-evento").close();
-};
+};*/
 
- // evento scroll non ancora funzionante (in piu se abbiamo tempo)
-document.addEventListener('DOMContentLoaded', function () {
+// evento scroll non ancora funzionante (in piu se abbiamo tempo)
+document.addEventListener("DOMContentLoaded", function () {
   document.body.appendChild(BalancePage());
 
-  const filterBar = document.getElementById('tendinaFiltriBilancio');
+  const filterBar = document.getElementById("tendinaFiltriBilancio");
 
   if (filterBar) {
     let isDragging = false;
@@ -319,34 +313,34 @@ document.addEventListener('DOMContentLoaded', function () {
     let scrollLeft;
 
     // evento scroll mousewheel
-    filterBar.addEventListener('wheel', (e) => {
+    filterBar.addEventListener("wheel", (e) => {
       e.preventDefault();
       filterBar.scrollLeft += e.deltaY;
     });
 
     // evento inizio del trascinamento (quando si clicca il mouse)
-    filterBar.addEventListener('mousedown', (e) => {
+    filterBar.addEventListener("mousedown", (e) => {
       if (e.button === 0) {
-        isDragging = true; 
-        filterBar.classList.add('is-dragging');
+        isDragging = true;
+        filterBar.classList.add("is-dragging");
         startX = e.pageX - filterBar.offsetLeft;
         scrollLeft = filterBar.scrollLeft;
       }
     });
 
     // evento fine del trascinamento (quando il mouse esce o viene rilasciato)
-    filterBar.addEventListener('mouseleave', () => {
-      isDragging = false; 
-      filterBar.classList.remove('is-dragging'); 
+    filterBar.addEventListener("mouseleave", () => {
+      isDragging = false;
+      filterBar.classList.remove("is-dragging");
     });
 
-    filterBar.addEventListener('mouseup', () => {
-      isDragging = false; 
-      filterBar.classList.remove('is-dragging'); 
+    filterBar.addEventListener("mouseup", () => {
+      isDragging = false;
+      filterBar.classList.remove("is-dragging");
     });
 
     // evento durante il trascinamento (quando il mouse si muove con il tasto premuto)
-    filterBar.addEventListener('mousemove', (e) => {
+    filterBar.addEventListener("mousemove", (e) => {
       if (!isDragging) return;
       e.preventDefault();
       const x = e.pageX - filterBar.offsetLeft;
@@ -354,35 +348,39 @@ document.addEventListener('DOMContentLoaded', function () {
       filterBar.scrollLeft = scrollLeft - walk;
     });
   } else {
-    console.warn("Elemento #tendinaFiltriBilancio non trovato. Lo scorrimento non sarà abilitato.");
+    console.warn(
+      "Elemento #tendinaFiltriBilancio non trovato. Lo scorrimento non sarà abilitato."
+    );
   }
 
   // chiamata iniziale per recuperare e renderizzare le transazioni quando il DOM è caricato
   fetchAndRenderTransactions();
 
-  setupFiltroInterazione(); 
+  setupFiltroInterazione();
 });
 
-  setupFiltroInterazione();
+setupFiltroInterazione();
 
-  function setupFiltroInterazione() {
-  const filters = document.querySelectorAll('.elementoFiltro');
-  const transazioni = document.querySelectorAll('.elementoTransazione');
+function setupFiltroInterazione() {
+  const filters = document.querySelectorAll(".elementoFiltro");
+  const transazioni = document.querySelectorAll(".elementoTransazione");
 
-  filters.forEach(filtro => {
-    filtro.addEventListener('click', () => {
+  filters.forEach((filtro) => {
+    filtro.addEventListener("click", () => {
       // Update active state
-      filters.forEach(el => el.classList.remove('attivo'));
-      filtro.classList.add('attivo');
+      filters.forEach((el) => el.classList.remove("attivo"));
+      filtro.classList.add("attivo");
 
       const selectedFilter = filtro.dataset.filter;
 
       // mostra/nasconde transactions
-      transazioni.forEach(tx => {
-        if (selectedFilter === 'all') {
-          tx.style.display = '';
+      transazioni.forEach((tx) => {
+        if (selectedFilter === "all") {
+          tx.style.display = "";
         } else {
-          tx.style.display = tx.classList.contains(selectedFilter) ? '' : 'none';
+          tx.style.display = tx.classList.contains(selectedFilter)
+            ? ""
+            : "none";
         }
       });
     });

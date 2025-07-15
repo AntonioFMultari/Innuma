@@ -29,12 +29,17 @@ if (salva && modal) {
     if (!descrizione) return alert("Inserisci una descrizione per la spesa!");
 
     _data = new Date();
-    _data = _data.toISOString().slice(0, 19).replace("T", " ");
+    const anni = String(_data.getFullYear()).padStart(2, "0");
+    const mesi = String(_data.getMonth() + 1).padStart(2, "0");
+    const giorni = String(_data.getDate()).padStart(2, "0");
+    const ore = String(_data.getHours()).padStart(2, "0");
+    const minuti = String(_data.getMinutes()).padStart(2, "0");
+    _data = `${anni}-${mesi}-${giorni} ${ore}:${minuti}:00`;
 
     if (importo && descrizione) {
       inviaRichiesta("POST", "/db-spesa", {
         Descrizione: descrizione,
-        Uscita: importo,
+        Uscita: importo + ".00",
         _data: _data,
       }).then((response) => {
         const newSpesa = response.data;
@@ -48,19 +53,17 @@ if (salva && modal) {
                             <span class="transazioneTitolo">${
                               descrizione || "N/A"
                             }</span>
-                            <span class="transazioneDescrizione">${
-                              _data || "N/A"
-                            }</span>
+                            <span class="transazioneDescrizione">Data: ${giorni}/${mesi}/${anni}</span>
                         </div>
                         <div class="transazioneDettagliDestra">
-                            <span class="transazioneImporto">${
+                            <span class="transazioneImporto transazioneUscita">-€${
                               importo || "N/A"
-                            }</span>
+                            }.00</span>
                             <span class="transazioneTestoTotale">totale</span>
                         </div>
                     `;
         document.querySelector(".listaBil").appendChild(SpesaDiv);
-        window.location.reload();
+        //window.location.reload();
       });
     }
   };
