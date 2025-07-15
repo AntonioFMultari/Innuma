@@ -458,3 +458,9 @@
     background-color: var(--colore-attivita, #a9f5c1);
   }
 }
+
+#label-descrizione-evento {
+  display: flex;
+  align-items: start;
+  justify-content: start;
+}

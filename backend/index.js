@@ -224,16 +224,17 @@ app.delete("/db-attivita/:id", async (req, res) => {
     if (eventiCollegati.length > 0) {
       const idsEventi = eventiCollegati.map((ev) => ev.ID_Evento);
       await db.promiseConnection.query(
-        `DELETE FROM evento WHERE ID IN (${idsEventi.map(() => "?").join(",")})`,
+        `DELETE FROM evento WHERE ID IN (${idsEventi
+          .map(() => "?")
+          .join(",")})`,
         idsEventi
       );
     }
 
     // Elimina l'attività
-    await db.promiseConnection.query(
-      "DELETE FROM attività WHERE ID = ?",
-      [AttId]
-    );
+    await db.promiseConnection.query("DELETE FROM attività WHERE ID = ?", [
+      AttId,
+    ]);
 
     res.status(204).send();
   } catch (err) {
@@ -250,7 +251,7 @@ app.put("/db-events/:id", express.json(), async (req, res) => {
   const updatedEvent = req.body;
   try {
     await db.promiseConnection.query(
-      "UPDATE events SET start = ?, end = ? WHERE id = ?",
+      "UPDATE evento SET _dataInizio = ?, _dataFine = ? WHERE id = ?",
       [updatedEvent.start, updatedEvent.end, eventId]
     );
     res.status(200).json({ success: true });

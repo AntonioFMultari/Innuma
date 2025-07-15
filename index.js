@@ -262,10 +262,7 @@ document.addEventListener("DOMContentLoaded", function () {
       // Elimina l'evento al click su "Elimina"
       document.getElementById("elimina-evento").onclick = () => {
         if (confirm("Sei sicuro di voler eliminare questo evento?")) {
-          inviaRichiesta(
-            "DELETE",
-            `/db-events/${info.event.id}`
-          )
+          inviaRichiesta("DELETE", `/db-events/${info.event.id}`)
             .then((ris) => {
               console.log(ris);
               box.remove();
@@ -299,10 +296,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       document.getElementById("elimina-evento").onclick = () => {
         if (confirm("Sei sicuro di voler eliminare questo evento?")) {
-          inviaRichiesta(
-            "DELETE",
-            `/db-events/${info.event.id}`
-          )
+          inviaRichiesta("DELETE", `/db-events/${info.event.id}`)
             .then((ris) => {
               console.log(ris);
               box.remove();
@@ -377,9 +371,23 @@ document.addEventListener("DOMContentLoaded", function () {
   const chiudi = document.getElementById("chiudi-modal-evento");
   const salva = document.getElementById("salva-evento");
   const nomeInput = document.getElementById("nome-evento");
+  const nomeClienteInput = document.getElementById("nome-cliente-evento");
   const orarioInizioInput = document.getElementById("orario-inizio-evento");
   const orarioFineInput = document.getElementById("orario-fine-evento");
   const containerFiltri = document.querySelector(".containerFiltri");
+
+  // Funzione per formattare la data e l'ora nel formato YYYY-MM-DDTHH:mm
+  function formatDateTime(date) {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  }
+
+  // Ottieni la data e l'ora correnti
+  const now = new Date();
 
   orarioInizioInput.addEventListener("change", () => {
     if (orarioInizioInput.value != "") {
@@ -397,13 +405,17 @@ document.addEventListener("DOMContentLoaded", function () {
     btnEvent[0].onclick = () => {
       nomeInput.value = "";
       orarioInizioInput.value = "";
+      orarioInizioInput.min = formatDateTime(now);
       orarioFineInput.value = "";
+      orarioFineInput.min = formatDateTime(now);
+      nomeClienteInput.value = "";
       modal.showModal();
     };
     btnEvent[1].onclick = () => {
       nomeInput.value = "";
       orarioInizioInput.value = "";
       orarioFineInput.value = "";
+      nomeClienteInput.value = "";
       modal.showModal();
     };
 
@@ -413,10 +425,10 @@ document.addEventListener("DOMContentLoaded", function () {
       inviaRichiesta("GET", "/db-attivita")
         .then((ris) => {
           const attivita = ris.data || ris;
-          attivita.forEach((attivita) => {
+          attivita.forEach((attivita, i) => {
             const option = document.createElement("option");
-            option.value = attivita.ID + "- " + attivita.Descrizione;
-            option.textContent = attivita.ID + "- " + attivita.Descrizione;
+            option.value = attivita.ID;
+            option.textContent = i + 1 + "- " + attivita.Descrizione;
             attivitaSelect.appendChild(option);
           });
         })
@@ -442,16 +454,8 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!nome) return alert("Inserisci un nome all'evento!");
       if (!orarioInizio)
         return alert("Inserisci un orario di inizio all'evento!");
-      /* MAGARI SERVE MAGARI NO, BOH 
-      // Crea nuovo filtro
-      const filtro = document.createElement("div");
-      filtro.className = "elementoFiltro";
-      filtro.innerHTML = `<div class="pallino" style="background:${colore};"></div>
-        <span class="spanFiltro">${nome}</span>`;
-      containerFiltri.prepend(filtro);
-      aggiungiListenerFiltro(filtro); // <-- aggiungi subito il listener!
-      */
-      attivitaID = document.getElementById("attivita-evento").value[0]; // Prendi l'ID dell'attività selezionata
+
+      attivitaID = document.getElementById("attivita-evento").value;
       const nuovoEvento = {
         start: orarioInizioInput.value,
         end: orarioFineInput.value,

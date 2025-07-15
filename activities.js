@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         <button class="DeleteBtn"><img src="assets/delete.png" alt="Delete Icon" class="Deleteimg"></button>
                     `;
             document.querySelector(".listaAtt").appendChild(attivitaDiv);
-            //window.location.reload();
+            window.location.reload();
           });
         }
       };
