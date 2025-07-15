@@ -8,15 +8,21 @@
   <link rel="stylesheet" href="global.css" />
   <link rel="stylesheet" href="calendar.css" />
   <link rel="stylesheet" href="invoice.css" />
-  <link rel="stylesheet" href="balance.css" />
   <link rel="stylesheet" href="balanceEU.css">
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="balance-mobile-add-on.css" />
 
   <script src="index.js" defer></script>
+  <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.10.0/axios.min.js"
+      integrity="sha512-WkZrEcQ5LMyNy6Y2PQf+Tu3vMcsmKKRKuPXtJSTHQJ3mpuvLRlA5dlDDhrrcXfyWr6Z/y3wIMfjfqVFO/gDZYQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  <script src="./richieste.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="bilancioEU.js" defer></script>
   <title>Innuma</title>
 </head>
@@ -91,94 +97,7 @@
       </button>
     </div>
 
-    <!--Cartella Bilancio con due viversi lati che si uniscono dentro-->
-    <div class="cartBil">
-
-      <div class="cartSinistra">
-        <div class="grafaBil">
-           <div id="grafico">
-             <div id="grafico-total"></div>
-           </div>
-        </div>
-        <div class="divBilancioFiltri">
-          <!--Preso dal calendario, CSS nel GLOBAL?-->
-          <!--per la classe pallinoEU vedi calendar.css-->
-          <div class="elementoFiltro"> 
-            <div class="pallinoEntrate"></div>
-            <span class="spanFiltriBil">Entrate</span>
-          </div>
-          <div class="elementoFiltro">
-            <div class="pallinoUscite"></div>
-            <span class="spanFiltriBil">Uscite</span>
-          </div>
-          <div class="elementoFiltro">
-            <div class="pallinoDaCont"></div>
-            <span class="spanFiltriBil">Da Contab...</span>
-          </div>
-        </div>
-        <a href="bilancio.html">
-        <button class="entrateUscita">
-          Entrata/Uscita
-        </button>
-        </a>
-      </div>
-
-      <div class="cartDestra">
-        <h1 class="titoloBil">Transazioni</h1>
-        <div class="listaBil">
-
-          <div class="transazioneOgetto">
-            <div class="transazionePallino1"></div>
-            <span class="transazioneNome">Ezra Federico</span>
-            <span class="transazioneEntrata">€45.00</span>
-            <span class="transazioneStato">Da Cont.</span>
-          </div>
-
-          <div class="transazioneOgetto">
-            <div class="transazionePallino2"></div>
-            <span class="transazioneNome">Materie</span>
-            <span class="transazioneUscita">-€20.00</span>
-            <span class="transazioneStato">Uscita</span>
-          </div>
-
-          <div class="transazioneOgetto">
-            <div class="transazionePallino3"></div>
-            <span class="transazioneNome">Ezra Federico</span>
-            <span class="transazioneEntrata">€45.00</span>
-            <span class="transazioneStato">Da Cont.</span>
-          </div>
-
-          <div class="transazioneOgetto">
-            <div class="transazionePallino4"></div>
-            <span class="transazioneNome">Marco Delfinis</span>
-            <span class="transazioneEntrata">€45.00</span>
-            <span class="transazioneStato">Da Cont.</span>
-          </div>
-
-          <div class="transazioneOgetto">
-            <div class="transazionePallino5"></div>
-            <span class="transazioneNome">Libri</span>
-            <span class="transazioneUscita">-€15.00</span>
-            <span class="transazioneStato">Uscita</span>
-          </div>
-
-          <div class="transazioneOgetto">
-            <div class="transazionePallino6"></div>
-            <span class="transazioneNome">Mario Ross</span>
-            <span class="transazioneEntrata">€45.00</span>
-            <span class="transazioneStato">Da Cont.</span>
-          </div>
-
-          <div class="transazioneOgetto">
-            <div class="transazionePallino7"></div>
-            <span class="transazioneNome">Mario Rossi</span>
-            <span class="transazioneEntrata">€45.00</span>
-            <span class="transazioneStato">Contab.</span>
-          </div>
-
-        </div>
-      </div>
-    </div>
+    
 
     <!--Modale aggiunta Evento calendario-->
     <dialog id="modal-evento">
