@@ -4,7 +4,7 @@ const connection = mysql.createConnection({
   user: "root",
   password: "Innuma2000",
   database: "Innuma",
-  /*socketPath: "/tmp/mysql.sock", // <<< questa è la chiave!*/
+  
 });
 
 connection.connect((err) => {

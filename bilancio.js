@@ -35,15 +35,11 @@ function BalancePage() {
   const contenutoFiltri = document.createElement("div");
   contenutoFiltri.className = "divBilancioFiltri";
   cartBilSinistra.appendChild(contenutoFiltri);
-  
 
-  
   const containerFiltriBilancio = document.createElement("div");
   containerFiltriBilancio.className = "containerFiltriBilancio";
   contenutoFiltri.appendChild(containerFiltriBilancio);
-  
 
-  
   const tendinaFiltriBilancio = document.createElement("div");
   tendinaFiltriBilancio.id = "tendinaFiltriBilancio";
   tendinaFiltriBilancio.className = "tendinaFiltriBilancio";
@@ -51,22 +47,22 @@ function BalancePage() {
 
   // placeholder filtri TONY
   const filters = [
-    { label: 'Tutti', colorClass: 'pallinoFiltro', type: 'all' },
-    { label: 'Entrate', colorClass: 'pallinoEntrate', type: 'entrata' },
-    { label: 'Uscite', colorClass: 'pallinoUscite', type: 'uscita' },
-    { label: 'Da Cont.', colorClass: 'pallinoDaCont', type: 'pending' }
+    { label: "Tutti", colorClass: "pallinoFiltro", type: "all" },
+    { label: "Entrate", colorClass: "pallinoEntrate", type: "entrata" },
+    { label: "Uscite", colorClass: "pallinoUscite", type: "uscita" },
+    { label: "Da Cont.", colorClass: "pallinoDaCont", type: "pending" },
   ];
 
   filters.forEach((filter, index) => {
-    const filtroEl = document.createElement('div');
-    filtroEl.classList.add('elementoFiltro');
+    const filtroEl = document.createElement("div");
+    filtroEl.classList.add("elementoFiltro");
     filtroEl.dataset.filter = filter.type;
-    if (index === 0) filtroEl.classList.add('attivo');
+    if (index === 0) filtroEl.classList.add("attivo");
 
-    const dot = document.createElement('span');
-    dot.classList.add('pallino', filter.colorClass);
+    const dot = document.createElement("span");
+    dot.classList.add("pallino", filter.colorClass);
 
-    const label = document.createElement('span');
+    const label = document.createElement("span");
     label.textContent = filter.label;
 
     filtroEl.appendChild(dot);
@@ -80,7 +76,7 @@ function BalancePage() {
   link.href = "bilancioEU.html";
 
   const bottoneTransazione = document.createElement("button");
-  bottoneTransazione.className = "entrateUscita"
+  bottoneTransazione.className = "entrateUscita";
   bottoneTransazione.textContent = "Entrate/Uscite";
   link.appendChild(bottoneTransazione);
   cartBilSinistra.appendChild(link);
@@ -105,15 +101,15 @@ function BalancePage() {
 let balanceChart = null; 
 
 function renderBalanceChart(transactions) {
-  const ctx = document.getElementById('graficoCanvas').getContext('2d');
-  const graficoTotale = document.getElementById('grafico-total');
+  const ctx = document.getElementById("graficoCanvas").getContext("2d");
+  const graficoTotale = document.getElementById("grafico-total");
 
   const totalIn = transactions
-    .filter(t => t.transazioneEntrata)
+    .filter((t) => t.transazioneEntrata)
     .reduce((sum, t) => sum + parseFloat(t.transazioneEntrata), 0);
 
   const totalOut = transactions
-    .filter(t => t.transazioneUscita)
+    .filter((t) => t.transazioneUscita)
     .reduce((sum, t) => sum + parseFloat(t.transazioneUscita), 0);
 
   const balance = totalIn - totalOut;
@@ -125,14 +121,16 @@ function renderBalanceChart(transactions) {
   }
 
   balanceChart = new Chart(ctx, {
-    type: 'doughnut',
+    type: "doughnut",
     data: {
-      labels: ['Entrate', 'Uscite'],
-      datasets: [{
-        data: [totalIn, totalOut],
-        backgroundColor: ['#ade27b', '#ff4645'], 
-        hoverOffset: 4
-      }]
+      labels: ["Entrate", "Uscite"],
+      datasets: [
+        {
+          data: [totalIn, totalOut],
+          backgroundColor: ["#ade27b", "#ff4645"], // Green for In, Red for Out
+          hoverOffset: 4,
+        },
+      ],
     },
     options: {
       responsive: true,
@@ -144,23 +142,22 @@ function renderBalanceChart(transactions) {
         },
         tooltip: {
           callbacks: {
-            label: function(context) {
-              let label = context.label || '';
+            label: function (context) {
+              let label = context.label || "";
               if (label) {
-                label += ': ';
+                label += ": ";
               }
               if (context.parsed) {
-                label += '€' + context.parsed.toFixed(2);
+                label += "€" + context.parsed.toFixed(2);
               }
               return label;
-            }
-          }
-        }
-      }
-    }
+            },
+          },
+        },
+      },
+    },
   });
 }
-
 
 function updateGraphTotal(transactions) {
   const graficoTotale = document.getElementById("grafico-total");
@@ -210,17 +207,22 @@ function renderTransactions(transactions) {
       pallinoClass = "pallinoDaCont";
       amountText = `€${parseFloat(t.importo_transazione || 0).toFixed(2)}`;
       elementoTransazione.classList.add("da-contabilizzare");
-      transactionTypeClass = 'transazioneNeutro'; 
+      transactionTypeClass = "transazioneNeutro"; // Example: class for neutral amounts
     }
 
-    const transactionDescription = `Data: ${new Date(t.data_transazione).toLocaleDateString('it-IT')}`;
+    // Using data_transazione as a simple description/subtitle for now
+    const transactionDescription = `Data: ${new Date(
+      t.data_transazione
+    ).toLocaleDateString("it-IT")}`;
 
     elementoTransazione.innerHTML = `
       <div class="transazioneIconaContenitore">
         <div class="pallino ${pallinoClass}"></div>
       </div>
       <div class="transazioneInfoPrincipale">
-        <span class="transazioneTitolo">${t.transazioneNome || t.title || 'N/A'}</span>
+        <span class="transazioneTitolo">${
+          t.transazioneNome || t.title || "N/A"
+        }</span>
         <span class="transazioneDescrizione">${transactionDescription}</span>
       </div>
       <div class="transazioneDettagliDestra">
@@ -261,7 +263,7 @@ function fetchAndRenderTransactions() {
       data_transazione: "2025-07-07T08:30:00",
       transazioneUscita: "85.50",
       stato_transazione: "Contab.",
-      color: "#ff4645"
+      color: "#ff4645",
     },
     {
       id: "4",
@@ -269,7 +271,15 @@ function fetchAndRenderTransactions() {
       data_transazione: "2025-07-10T15:00:00",
       transazioneEntrata: "50.00", 
       stato_transazione: "Contab.",
-      color: "#ade27b"
+      color: "#ade27b",
+    },
+    {
+      id: "5",
+      transazioneNome: "Bolletta Luce",
+      data_transazione: "2025-07-12T09:00:00",
+      transazioneUscita: "120.00", // Expense
+      stato_transazione: "In attesa",
+      color: "#ff4645",
     },
     {
       id: "6",
@@ -277,8 +287,8 @@ function fetchAndRenderTransactions() {
       data_transazione: "2025-07-11T14:00:00",
       transazioneEntrata: "200.00",
       stato_transazione: "Contab.",
-      color: "#ade27b"
-    }
+      color: "#ade27b",
+    },
   ];
   renderTransactions(testData);
 }
@@ -302,13 +312,13 @@ document.getElementById("salva-evento").onclick = function (e) {
   
   fetchAndRenderTransactions(); 
   document.getElementById("modal-evento").close();
-};
+}
 
  // evento scroll non ancora funzionante (in piu se abbiamo tempo)
 document.addEventListener('DOMContentLoaded', function () {
   document.body.appendChild(BalancePage());
 
-  const filterBar = document.getElementById('tendinaFiltriBilancio');
+  const filterBar = document.getElementById("tendinaFiltriBilancio");
 
   if (filterBar) {
     let isDragging = false;
@@ -362,15 +372,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
   setupFiltroInterazione();
 
-  function setupFiltroInterazione() {
-  const filters = document.querySelectorAll('.elementoFiltro');
-  const transazioni = document.querySelectorAll('.elementoTransazione');
+function setupFiltroInterazione() {
+  const filters = document.querySelectorAll(".elementoFiltro");
+  const transazioni = document.querySelectorAll(".elementoTransazione");
 
-  filters.forEach(filtro => {
-    filtro.addEventListener('click', () => {
+  filters.forEach((filtro) => {
+    filtro.addEventListener("click", () => {
       // Update active state
-      filters.forEach(el => el.classList.remove('attivo'));
-      filtro.classList.add('attivo');
+      filters.forEach((el) => el.classList.remove("attivo"));
+      filtro.classList.add("attivo");
 
       const selectedFilter = filtro.dataset.filter;
 
@@ -379,7 +389,9 @@ document.addEventListener('DOMContentLoaded', function () {
         if (selectedFilter === 'all') {
           tx.style.display = '';
         } else {
-          tx.style.display = tx.classList.contains(selectedFilter) ? '' : 'none';
+          tx.style.display = tx.classList.contains(selectedFilter)
+            ? ""
+            : "none";
         }
       });
     });

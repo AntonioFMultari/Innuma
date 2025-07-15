@@ -80,6 +80,20 @@ async function getAttivita() {
   }
 }
 
+async function getSpese() {
+  try {
+    // Esegui una query SELECT
+    const [rows, fields] = await db.promiseConnection.query(
+      "SELECT * FROM spese ORDER BY _data DESC;"
+    );
+    console.log("Spese:", rows, fields);
+    return rows;
+  } catch (err) {
+    console.error("Errore durante il recupero delle spese:", err);
+    throw err;
+  }
+}
+
 //PAGINA CALENDARIO
 //GET -> PRENDI TUTTI GLI EVENTI
 app.get("/db-events", async (req, res) => {
@@ -100,6 +114,15 @@ app.get("/db-attivita", async (req, res) => {
     res
       .status(500)
       .json({ error: "Errore durante il recupero delle attività" });
+  }
+});
+
+app.get("/db-spesa", async (req, res) => {
+  try {
+    const spese = await getSpese();
+    res.json(spese);
+  } catch (err) {
+    res.status(500).json({ error: "Errore durante il recupero delle spese" });
   }
 });
 
@@ -176,6 +199,23 @@ app.post("/db-attivita", express.json(), async (req, res) => {
     res
       .status(500)
       .json({ error: "Errore durante l'inserimento dell'attività" });
+  }
+});
+
+app.post("/db-spesa", express.json(), async (req, res) => {
+  const newSpesa = req.body;
+  console.log("Nuova spesa ricevuta:", newSpesa);
+  try {
+    // Esegui una query INSERT
+    const [result] = await db.promiseConnection.query(
+      "INSERT INTO spese (Descrizione, Uscita, _data) VALUES (?, ?, ?)",
+      [newSpesa.Descrizione, newSpesa.Uscita, newSpesa._data]
+    );
+    newSpesa.ID = result.insertId; // Aggiungi l'ID generato
+    res.status(201).json(newSpesa);
+  } catch (err) {
+    console.error("Errore durante l'inserimento della spesa:", err);
+    res.status(500).json({ error: "Errore durante l'inserimento della spesa" });
   }
 });
 
