@@ -50,7 +50,6 @@ async function getEvents() {
         e.NomeCliente AS nome_cliente,
         e.descrizione AS descrizione_evento,
         a.Tariffa AS tariffa_oraria,
-        e.Titolo AS descrizione_evento,
         a.INPS AS rivalsa_inps,
         a.descrizione AS descrizione_attivita
       FROM evento e

@@ -5,17 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/x-icon" href="./assets/logo.ico" />
     <link rel="stylesheet" href="global.css" />
-    <link rel="stylesheet" href="calendar.css" />
     <link rel="stylesheet" href="invoice.css" />
-    <link rel="stylesheet" href="balance.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
     <link
       href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&display=swap"
       rel="stylesheet"
     />
+        <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.10.0/axios.min.js"
+      integrity="sha512-WkZrEcQ5LMyNy6Y2PQf+Tu3vMcsmKKRKuPXtJSTHQJ3mpuvLRlA5dlDDhrrcXfyWr6Z/y3wIMfjfqVFO/gDZYQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
 
+    <script src="./richieste.js"></script>
     <script src="index.js" defer></script>
     <script src="fatture.js" defer></script>
     <title>Innuma</title>
@@ -105,6 +111,8 @@
       </div>
     </header>
     <!--Fatture-->
+    <h1>Le Tue Fatture Eventi</h1>
+    <p>Eventi caricati: <span id="eventCount">0</span></p> 
     <div class="ContainerFatture">
       <!--Anteprima fatture-->
       <div class="anteprimaFattureWrapper">

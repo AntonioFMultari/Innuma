@@ -132,16 +132,16 @@
 }
 
 ul{
-  position:absolute;
-  margin:  auto;
+  margin-block:  auto;
   color: black;
   font-size: 1.2rem;
   font-weight: bold;
   padding-left: 1rem;
+  padding-right:1rem;
 }
 
 .Panoramica{
-  margin-top: 3.75rem;
+  display: flex;
 }
 
 .pre {
@@ -227,6 +227,7 @@ button.Delete:active {
   ul {
     font-size: 0.8rem;
     padding-left: 0.5rem;
+
   }
   .IconaPanoramica {
     max-width: 1rem;
