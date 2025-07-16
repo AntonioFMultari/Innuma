@@ -3,6 +3,10 @@
   margin: 0;
 }
 
+body{
+  overflow-x: hidden;
+}
+
 header {
   position: relative;
   background-color: #fff;
@@ -97,4 +101,9 @@ a {
   html {
     font-size: 14px;
   }
+}
+
+header{
+  position: sticky;
+  inset: 0 0 auto 0;
 }
