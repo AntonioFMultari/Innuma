@@ -1,39 +1,57 @@
 <!DOCTYPE html>
 <html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="./assets/logo.ico" />
+    <link rel="stylesheet" href="global.css" />
+    <link rel="stylesheet" href="calendar.css" />
+    <link rel="stylesheet" href="invoice.css" />
+    <link rel="stylesheet" href="balanceEU.css" />
+    <link rel="stylesheet" href="spesa.css" />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/x-icon" href="./assets/logo.ico" />
-  <link rel="stylesheet" href="global.css" />
-  <link rel="stylesheet" href="calendar.css" />
-  <link rel="stylesheet" href="invoice.css" />
-  <link rel="stylesheet" href="balance.css" />
-  <link rel="stylesheet" href="balanceEU.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="balance-mobile-add-on.css" />
+    <script src="index.js" defer></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.10.0/axios.min.js"
+      integrity="sha512-WkZrEcQ5LMyNy6Y2PQf+Tu3vMcsmKKRKuPXtJSTHQJ3mpuvLRlA5dlDDhrrcXfyWr6Z/y3wIMfjfqVFO/gDZYQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="./richieste.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="bilancioEU.js" defer></script>
+    <script src="./spese.js" defer></script>
 
-  <script src="index.js" defer></script>
-  <script src="bilancioEU.js" defer></script>
-  <title>Innuma</title>
-</head>
+    <title>Innuma</title>
+  </head>
 
-<body>
-  <!--Header con logo, Saluto e menu hamburger-->
-  <header>
-    <!--Tendina HamburgerMenu-->
-    <div class="tendinaHamburger">
-      <a href="./index.html">
-        <div class="divElementoHamburger elementoSelezionato" data-page="calendario"
-          onclick="selezioneElementoHamburger(event)">
-          <img src="./assets/calendario.png" alt="immagine bottone calendario" class="icoElementiHamburger" />
-          <span class="spanElementoHamburger">Calendario</span>
-        </div>
-      </a>
-      <a href="./activities.html">
+  <body>
+    <!--Header con logo, Saluto e menu hamburger-->
+    <header>
+      <!--Tendina HamburgerMenu-->
+      <div class="tendinaHamburger">
+        <a href="./index.html">
+          <div
+            class="divElementoHamburger elementoSelezionato"
+            data-page="calendario"
+            onclick="selezioneElementoHamburger(event)"
+          >
+            <img
+              src="./assets/calendario.png"
+              alt="immagine bottone calendario"
+              class="icoElementiHamburger"
+            />
+            <span class="spanElementoHamburger">Calendario</span>
+          </div>
+        </a>
+        <a href="./activities.html">
           <div
             class="divElementoHamburger"
             data-page="attività"
@@ -47,24 +65,40 @@
             <span class="spanElementoHamburger">Attività</span>
           </div>
         </a>
-      <a href="./bilancio.html">
-        <div class="divElementoHamburger" data-page="bilancio" onclick="selezioneElementoHamburger(event)">
-          <img src="./assets/bilancio.png" alt="immagine bottone bilancio" class="icoElementiHamburger" />
-          <span class="spanElementoHamburger">Bilancio</span>
-        </div>
-      </a>
-      <a href="./fatture.html">
-        <div class="divElementoHamburger" data-page="fatture" onclick="selezioneElementoHamburger(event)">
-          <img src="./assets/fattura.png" alt="immagine bottone bilancio" class="icoElementiHamburger" />
-          <span class="spanElementoHamburger">Fatture</span>
-        </div>
-      </a>
-    </div>
+        <a href="./bilancio.html">
+          <div
+            class="divElementoHamburger"
+            data-page="bilancio"
+            onclick="selezioneElementoHamburger(event)"
+          >
+            <img
+              src="./assets/bilancio.png"
+              alt="immagine bottone bilancio"
+              class="icoElementiHamburger"
+            />
+            <span class="spanElementoHamburger">Bilancio</span>
+          </div>
+        </a>
+        <a href="./fatture.html">
+          <div
+            class="divElementoHamburger"
+            data-page="fatture"
+            onclick="selezioneElementoHamburger(event)"
+          >
+            <img
+              src="./assets/fattura.png"
+              alt="immagine bottone bilancio"
+              class="icoElementiHamburger"
+            />
+            <span class="spanElementoHamburger">Fatture</span>
+          </div>
+        </a>
+      </div>
 
-    <!--header-->
-    <div id="header">
-      <div class="divLogo-saluto">
-        <a href="./index.html">
+      <!--header-->
+      <div id="header">
+        <div class="divLogo-saluto">
+          <a href="./index.html">
             <img
               src="./assets/logo.png"
               alt="Logo del sito web"
@@ -72,158 +106,70 @@
               onclick="tornaAllaHome()"
             />
           </a>
-        <span class="spanSaluto">Buongiorno ☀️</span>
+          <span class="spanSaluto">Buongiorno ☀️</span>
+        </div>
+        <img
+          src="./assets/menuHamburger.png"
+          onclick="tendinaHamburger()"
+          alt="icona menu a tendina"
+          class="hamburgerMenu"
+        />
       </div>
-      <img src="./assets/menuHamburger.png" onclick="tendinaHamburger()" alt="icona menu a tendina"
-        class="hamburgerMenu" />
-    </div>
-  </header>
-
-  <div class="divCalendarioFiltri">
+    </header>
 
     <!--Bottone aggiungi spese-->
     <div class="bottoneNuovoElemento">
       <button id="firstButtonSpese" class="btnAggiungiSpese">
-      <img src="./assets/spese.png" alt="Bottone aggiungi spese">
+        <img src="./assets/spese.png" alt="Bottone aggiungi spese" />
       </button>
       <button id="secondButtonSpese" class="btnAggiungiSpese">
         Aggiungi Spese
       </button>
     </div>
 
-    <!--Cartella Bilancio con due viversi lati che si uniscono dentro-->
-    <div class="cartBil">
-
-      <div class="cartSinistra">
-        <div class="grafaBil">
-           <div id="grafico">
-             <div id="grafico-total"></div>
-           </div>
-        </div>
-        <div class="divBilancioFiltri">
-          <!--Preso dal calendario, CSS nel GLOBAL?-->
-          <!--per la classe pallinoEU vedi calendar.css-->
-          <div class="elementoFiltro"> 
-            <div class="pallinoEntrate"></div>
-            <span class="spanFiltriBil">Entrate</span>
-          </div>
-          <div class="elementoFiltro">
-            <div class="pallinoUscite"></div>
-            <span class="spanFiltriBil">Uscite</span>
-          </div>
-          <div class="elementoFiltro">
-            <div class="pallinoDaCont"></div>
-            <span class="spanFiltriBil">Da Contab...</span>
-          </div>
-        </div>
-        <a href="bilancio.html">
-        <button class="entrateUscita">
-          Entrata/Uscita
-        </button>
-        </a>
-      </div>
-
-      <div class="cartDestra">
-        <h1 class="titoloBil">Transazioni</h1>
-        <div class="listaBil">
-
-          <div class="transazioneOgetto">
-            <div class="transazionePallino1"></div>
-            <span class="transazioneNome">Ezra Federico</span>
-            <span class="transazioneEntrata">€45.00</span>
-            <span class="transazioneStato">Da Cont.</span>
-          </div>
-
-          <div class="transazioneOgetto">
-            <div class="transazionePallino2"></div>
-            <span class="transazioneNome">Materie</span>
-            <span class="transazioneUscita">-€20.00</span>
-            <span class="transazioneStato">Uscita</span>
-          </div>
-
-          <div class="transazioneOgetto">
-            <div class="transazionePallino3"></div>
-            <span class="transazioneNome">Ezra Federico</span>
-            <span class="transazioneEntrata">€45.00</span>
-            <span class="transazioneStato">Da Cont.</span>
-          </div>
-
-          <div class="transazioneOgetto">
-            <div class="transazionePallino4"></div>
-            <span class="transazioneNome">Marco Delfinis</span>
-            <span class="transazioneEntrata">€45.00</span>
-            <span class="transazioneStato">Da Cont.</span>
-          </div>
-
-          <div class="transazioneOgetto">
-            <div class="transazionePallino5"></div>
-            <span class="transazioneNome">Libri</span>
-            <span class="transazioneUscita">-€15.00</span>
-            <span class="transazioneStato">Uscita</span>
-          </div>
-
-          <div class="transazioneOgetto">
-            <div class="transazionePallino6"></div>
-            <span class="transazioneNome">Mario Ross</span>
-            <span class="transazioneEntrata">€45.00</span>
-            <span class="transazioneStato">Da Cont.</span>
-          </div>
-
-          <div class="transazioneOgetto">
-            <div class="transazionePallino7"></div>
-            <span class="transazioneNome">Mario Rossi</span>
-            <span class="transazioneEntrata">€45.00</span>
-            <span class="transazioneStato">Contab.</span>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <!--Modale aggiunta Evento calendario-->
-    <dialog id="modal-evento">
+    <!--Modale aggiunta Spese Bilancio-->
+    <dialog id="modal-spesa">
       <form method="dialog" id="formDialog">
-        <h2 id="h2Dialog">Aggiungi Evento</h2>
+        <h2 id="h2Dialog">Aggiungi Spesa</h2>
         <label>
-          Nome Evento:
-          <input id="nome-evento" name="nome-evento" type="text" required />
-        </label>
-        <label>
-          Orario di inizio:
+          Importo:
           <input
-            id="orario-inizio-evento"
-            name="orario-inizio-evento"
-            type="datetime-local"
+            id="importo-spesa"
+            name="importo-spesa"
+            type="number"
+            step="0.05"
+            placeholder="Importo della spesa"
             required
           />
         </label>
-        <label>
-          Orario di fine:
-          <input
-            id="orario-fine-evento"
-            name="orario-fine-evento"
-            type="datetime-local"
-            required
-          />
-        </label>
-        <label>
-          Colore pallino:
-          <input
-            id="colore-evento"
-            name="colore-evento"
-            type="color"
-            value="#a9f5c1"
-          />
+        <label id="label-descrizione-spesa">
+          Descrizione:
+          <textarea
+            id="descrizione-spesa"
+            name="descrizione-spesa"
+            rows="4"
+            cols="50"
+            placeholder="Breve descrizione della spesa (max 250 caratteri)"
+            maxlength="250"
+          ></textarea>
         </label>
         <menu id="menuDialog">
-          <button id="salva-evento" value="default">Salva</button>
-          <button id="chiudi-modal-evento" value="cancel" type="button">
-            Annulla
+          <button id="salva-spesa" value="default">
+            <img
+              id="imgPopupEvent"
+              src="./assets/salva.png"
+              alt="Bottone salva spesa"
+            />Salva
+          </button>
+          <button id="chiudi-modal-spesa" value="cancel" type="button">
+            <img
+              id="imgPopupEvent"
+              src="./assets/chiudi.png"
+              alt="Bottone chiudi spesa"
+            />Chiudi
           </button>
         </menu>
       </form>
     </dialog>
-
-</body>
-
+  </body>
 </html>

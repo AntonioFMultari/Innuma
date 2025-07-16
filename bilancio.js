@@ -1,20 +1,16 @@
 // Balance Page
 function BalancePage() {
-  // The wrapper for all balance page content
   const wrapperBilancio = document.createElement("div");
   wrapperBilancio.className = "contenitoreBilancio";
 
-  // The main container for chart and transactions
   const cartellaBilancio = document.createElement("div");
   cartellaBilancio.className = "cartBil";
   wrapperBilancio.appendChild(cartellaBilancio);
 
-  // Left part: Chart
   const cartBilSinistra = document.createElement("div");
   cartBilSinistra.className = "cartSinistra";
   cartellaBilancio.appendChild(cartBilSinistra);
 
-  // Chart code (from Pietro Bosio)
   const grafaBilancio = document.createElement("div");
   grafaBilancio.className = "grafaBil";
   cartBilSinistra.appendChild(grafaBilancio);
@@ -22,16 +18,15 @@ function BalancePage() {
   const graficoCanvas = document.createElement("canvas");
   graficoCanvas.id = "graficoCanvas";
   graficoCanvas.className = "graficoCanvas";
-  // The chart canvas is now appended directly to grafaBilancio
+
   grafaBilancio.appendChild(graficoCanvas);
 
   const graficoTotale = document.createElement("div");
   graficoTotale.id = "grafico-total";
   graficoTotale.textContent = "€0.00";
-  // The total amount display is now appended directly to grafaBilancio
+
   grafaBilancio.appendChild(graficoTotale);
 
-  // Filters below the chart
   const contenutoFiltri = document.createElement("div");
   contenutoFiltri.className = "divBilancioFiltri";
   cartBilSinistra.appendChild(contenutoFiltri);
@@ -45,6 +40,7 @@ function BalancePage() {
   tendinaFiltriBilancio.className = "tendinaFiltriBilancio";
   containerFiltriBilancio.appendChild(tendinaFiltriBilancio);
 
+  // placeholder filtri TONY
   const filters = [
     { label: "Tutti", colorClass: "pallinoFiltro", type: "all" },
     { label: "Entrate", colorClass: "pallinoEntrate", type: "entrata" },
@@ -66,19 +62,8 @@ function BalancePage() {
 
     filtroEl.appendChild(dot);
     filtroEl.appendChild(label);
-    tendinaFiltriBilancio.appendChild(filtroEl); // Append directly to the created tendinaFiltriBilancio
+    tendinaFiltriBilancio.appendChild(filtroEl);
   });
-
-  /*
-  const filtroContainer = document.createElement('div');
-  filtroContainer.classList.add('divBilancioFiltri');
-  filtroContainer.id = 'filtroContainer';
-  
-
-   const cartSinistra = document.querySelector('.cartSinistra');
-  if (cartSinistra) {
-    cartSinistra.insertBefore(filtroContainer, cartSinistra.firstChild); // Add it at the top
-  }*/
 
   const link = document.createElement("a");
   link.href = "bilancioEU.html";
@@ -105,8 +90,8 @@ function BalancePage() {
   return wrapperBilancio;
 }
 
-// Initialize the pie chart
-let balanceChart = null; // Variable to hold the Chart.js instance
+// inizializza chart doughnut
+let balanceChart = null;
 
 function renderBalanceChart(transactions) {
   const ctx = document.getElementById("graficoCanvas").getContext("2d");
@@ -125,7 +110,7 @@ function renderBalanceChart(transactions) {
   graficoTotale.textContent = `€${balance.toFixed(2)}`;
 
   if (balanceChart) {
-    balanceChart.destroy(); // Destroy existing chart instance
+    balanceChart.destroy();
   }
 
   balanceChart = new Chart(ctx, {
@@ -143,10 +128,10 @@ function renderBalanceChart(transactions) {
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      cutout: "80%", // Makes it a ring chart
+      cutout: "80%", // crea doughnut
       plugins: {
         legend: {
-          display: false, // No legend as total is in the center
+          display: false,
         },
         tooltip: {
           callbacks: {
@@ -183,7 +168,7 @@ function updateGraphTotal(transactions) {
 
 function renderTransactions(transactions) {
   const listaBil = document.querySelector(".listaBil");
-  listaBil.innerHTML = ""; // Clear existing list
+  listaBil.innerHTML = "";
 
   if (!transactions || transactions.length === 0) {
     listaBil.innerHTML = "<p>Nessuna transazione trovata.</p>";
@@ -194,25 +179,24 @@ function renderTransactions(transactions) {
 
   transactions.forEach((t) => {
     const elementoTransazione = document.createElement("div");
-    elementoTransazione.className = "elementoTransazione"; // This will be the "card"
+    elementoTransazione.className = "elementoTransazione";
 
     let pallinoClass = "";
     let amountText = "";
-    let statusText = t.stato_transazione || "N/A"; // Capture the status
-    let transactionTypeClass = ""; // For specific styling based on type
+    let statusText = t.stato_transazione || "N/A";
+    let transactionTypeClass = "";
 
     if (t.transazioneEntrata) {
       pallinoClass = "pallinoEntrate";
       amountText = `€${parseFloat(t.transazioneEntrata).toFixed(2)}`;
       elementoTransazione.classList.add("entrata");
-      transactionTypeClass = "transazioneEntrata"; // Class for the amount
+      transactionTypeClass = "transazioneEntrata";
     } else if (t.transazioneUscita) {
       pallinoClass = "pallinoUscite";
       amountText = `-€${parseFloat(t.transazioneUscita).toFixed(2)}`;
       elementoTransazione.classList.add("uscita");
-      transactionTypeClass = "transazioneUscita"; // Class for the amount
+      transactionTypeClass = "transazioneUscita";
     } else {
-      // Fallback for transactions that are neither 'entrata' nor 'uscita' but might have 'importo_transazione'
       pallinoClass = "pallinoDaCont";
       amountText = `€${parseFloat(t.importo_transazione || 0).toFixed(2)}`;
       elementoTransazione.classList.add("da-contabilizzare");
@@ -246,31 +230,30 @@ function renderTransactions(transactions) {
   renderBalanceChart(transactions);
 }
 
-// Fetch transactions (using hardcoded data for testing)
+// placeholder lista TONY
 function fetchAndRenderTransactions() {
-  // Hardcoded test data for immediate display
   const testData = [
     {
       id: "1",
       transazioneNome: "Affitto",
       data_transazione: "2025-07-01T10:00:00",
-      transazioneUscita: "750.00", // Expense
+      transazioneUscita: "750.00",
       stato_transazione: "Contab.",
-      color: "#ff4645", // Example color for 'Uscita'
+      color: "#ff4645",
     },
     {
       id: "2",
       transazioneNome: "Stipendio",
       data_transazione: "2025-07-05T12:00:00",
-      transazioneEntrata: "1500.00", // Income
+      transazioneEntrata: "1500.00",
       stato_transazione: "Contab.",
-      color: "#ade27b", // Example color for 'Entrata'
+      color: "#ade27b",
     },
     {
       id: "3",
       transazioneNome: "Spesa Supermercato",
       data_transazione: "2025-07-07T08:30:00",
-      transazioneUscita: "85.50", // Expense
+      transazioneUscita: "85.50",
       stato_transazione: "Contab.",
       color: "#ff4645",
     },
@@ -278,7 +261,7 @@ function fetchAndRenderTransactions() {
       id: "4",
       transazioneNome: "Rimborso",
       data_transazione: "2025-07-10T15:00:00",
-      transazioneEntrata: "50.00", // Income
+      transazioneEntrata: "50.00",
       stato_transazione: "Contab.",
       color: "#ade27b",
     },
@@ -294,77 +277,16 @@ function fetchAndRenderTransactions() {
       id: "6",
       transazioneNome: "Vendita Online",
       data_transazione: "2025-07-11T14:00:00",
-      transazioneEntrata: "200.00", // Income
+      transazioneEntrata: "200.00",
       stato_transazione: "Contab.",
       color: "#ade27b",
     },
   ];
   renderTransactions(testData);
-  // Uncomment the following lines when you have a backend to fetch real data
-  /*
-  inviaRichiesta("GET", "/db-events")
-    .then((ris) => {
-      const eventi = ris.data || ris;
-      renderTransactions(eventi);
-    })
-    .catch((err) => {
-      console.error(err);
-      // Fallback to test data if fetching fails, or display an error message
-      renderTransactions(testData);
-    });
-  */
 }
 
-// The event listener for the delete button is commented out as the button is removed.
-// You can safely remove this block if you are sure you won't re-add the delete button.
-/*
-document.querySelectorAll(".deleteTransazione").forEach((btn) => {
-  btn.onclick = function () {
-    const id = this.getAttribute("data-id");
-    if (confirm("Eliminare questa transazione?")) {
-      inviaRichiesta("DELETE", `/db-events/${id}`)
-        .then(() => fetchAndRenderTransactions())
-        .catch((err) => alert("Errore durante l'eliminazione"));
-    }
-  };
-});
-*/
-
-// Listener for adding new events
-/*document.getElementById("salva-evento").onclick = function (e) {
-  e.preventDefault();
-  const nome = document.getElementById("nome-evento").value;
-  const orarioInizio = document.getElementById("orario-inizio-evento").value;
-  const orarioFine = document.getElementById("orario-fine-evento").value;
-  const colore = document.getElementById("colore-evento").value;
-
-  const nuovoEvento = {
-    title: nome,
-    start: orarioInizio,
-    end: orarioFine,
-    color: colore,
-  };
-
-  // Using test data logic for adding new event as well
-  // In a real application, you would send this to your backend
-  console.log("Adding new event (test mode):", nuovoEvento);
-  // Add the new event to your testData array and re-render if you want to see it immediately
-  // For now, it just logs, as we don't have a mutable global testData array.
-  // When backend is integrated, uncomment the inviaRichiesta below
-  /*
-  inviaRichiesta("POST", "/db-events", nuovoEvento)
-    .then(() => {
-      fetchAndRenderTransactions(); // Re-fetch to include the new event
-      document.getElementById("modal-evento").close();
-    })
-    .catch((err) => alert("Errore durante il salvataggio"));
-  
-  fetchAndRenderTransactions(); // Re-render to simulate addition, will show hardcoded data
-  document.getElementById("modal-evento").close();
-});*/
-
+// evento scroll non ancora funzionante (in piu se abbiamo tempo)
 document.addEventListener("DOMContentLoaded", function () {
-  // Append the BalancePage content to the body
   document.body.appendChild(BalancePage());
 
   const filterBar = document.getElementById("tendinaFiltriBilancio");
@@ -374,20 +296,23 @@ document.addEventListener("DOMContentLoaded", function () {
     let startX;
     let scrollLeft;
 
-    // Mouse Wheel Scroll
+    // evento scroll mousewheel
     filterBar.addEventListener("wheel", (e) => {
       e.preventDefault();
       filterBar.scrollLeft += e.deltaY;
     });
 
-    // Click and Drag
+    // evento inizio del trascinamento (quando si clicca il mouse)
     filterBar.addEventListener("mousedown", (e) => {
-      isDragging = true;
-      filterBar.classList.add("is-dragging");
-      startX = e.pageX - filterBar.offsetLeft;
-      scrollLeft = filterBar.scrollLeft;
+      if (e.button === 0) {
+        isDragging = true;
+        filterBar.classList.add("is-dragging");
+        startX = e.pageX - filterBar.offsetLeft;
+        scrollLeft = filterBar.scrollLeft;
+      }
     });
 
+    // evento fine del trascinamento (quando il mouse esce o viene rilasciato)
     filterBar.addEventListener("mouseleave", () => {
       isDragging = false;
       filterBar.classList.remove("is-dragging");
@@ -398,86 +323,25 @@ document.addEventListener("DOMContentLoaded", function () {
       filterBar.classList.remove("is-dragging");
     });
 
+    // evento durante il trascinamento (quando il mouse si muove con il tasto premuto)
     filterBar.addEventListener("mousemove", (e) => {
       if (!isDragging) return;
       e.preventDefault();
       const x = e.pageX - filterBar.offsetLeft;
-      const walk = (x - startX) * 1.5; // Multiplier for scroll speed
+      const walk = (x - startX) * 1.5;
       filterBar.scrollLeft = scrollLeft - walk;
     });
+  } else {
+    console.warn(
+      "Elemento #tendinaFiltriBilancio non trovato. Lo scorrimento non sarà abilitato."
+    );
   }
 
-  // Initial fetch and render of transactions when the DOM is loaded
+  // chiamata iniziale per recuperare e renderizzare le transazioni quando il DOM è caricato
   fetchAndRenderTransactions();
 
   setupFiltroInterazione();
 });
-
-/*
-document.addEventListener('DOMContentLoaded', () => {
-  const filters = [
-    { label: 'Entrate', colorClass: 'pallinoEntrate' },
-    { label: 'Uscite', colorClass: 'pallinoUscite' },
-    { label: 'Da Cont.', colorClass: 'pallinoDaCont' }
-    // Add more filters here if needed
-  ];
-
-  const container = document.getElementById('filtroContainer');
-
-  filters.forEach((filter, index) => {
-    const filtroEl = document.createElement('div');
-    filtroEl.classList.add('elementoFiltro');
-    if (index === 0) filtroEl.classList.add('attivo'); // Make first one active by default
-
-    // Create the dot
-    const dot = document.createElement('span');
-    dot.classList.add('pallino', filter.colorClass);
-
-    // Create the label
-    const label = document.createElement('span');
-    label.textContent = filter.label;
-
-    // Append dot and label to the filter element
-    filtroEl.appendChild(dot);
-    filtroEl.appendChild(label);
-
-    // Optionally add click event to toggle "attivo" class
-    filtroEl.addEventListener('click', () => {
-      document.querySelectorAll('.elementoFiltro').forEach(el => el.classList.remove('attivo'));
-      filtroEl.classList.add('attivo');
-      // Add filter logic here if needed
-    });
-
-    // Add the filter to the container
-    container.appendChild(filtroEl);
-  });
-});*/
-
-//  const filters = [
-//     { label: 'Tutti', colorClass: 'pallinoFiltro', type: 'all' },
-//     { label: 'Entrate', colorClass: 'pallinoEntrate', type: 'entrata' },
-//     { label: 'Uscite', colorClass: 'pallinoUscite', type: 'uscita' },
-//     { label: 'Da Cont.', colorClass: 'pallinoDaCont', type: 'pending' }
-//   ];
-
-//   filters.forEach((filter, index) => {
-//     const filtroEl = document.createElement('div');
-//     filtroEl.classList.add('elementoFiltro');
-//     filtroEl.dataset.filter = filter.type;
-//     if (index === 0) filtroEl.classList.add('attivo');
-
-//     const dot = document.createElement('span');
-//     dot.classList.add('pallino', filter.colorClass);
-
-//     const label = document.createElement('span');
-//     label.textContent = filter.label;
-
-//     label.classList.add('spanFiltriBil');
-
-//     filtroEl.appendChild(dot);
-//     filtroEl.appendChild(label);
-//     document.getElementById('tendinaFiltriBilancio').appendChild(filtroEl);
-//   });
 
 setupFiltroInterazione();
 
@@ -493,7 +357,7 @@ function setupFiltroInterazione() {
 
       const selectedFilter = filtro.dataset.filter;
 
-      // Show/hide transactions
+      // mostra/nasconde transactions
       transazioni.forEach((tx) => {
         if (selectedFilter === "all") {
           tx.style.display = "";
