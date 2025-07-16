@@ -1,15 +1,22 @@
+h1{
+  margin: 2rem 5rem 1rem
+}
+
+.pCount{
+  margin-left: 5rem;
+}
+
 .ContainerFatture {
   margin-top: 5rem;
   display: flex; /* Trasforma il contenitore in un flex container */
   gap: 20px; /* Imposta la distanza tra gli elementi flessibili (i tuoi div) */
-  /* justify-content: center; */
   align-items: center;
   margin-left: 5rem;
   flex-wrap: wrap;
+  margin-block-end: 2%;
 }
 
 .anteprimaFattureWrapper{
-
   background: white;
   border-radius: 2rem; /* Aggiunge un bordo arrotondato per un aspetto migliore */
   padding: 2rem 0rem ; /* Aggiunge un padding per evitare che il contenuto tocchi i bordi */
@@ -191,6 +198,13 @@ button.Delete:active {
 
 
 @media screen and (width < 480px) {
+
+  h1, .pCount{
+    text-align: center;
+    margin: 0 auto;
+    padding-top: 1rem;
+  }
+
   .ContainerFatture {
     flex-direction: column; /* Cambia la direzione del flex container in colonna */
     align-items: center; /* Centra gli elementi figli orizzontalmente */
