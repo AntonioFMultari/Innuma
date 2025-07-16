@@ -40,31 +40,30 @@ function BalancePage() {
   tendinaFiltriBilancio.className = "tendinaFiltriBilancio";
   containerFiltriBilancio.appendChild(tendinaFiltriBilancio);
 
-  // placeholder filtri TONY
-  const filters = [
-    { label: "Tutti", colorClass: "pallinoFiltro", type: "all" },
-    { label: "Entrate", colorClass: "pallinoEntrate", type: "entrata" },
-    { label: "Uscite", colorClass: "pallinoUscite", type: "uscita" },
-    { label: "Da Cont.", colorClass: "pallinoDaCont", type: "pending" },
-  ];
+  // crea i filtri
+  tendinaFiltriBilancio.innerHTML = ""; // pulisce i filtri esistenti
+  inviaRichiesta("GET", "/db-attivita").then((ris) => {
+    const attivita = ris.data;
 
-  filters.forEach((filter, index) => {
-    const filtroEl = document.createElement("div");
-    filtroEl.classList.add("elementoFiltro");
-    filtroEl.dataset.filter = filter.type;
-    if (index === 0) filtroEl.classList.add("attivo");
+    // crea i filtri
+    attivita.forEach((filter, index) => {
+      const filtroEl = document.createElement("div");
+      filtroEl.classList.add("elementoFiltro");
+      filtroEl.dataset.filter = filter.type;
+      if (index === 0) filtroEl.classList.add("attivo");
 
-    const dot = document.createElement("span");
-    dot.classList.add("pallino", filter.colorClass);
+      const dot = document.createElement("span");
+      dot.classList.add("pallino");
+      dot.style.backgroundColor = filter.Colore;
 
-    const label = document.createElement("span");
-    label.textContent = filter.label;
+      const label = document.createElement("span");
+      label.textContent = filter.Descrizione || "Attività " + (index + 1);
 
-    filtroEl.appendChild(dot);
-    filtroEl.appendChild(label);
-    tendinaFiltriBilancio.appendChild(filtroEl);
+      filtroEl.appendChild(dot);
+      filtroEl.appendChild(label);
+      tendinaFiltriBilancio.appendChild(filtroEl);
+    });
   });
-
   const link = document.createElement("a");
   link.href = "bilancioEU.html";
 
@@ -97,13 +96,16 @@ function renderBalanceChart(transactions) {
   const ctx = document.getElementById("graficoCanvas").getContext("2d");
   const graficoTotale = document.getElementById("grafico-total");
 
-  const totalIn = transactions
-    .filter((t) => t.transazioneEntrata)
-    .reduce((sum, t) => sum + parseFloat(t.transazioneEntrata), 0);
+  let totalIn = 0;
+  for (const t of transactions) {
+    totalIn += parseFloat(t.tariffa_oraria) || 0;
+  }
 
-  const totalOut = transactions
-    .filter((t) => t.transazioneUscita)
-    .reduce((sum, t) => sum + parseFloat(t.transazioneUscita), 0);
+  let totalOut = 0;
+  console.log(transactions);
+  for (const t of transactions) {
+    totalOut += parseFloat("-" + t.Uscita) || 0;
+  }
 
   const balance = totalIn - totalOut;
 
@@ -112,15 +114,26 @@ function renderBalanceChart(transactions) {
   if (balanceChart) {
     balanceChart.destroy();
   }
-
+  const colori = [];
+  const labels = [];
+  const data = [];
+  inviaRichiesta("GET", "/db-events").then((res) => {
+    const eventi = res.data;
+    for (const e of eventi) {
+      const colore = e.color || "#ade27b";
+      colori.push(colore);
+      labels.push(e.descrizione_attivita || "Evento " + (labels.length + 1));
+      data.push(parseFloat(e.tariffa_oraria) || 0);
+    }
+  });
   balanceChart = new Chart(ctx, {
     type: "doughnut",
     data: {
-      labels: ["Entrate", "Uscite"],
+      labels: labels,
       datasets: [
         {
-          data: [totalIn, totalOut],
-          backgroundColor: ["#ade27b", "#ff4645"], // Green for In, Red for Out
+          data: data,
+          backgroundColor: colori,
           hoverOffset: 4,
         },
       ],
@@ -128,7 +141,7 @@ function renderBalanceChart(transactions) {
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      cutout: "80%", // crea doughnut
+      cutout: "70%", // crea doughnut
       plugins: {
         legend: {
           display: false,
@@ -136,7 +149,7 @@ function renderBalanceChart(transactions) {
         tooltip: {
           callbacks: {
             label: function (context) {
-              let label = context.label || "";
+              let label = "";
               if (label) {
                 label += ": ";
               }
@@ -153,137 +166,75 @@ function renderBalanceChart(transactions) {
 }
 
 function updateGraphTotal(transactions) {
-  const graficoTotale = document.getElementById("grafico-total");
-  if (graficoTotale) {
-    const totalIn = transactions
-      .filter((t) => t.transazioneEntrata)
-      .reduce((sum, t) => sum + parseFloat(t.transazioneEntrata), 0);
-    const totalOut = transactions
-      .filter((t) => t.transazioneUscita)
-      .reduce((sum, t) => sum + parseFloat(t.transazioneUscita), 0);
-    const total = totalIn - totalOut;
-    graficoTotale.textContent = `€${total.toFixed(2)}`;
-  }
-}
-
-function renderTransactions(transactions) {
-  const listaBil = document.querySelector(".listaBil");
-  listaBil.innerHTML = "";
-
-  if (!transactions || transactions.length === 0) {
-    listaBil.innerHTML = "<p>Nessuna transazione trovata.</p>";
-    updateGraphTotal([]);
-    renderBalanceChart([]);
-    return;
-  }
-
-  transactions.forEach((t) => {
-    const elementoTransazione = document.createElement("div");
-    elementoTransazione.className = "elementoTransazione";
-
-    let pallinoClass = "";
-    let amountText = "";
-    let statusText = t.stato_transazione || "N/A";
-    let transactionTypeClass = "";
-
-    if (t.transazioneEntrata) {
-      pallinoClass = "pallinoEntrate";
-      amountText = `€${parseFloat(t.transazioneEntrata).toFixed(2)}`;
-      elementoTransazione.classList.add("entrata");
-      transactionTypeClass = "transazioneEntrata";
-    } else if (t.transazioneUscita) {
-      pallinoClass = "pallinoUscite";
-      amountText = `-€${parseFloat(t.transazioneUscita).toFixed(2)}`;
-      elementoTransazione.classList.add("uscita");
-      transactionTypeClass = "transazioneUscita";
-    } else {
-      pallinoClass = "pallinoDaCont";
-      amountText = `€${parseFloat(t.importo_transazione || 0).toFixed(2)}`;
-      elementoTransazione.classList.add("da-contabilizzare");
-      transactionTypeClass = "transazioneNeutro"; // Example: class for neutral amounts
+  setTimeout(() => {
+    const graficoTotale = document.getElementById("grafico-total");
+    if (graficoTotale) {
+      let totalIn = 0;
+      let totalOut = 0;
+      for (const t of transactions) {
+        totalIn += parseFloat(t.tariffa_oraria) || 0;
+        totalOut += parseFloat(t.Uscita) || 0;
+      }
+      let total = totalIn - totalOut;
+      graficoTotale.innerText = `€${total.toFixed(2)}`;
     }
+  }, 1);
+}
 
-    // Using data_transazione as a simple description/subtitle for now
-    const transactionDescription = `Data: ${new Date(
-      t.data_transazione
-    ).toLocaleDateString("it-IT")}`;
+//TONY: display transactions
+document.addEventListener("DOMContentLoaded", async function () {
+  /*document.body.appendChild(BalancePage());*/
+  inviaRichiesta("GET", "/db-events").then((res) => {
+    const listaBil = document.querySelector(".listaBil");
+    const eventi = res.data;
+    for (const r of eventi) {
+      const entrataItem = r;
 
-    elementoTransazione.innerHTML = `
-      <div class="transazioneIconaContenitore">
-        <div class="pallino ${pallinoClass}"></div>
-      </div>
-      <div class="transazioneInfoPrincipale">
-        <span class="transazioneTitolo">${
-          t.transazioneNome || t.title || "N/A"
-        }</span>
-        <span class="transazioneDescrizione">${transactionDescription}</span>
-      </div>
-      <div class="transazioneDettagliDestra">
-        <span class="transazioneImporto ${transactionTypeClass}">${amountText}</span>
-        <span class="transazioneTestoTotale">totale</span>
-        <span class="transazioneStatoNuovo">${statusText}</span>
-      </div>
-    `;
-    listaBil.appendChild(elementoTransazione);
+      const elementoTransazione = document.createElement("div");
+      elementoTransazione.classList.add("elementoTransazione", "entrata");
+      elementoTransazione.setAttribute("data-id", entrataItem.id); // <-- aggiungi questa riga
+
+      const anno = String(entrataItem.end.split(" ")[0].split("-")[0]).padStart(
+        2,
+        "0"
+      );
+      const mese = String(entrataItem.end.split(" ")[0].split("-")[1]).padStart(
+        2,
+        "0"
+      );
+      const giorno = String(entrataItem.end.split(" ")[0].split("-")[2])
+        .padStart(2, "0")
+        .split("T")[0];
+
+      elementoTransazione.classList.add("entrata");
+      elementoTransazione.innerHTML = `
+                <div class="transazioneIconaContenitore">
+                            <div class="pallino" style="background-color: ${
+                              entrataItem.color || "#ade27b"
+                            };"></div>
+                        </div>
+                        <div class="transazioneInfoPrincipale">
+                            <span class="transazioneTitolo">${
+                              entrataItem.title || "N/A"
+                            }</span>
+                            <span class="transazioneDescrizione">Data: ${giorno}/${mese}/${anno}</span>
+                        </div>
+                        <div class="transazioneDettagliDestra">
+                            <span class="transazioneImporto transazioneEntrata">+€${
+                              entrataItem.tariffa_oraria || "N/A"
+                            }</span>
+                            <span class="transazioneTestoTotale">totale</span>
+                        </div>
+            `;
+      listaBil.appendChild(elementoTransazione);
+    }
+    console.log(eventi);
+    updateGraphTotal(eventi);
+    renderBalanceChart(eventi);
   });
-  updateGraphTotal(transactions);
-  renderBalanceChart(transactions);
-}
 
-// placeholder lista TONY
-function fetchAndRenderTransactions() {
-  const testData = [
-    {
-      id: "1",
-      transazioneNome: "Affitto",
-      data_transazione: "2025-07-01T10:00:00",
-      transazioneUscita: "750.00",
-      stato_transazione: "Contab.",
-      color: "#ff4645",
-    },
-    {
-      id: "2",
-      transazioneNome: "Stipendio",
-      data_transazione: "2025-07-05T12:00:00",
-      transazioneEntrata: "1500.00",
-      stato_transazione: "Contab.",
-      color: "#ade27b",
-    },
-    {
-      id: "3",
-      transazioneNome: "Spesa Supermercato",
-      data_transazione: "2025-07-07T08:30:00",
-      transazioneUscita: "85.50",
-      stato_transazione: "Contab.",
-      color: "#ff4645",
-    },
-    {
-      id: "4",
-      transazioneNome: "Rimborso",
-      data_transazione: "2025-07-10T15:00:00",
-      transazioneEntrata: "50.00",
-      stato_transazione: "Contab.",
-      color: "#ade27b",
-    },
-    {
-      id: "5",
-      transazioneNome: "Bolletta Luce",
-      data_transazione: "2025-07-12T09:00:00",
-      transazioneUscita: "120.00", // Expense
-      stato_transazione: "In attesa",
-      color: "#ff4645",
-    },
-    {
-      id: "6",
-      transazioneNome: "Vendita Online",
-      data_transazione: "2025-07-11T14:00:00",
-      transazioneEntrata: "200.00",
-      stato_transazione: "Contab.",
-      color: "#ade27b",
-    },
-  ];
-  renderTransactions(testData);
-}
+  setupFiltroInterazione();
+});
 
 // evento scroll non ancora funzionante (in piu se abbiamo tempo)
 document.addEventListener("DOMContentLoaded", function () {
@@ -338,7 +289,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // chiamata iniziale per recuperare e renderizzare le transazioni quando il DOM è caricato
-  fetchAndRenderTransactions();
 
   setupFiltroInterazione();
 });

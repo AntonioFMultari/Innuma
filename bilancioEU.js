@@ -70,7 +70,7 @@ function BalancePage() {
 
   const bottoneTransazione = document.createElement("button");
   bottoneTransazione.className = "entrateUscita";
-  bottoneTransazione.textContent = "Entrate/Uscite";
+  bottoneTransazione.textContent = "Contabilità";
   link.appendChild(bottoneTransazione);
   cartBilSinistra.appendChild(link);
 
@@ -175,10 +175,7 @@ function updateGraphTotal(transactions) {
 document.addEventListener("DOMContentLoaded", async function () {
   /*document.body.appendChild(BalancePage());*/
 
-  const arr = [
-    inviaRichiesta("GET", "/db-spesa"),
-    inviaRichiesta("GET", "/db-events"),
-  ];
+  const arr = [inviaRichiesta("GET", "/db-events")];
 
   let res = await Promise.all(arr).catch(() =>
     alert("Errore nella richiesta dei dati")
@@ -186,14 +183,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   if (!res) return;
 
-  res = res
-    .map((r) => r.data)
-    .flatMap((r) => r)
-    .sort((a, b) => {
-      const dataA = new Date(a._data || a.end);
-      const dataB = new Date(b._data || b.end);
-      return dataB - dataA;
-    });
+  res = res.map((r) => r.data).flatMap((r) => r);
 
   console.log(res);
 

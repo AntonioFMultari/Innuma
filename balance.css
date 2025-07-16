@@ -144,6 +144,22 @@
   flex-direction: column;
   gap: 0.75rem;
 }
+/* Lista transazioni con scrollbar verticale */
+.listaBil {
+  max-height: 35rem; /* imposta l'altezza massima visibile */
+  overflow-y: auto; /* abilita la scrollbar verticale */
+  padding: 2rem;
+  /* opzionale: nascondi la scrollbar su Chrome/Safari */
+  scrollbar-width: thin; /* Firefox */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.listaBil::-webkit-scrollbar {
+  width: 8px;
+}
+.listaBil::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
 
 /* Style for the individual transaction card */
 .elementoTransazione {
