@@ -173,7 +173,7 @@ function updateGraphTotal(transactions) {
 
 //TONY: display transactions
 document.addEventListener("DOMContentLoaded", async function () {
-  BalancePage();
+  /*document.body.appendChild(BalancePage());*/
 
   const arr = [
     inviaRichiesta("GET", "/db-spesa"),
@@ -287,6 +287,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   updateGraphTotal(res);
   renderBalanceChart(res);
+
+  setupFiltroInterazione();
 });
 
 // evento scroll non ancora funzionante (in piu se abbiamo tempo)
@@ -344,7 +346,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // chiamata iniziale per recuperare e renderizzare le transazioni quando il DOM è caricato
   //fetchAndRenderTransactions();
 
-  setupFiltroInterazione();
+  /*setupFiltroInterazione();*/
 });
 
 setupFiltroInterazione();
