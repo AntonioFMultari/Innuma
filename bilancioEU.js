@@ -97,13 +97,16 @@ function renderBalanceChart(transactions) {
   const ctx = document.getElementById("graficoCanvas").getContext("2d");
   const graficoTotale = document.getElementById("grafico-total");
 
-  const totalIn = transactions
-    .filter((t) => t.transazioneEntrata)
-    .reduce((sum, t) => sum + parseFloat(t.transazioneEntrata), 0);
+  let totalIn = 0;
+  for (const t of transactions) {
+    totalIn += parseFloat(t.tariffa_oraria) || 0;
+  }
 
-  const totalOut = transactions
-    .filter((t) => t.transazioneUscita)
-    .reduce((sum, t) => sum + parseFloat(t.transazioneUscita), 0);
+  let totalOut = 0;
+  console.log(transactions);
+  for (const t of transactions) {
+    totalOut += parseFloat("-" + t.Uscita) || 0;
+  }
 
   const balance = totalIn - totalOut;
 
@@ -128,7 +131,7 @@ function renderBalanceChart(transactions) {
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      cutout: "80%", // crea doughnut
+      cutout: "70%", // crea doughnut
       plugins: {
         legend: {
           display: false,
@@ -153,42 +156,113 @@ function renderBalanceChart(transactions) {
 }
 
 function updateGraphTotal(transactions) {
-  const graficoTotale = document.getElementById("grafico-total");
-  if (graficoTotale) {
-    let totalIn = 0;
-    console.log(transactions);
-    for (const t of transactions) {
-      totalIn += parseFloat("-" + t.Uscita) || 0;
+  setTimeout(() => {
+    const graficoTotale = document.getElementById("grafico-total");
+    if (graficoTotale) {
+      let totalIn = 0;
+      let totalOut = 0;
+      for (const t of transactions) {
+        totalIn += parseFloat(t.tariffa_oraria) || 0;
+        totalOut += parseFloat(t.Uscita) || 0;
+      }
+      let total = totalIn - totalOut;
+      graficoTotale.innerText = `€${total.toFixed(2)}`;
     }
-    graficoTotale.textContent = `€${totalIn}`;
-  }
+  }, 1);
 }
 
 //TONY: display transactions
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
   BalancePage();
-  inviaRichiesta("GET", "/db-spesa").then((response) => {
-    const spesa = response.data;
-    spesa.forEach((spesaItem) => {
-      const elementoTransazione = document.createElement("div");
-      elementoTransazione.classList.add("elementoTransazione", "uscita");
-      elementoTransazione.setAttribute("data-id", spesaItem.ID); // <-- aggiungi questa riga
 
-      const anno = String(spesaItem._data.split(" ")[0].split("-")[0]).padStart(
+  const arr = [
+    inviaRichiesta("GET", "/db-spesa"),
+    inviaRichiesta("GET", "/db-events"),
+  ];
+
+  let res = await Promise.all(arr).catch(() =>
+    alert("Errore nella richiesta dei dati")
+  );
+
+  if (!res) return;
+
+  res = res
+    .map((r) => r.data)
+    .flatMap((r) => r)
+    .sort((a, b) => {
+      const dataA = new Date(a._data || a.end);
+      const dataB = new Date(b._data || b.end);
+      return dataB - dataA;
+    });
+
+  console.log(res);
+
+  for (const r of res) {
+    if ("tariffa_oraria" in r) {
+      const entrataItem = r;
+
+      const elementoTransazione = document.createElement("div");
+      elementoTransazione.classList.add("elementoTransazione", "entrata");
+      elementoTransazione.setAttribute("data-id", entrataItem.id); // <-- aggiungi questa riga
+
+      const anno = String(entrataItem.end.split(" ")[0].split("-")[0]).padStart(
         2,
         "0"
       );
-      const mese = String(spesaItem._data.split(" ")[0].split("-")[1]).padStart(
+      const mese = String(entrataItem.end.split(" ")[0].split("-")[1]).padStart(
         2,
         "0"
       );
-      const giorno = String(spesaItem._data.split(" ")[0].split("-")[2])
+      const giorno = String(entrataItem.end.split(" ")[0].split("-")[2])
         .padStart(2, "0")
         .split("T")[0];
 
       elementoTransazione.innerHTML = `
                 <div class="transazioneIconaContenitore">
-                            <div class="pallino" style="background-color: #ff4645;"></div>
+                            <div class="pallino pallinoEntrate"></div>
+                        </div>
+                        <div class="transazioneInfoPrincipale">
+                            <span class="transazioneTitolo">${
+                              entrataItem.title || "N/A"
+                            }</span>
+                            <span class="transazioneDescrizione">Data: ${giorno}/${mese}/${anno}</span>
+                        </div>
+                        <div class="transazioneDettagliDestra">
+                            <span class="transazioneImporto transazioneEntrata">+€${
+                              entrataItem.tariffa_oraria || "N/A"
+                            }</span>
+                            <span class="transazioneTestoTotale">totale</span>
+                        </div>
+            `;
+      elementoTransazione.classList.add("entrata");
+
+      // Aggiungi l'element
+      document
+        .getElementsByClassName("listaBil")[0]
+        .appendChild(elementoTransazione);
+      continue;
+    }
+    const spesaItem = r;
+
+    const elementoTransazione = document.createElement("div");
+    elementoTransazione.classList.add("elementoTransazione", "uscita");
+    elementoTransazione.setAttribute("data-id", spesaItem.ID); // <-- aggiungi questa riga
+
+    const anno = String(spesaItem._data.split(" ")[0].split("-")[0]).padStart(
+      2,
+      "0"
+    );
+    const mese = String(spesaItem._data.split(" ")[0].split("-")[1]).padStart(
+      2,
+      "0"
+    );
+    const giorno = String(spesaItem._data.split(" ")[0].split("-")[2])
+      .padStart(2, "0")
+      .split("T")[0];
+
+    elementoTransazione.innerHTML = `
+                <div class="transazioneIconaContenitore">
+                            <div class="pallino pallinoUscite"></div>
                         </div>
                         <div class="transazioneInfoPrincipale">
                             <span class="transazioneTitolo">${
@@ -203,148 +277,17 @@ document.addEventListener("DOMContentLoaded", function () {
                             <span class="transazioneTestoTotale">totale</span>
                         </div>
             `;
-      console.log(spesaItem);
-      // Aggiungi l'element
-      document
-        .getElementsByClassName("listaBil")[0]
-        .appendChild(elementoTransazione);
-    });
-    updateGraphTotal(spesa);
-    renderBalanceChart(spesa);
-  });
-});
-/*
-function renderTransactions(transactions) {
-  const listaBil = document.querySelector(".listaBil");
-  listaBil.innerHTML = "";
-
-  if (!transactions || transactions.length === 0) {
-    listaBil.innerHTML = "<p>Nessuna transazione trovata.</p>";
-    updateGraphTotal([]);
-    renderBalanceChart([]);
-    return;
+    elementoTransazione.classList.add("uscita");
+    console.log(spesaItem);
+    // Aggiungi l'element
+    document
+      .getElementsByClassName("listaBil")[0]
+      .appendChild(elementoTransazione);
   }
 
-  transactions.forEach((t) => {
-    const elementoTransazione = document.createElement("div");
-    elementoTransazione.className = "elementoTransazione";
-
-    let pallinoClass = "";
-    let amountText = "";
-    let statusText = t.stato_transazione || "N/A";
-    let transactionTypeClass = "";
-
-    if (t.transazioneEntrata) {
-      pallinoClass = "pallinoEntrate";
-      amountText = `€${parseFloat(t.transazioneEntrata).toFixed(2)}`;
-      elementoTransazione.classList.add("entrata");
-      transactionTypeClass = "transazioneEntrata";
-    } else if (t.transazioneUscita) {
-      pallinoClass = "pallinoUscite";
-      amountText = `-€${parseFloat(t.transazioneUscita).toFixed(2)}`;
-      elementoTransazione.classList.add("uscita");
-      transactionTypeClass = "transazioneUscita";
-    } else {
-      pallinoClass = "pallinoDaCont";
-      amountText = `€${parseFloat(t.importo_transazione || 0).toFixed(2)}`;
-      elementoTransazione.classList.add("da-contabilizzare");
-      transactionTypeClass = "transazioneNeutro";
-    }
-
-    const transactionDescription = `Data: ${new Date(
-      t.data_transazione
-    ).toLocaleDateString("it-IT")}`;
-
-    elementoTransazione.innerHTML = `
-      <div class="transazioneIconaContenitore">
-        <div class="pallino ${pallinoClass}"></div>
-      </div>
-      <div class="transazioneInfoPrincipale">
-        <span class="transazioneTitolo">${
-          t.transazioneNome || t.title || "N/A"
-        }</span>
-        <span class="transazioneDescrizione">${transactionDescription}</span>
-      </div>
-      <div class="transazioneDettagliDestra">
-        <span class="transazioneImporto ${transactionTypeClass}">${amountText}</span>
-        <span class="transazioneTestoTotale">totale</span>
-        <span class="transazioneStatoNuovo">${statusText}</span>
-      </div>
-    `;
-    listaBil.appendChild(elementoTransazione);
-  });
-  updateGraphTotal(transactions);
-  renderBalanceChart(transactions);
-}*/
-/*
-// placeholder lista TONY
-function fetchAndRenderTransactions() {
-  const testData = [
-    {
-      id: "1",
-      transazioneNome: "Affitto",
-      data_transazione: "2025-07-01T10:00:00",
-      transazioneUscita: "750.00",
-      stato_transazione: "Contab.",
-      color: "#ff4645",
-    },
-    {
-      id: "2",
-      transazioneNome: "Stipendio",
-      data_transazione: "2025-07-05T12:00:00",
-      transazioneEntrata: "1500.00",
-      stato_transazione: "Contab.",
-      color: "#ade27b",
-    },
-    {
-      id: "3",
-      transazioneNome: "Spesa Supermercato",
-      data_transazione: "2025-07-07T08:30:00",
-      transazioneUscita: "85.50",
-      stato_transazione: "Contab.",
-      color: "#ff4645",
-    },
-    {
-      id: "4",
-      transazioneNome: "Rimborso",
-      data_transazione: "2025-07-10T15:00:00",
-      transazioneEntrata: "50.00",
-      stato_transazione: "Contab.",
-      color: "#ade27b",
-    },
-    {
-      id: "6",
-      transazioneNome: "Vendita Online",
-      data_transazione: "2025-07-11T14:00:00",
-      transazioneEntrata: "200.00",
-      stato_transazione: "Contab.",
-      color: "#ade27b",
-    },
-  ];
-  renderTransactions(testData);
-}*/
-
-// listener nuovi eventi
-/*
-document.getElementById("salva-evento").onclick = function (e) {
-  e.preventDefault();
-  const nome = document.getElementById("nome-evento").value;
-  const orarioInizio = document.getElementById("orario-inizio-evento").value;
-  const orarioFine = document.getElementById("orario-fine-evento").value;
-  const colore = document.getElementById("colore-evento").value;
-
-  const nuovoEvento = {
-    title: nome,
-    start: orarioInizio,
-    end: orarioFine,
-    color: colore,
-  };
-
-  console.log("Adding new event (test mode):", nuovoEvento);
-  
-  fetchAndRenderTransactions(); 
-  document.getElementById("modal-evento").close();
-};*/
+  updateGraphTotal(res);
+  renderBalanceChart(res);
+});
 
 // evento scroll non ancora funzionante (in piu se abbiamo tempo)
 document.addEventListener("DOMContentLoaded", function () {
