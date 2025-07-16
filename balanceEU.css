@@ -477,3 +477,35 @@
 .transazioneImporto.transazioneUscita {
   color: #ff4645;
 }
+
+/* Evidenzia la transazione uscita al passaggio mouse */
+.elementoTransazione.uscita {
+  position: relative;
+  transition: background 0.2s;
+}
+
+.elementoTransazione.uscita.hover-uscita {
+  background: #e74c3c !important;
+}
+
+.elementoTransazione.uscita .icona-cestino {
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 40px;
+  height: 40px;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.elementoTransazione.uscita.hover-uscita .icona-cestino {
+  display: block;
+}
+
+/* Nasconde tutti i figli tranne l'icona cestino quando in hover */
+.elementoTransazione.uscita.hover-uscita > :not(.icona-cestino) {
+  opacity: 0;
+  pointer-events: none;
+}

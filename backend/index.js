@@ -284,6 +284,25 @@ app.delete("/db-attivita/:id", async (req, res) => {
   }
 });
 
+//DELETE -> ELIMINA UNA SPESA
+app.delete("/db-spesa/:id", async (req, res) => {
+  const spesaId = req.params.id;
+  console.log("ID Spesa da eliminare:", spesaId);
+
+  try {
+    // Esegui una query DELETE
+    await db.promiseConnection.query("DELETE FROM spese WHERE ID = ?", [
+      spesaId,
+    ]);
+    res.status(204).send();
+  } catch (err) {
+    console.error("Errore durante l'eliminazione della spesa:", err);
+    res
+      .status(500)
+      .json({ error: "Errore durante l'eliminazione della spesa" });
+  }
+});
+
 // PUT -> AGGIORNA UN EVENTO
 app.put("/db-events/:id", express.json(), async (req, res) => {
   const eventId = req.params.id;
@@ -299,5 +318,21 @@ app.put("/db-events/:id", express.json(), async (req, res) => {
     res
       .status(500)
       .json({ error: "Errore durante l'aggiornamento dell'evento" });
+  }
+});
+
+// PUT -> AGGIORNA UN' ATTIVITA
+app.put("/db-attivita/:id", express.json(), async (req, res) => {
+  const AttId = req.params.id;
+  const dati = req.body;
+  try {
+    await db.promiseConnection.query(
+      "UPDATE attività SET Descrizione = ?, Tariffa = ?, Colore = ?, INPS = ? WHERE ID = ?",
+      [dati.Descrizione, dati.Tariffa, dati.Colore, dati.INPS, AttId]
+    );
+    res.status(200).json({ success: true });
+  } catch (err) {
+    console.error("Errore durante la modifica dell'attività:", err);
+    res.status(500).json({ error: "Errore durante la modifica dell'attività" });
   }
 });

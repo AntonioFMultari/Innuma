@@ -174,8 +174,10 @@ function updateGraphTotal(transactions) {
 //TONY: display transactions
 document.addEventListener("DOMContentLoaded", async function () {
   /*document.body.appendChild(BalancePage());*/
-
-  const arr = [inviaRichiesta("GET", "/db-events")];
+  const arr = [
+    inviaRichiesta("GET", "/db-spesa"),
+    inviaRichiesta("GET", "/db-events"),
+  ];
 
   let res = await Promise.all(arr).catch(() =>
     alert("Errore nella richiesta dei dati")
@@ -183,14 +185,18 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   if (!res) return;
 
-  res = res.map((r) => r.data).flatMap((r) => r);
-
-  console.log(res);
+  res = res
+    .map((r) => r.data)
+    .flatMap((r) => r)
+    .sort((a, b) => {
+      const dataA = new Date(a._data || a.end);
+      const dataB = new Date(b._data || b.end);
+      return dataB - dataA;
+    });
 
   for (const r of res) {
     if ("tariffa_oraria" in r) {
       const entrataItem = r;
-
       const elementoTransazione = document.createElement("div");
       elementoTransazione.classList.add("elementoTransazione", "entrata");
       elementoTransazione.setAttribute("data-id", entrataItem.id); // <-- aggiungi questa riga
@@ -199,10 +205,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         2,
         "0"
       );
+
       const mese = String(entrataItem.end.split(" ")[0].split("-")[1]).padStart(
         2,
         "0"
       );
+
       const giorno = String(entrataItem.end.split(" ")[0].split("-")[2])
         .padStart(2, "0")
         .split("T")[0];
@@ -236,7 +244,13 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const elementoTransazione = document.createElement("div");
     elementoTransazione.classList.add("elementoTransazione", "uscita");
-    elementoTransazione.setAttribute("data-id", spesaItem.ID); // <-- aggiungi questa riga
+    elementoTransazione.setAttribute("data-id", spesaItem.ID);
+
+    // CREA ICONA CESTINO
+    const iconaCestino = document.createElement("img");
+    iconaCestino.src = "./assets/delete.png";
+    iconaCestino.className = "icona-cestino";
+    elementoTransazione.appendChild(iconaCestino);
 
     const anno = String(spesaItem._data.split(" ")[0].split("-")[0]).padStart(
       2,
@@ -250,25 +264,47 @@ document.addEventListener("DOMContentLoaded", async function () {
       .padStart(2, "0")
       .split("T")[0];
 
-    elementoTransazione.innerHTML = `
-                <div class="transazioneIconaContenitore">
-                            <div class="pallino pallinoUscite"></div>
-                        </div>
-                        <div class="transazioneInfoPrincipale">
-                            <span class="transazioneTitolo">${
-                              spesaItem.Descrizione || "N/A"
-                            }</span>
-                            <span class="transazioneDescrizione">Data: ${giorno}/${mese}/${anno}</span>
-                        </div>
-                        <div class="transazioneDettagliDestra">
-                            <span class="transazioneImporto transazioneUscita">-€${
-                              spesaItem.Uscita || "N/A"
-                            }</span>
-                            <span class="transazioneTestoTotale">totale</span>
-                        </div>
-            `;
-    elementoTransazione.classList.add("uscita");
-    console.log(spesaItem);
+    elementoTransazione.innerHTML += `
+  <div class="transazioneIconaContenitore">
+    <div class="pallino pallinoUscite"></div>
+  </div>
+  <div class="transazioneInfoPrincipale">
+    <span class="transazioneTitolo">${spesaItem.Descrizione || "N/A"}</span>
+    <span class="transazioneDescrizione">Data: ${giorno}/${mese}/${anno}</span>
+  </div>
+  <div class="transazioneDettagliDestra">
+    <span class="transazioneImporto transazioneUscita">-€${
+      spesaItem.Uscita || "N/A"
+    }</span>
+    <span class="transazioneTestoTotale">totale</span>
+  </div>
+`;
+
+    // GESTIONE HOVER
+    elementoTransazione.addEventListener("mouseenter", function () {
+      elementoTransazione.classList.add("hover-uscita");
+    });
+    elementoTransazione.addEventListener("mouseleave", function () {
+      elementoTransazione.classList.remove("hover-uscita");
+    });
+
+    // GESTIONE CLICK SUL CESTINO
+    elementoTransazione.addEventListener("click", function (e) {
+      console.log("Ciaone");
+      e.stopPropagation(); // evita che il click propaghi al div
+      const idSpesa = elementoTransazione.getAttribute("data-id");
+      if (confirm("Vuoi eliminare questa spesa?")) {
+        inviaRichiesta("DELETE", `/db-spesa/${idSpesa}`)
+          .then(() => {
+            elementoTransazione.remove();
+          })
+          .catch(() => {
+            alert("Errore durante l'eliminazione della spesa.");
+          });
+      }
+      window.location.reload();
+    });
+
     // Aggiungi l'element
     document
       .getElementsByClassName("listaBil")[0]

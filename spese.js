@@ -1,5 +1,4 @@
 const btnSpesa = [...document.querySelectorAll(".btnAggiungiSpese")];
-console.log(btnSpesa);
 const modal = document.getElementById("modal-spesa");
 const chiudi = document.getElementById("chiudi-modal-spesa");
 const salva = document.getElementById("salva-spesa");
@@ -8,7 +7,7 @@ const descrizioneInput = document.getElementById("descrizione-spesa");
 
 btnSpesa.forEach((btn) => {
   btn.addEventListener("click", function () {
-    console.log(importInput, descrizioneInput)
+    console.log(importInput, descrizioneInput);
     if (importInput && descrizioneInput) {
       modal.showModal();
       importInput.value = "";

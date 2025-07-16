@@ -200,7 +200,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (key === "rivalsa_inps") {
               displayValue = value ? "Sì" : "No";
             }
-            dettagli += `<div class="dettaglioEvento"><span><b>${label}:</b> ${displayValue}</span></div>`;
+            dettagli += `<div class="dettaglioEvento"><span style="overflow-wrap: break-word;"><b>${label}:</b> ${displayValue}</span></div>`;
           }
         }
       }
