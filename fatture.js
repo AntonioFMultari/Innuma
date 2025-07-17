@@ -52,8 +52,32 @@ function showNoEventsMessage() {
 }
 
 // Mostra un messaggio di errore
-function showErrorMessage(message) {
-  anteprimaFatture.innerHTML = `<p class="errorMessage">Errore nel caricamento: ${message}</p>`;
+function showErrorMessage(errorMessage) {
+  anteprimaFatture.innerHTML = `
+    <div class="error-message" style="
+      text-align: center; 
+      padding: 40px; 
+      color: #d32f2f; 
+      font-size: 18px;
+      border: 2px solid #d32f2f;
+      border-radius: 10px;
+      margin: 20px 0;
+      background: #ffeaea;
+    ">
+      ❌ Errore di caricamento
+      <br><br>
+      <small style="color: #666;">${errorMessage}</small>
+      <br><br>
+      <button onclick="refreshEvents()" style="
+        background: #d32f2f;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+      ">🔄Check the link and retry</button>
+    </div>
+  `;
   if (eventCountElement) {
     eventCountElement.textContent = "Errore";
   }
