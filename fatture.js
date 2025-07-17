@@ -269,7 +269,7 @@ function mostraSpecificaFattura(fattura) {
   specificaFattura.innerHTML = `
     <span class="dot"></span> <div class="DivTitolo">
       <span class="TitoloFattura">${fattura.titolo ?? "N/D"}</span>
-      <span class="SottoTitolo">${fattura.nome ?? "N/D"}</span>
+      <span class="SottoTitolo">Cliente: ${fattura.nome ?? "N/D"}</span>
     </div>
     <img class="IconaPanoramica" src="assets/overview_60dp_A764BD_FILL0_wght400_GRAD0_opsz48.png" alt="Panoramica"/>
     <div class="Panoramica">
