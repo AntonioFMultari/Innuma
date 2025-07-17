@@ -314,7 +314,7 @@ function mostraSpecificaFattura(fattura) {
   if (deleteButton) {
     deleteButton.addEventListener('click', async () => {
       const eventIdToDelete = deleteButton.dataset.eventId;
-      if (confirm(`Sei sicuro di voler eliminare l'evento "${fattura.titolo}" (ID: ${eventIdToDelete})?`)) {
+      if (confirm(`Sei sicuro di voler eliminare la seguente fattura: "${fattura.titolo}" emessa in data ${fattura.date}?`)) {
         try {
           // Esegui la chiamata DELETE direttamente (ora che è nello stesso file)
           const response = await fetch(`/db-events/${eventIdToDelete}`, {
