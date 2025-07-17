@@ -172,7 +172,8 @@ function updateGraphTotal(transactions) {
 
 //TONY: display transactions
 document.addEventListener("DOMContentLoaded", async function () {
-  /*document.body.appendChild(BalancePage());*/
+  document.body.appendChild(BalancePage()); // listaBil is created here
+
   const arr = [
     inviaRichiesta("GET", "/db-spesa"),
     inviaRichiesta("GET", "/db-events"),
@@ -198,54 +199,45 @@ document.addEventListener("DOMContentLoaded", async function () {
       const entrataItem = r;
       const elementoTransazione = document.createElement("div");
       elementoTransazione.classList.add("elementoTransazione", "entrata");
-      elementoTransazione.setAttribute("data-id", entrataItem.id); // <-- aggiungi questa riga
-      elementoTransazione.setAttribute("filterCategory", "entrata"); // <-- aggiungi questa riga
+      elementoTransazione.setAttribute("data-id", entrataItem.id);
+      elementoTransazione.setAttribute("data-filter-category", "entrata"); // <-- CORREZIONE QUI
 
       const anno = String(entrataItem.end.split(" ")[0].split("-")[0]).padStart(
         2,
         "0"
       );
-
       const mese = String(entrataItem.end.split(" ")[0].split("-")[1]).padStart(
         2,
         "0"
       );
-
       const giorno = String(entrataItem.end.split(" ")[0].split("-")[2])
         .padStart(2, "0")
         .split("T")[0];
-
       elementoTransazione.innerHTML = `
-                <div class="transazioneIconaContenitore">
-                            <div class="pallino pallinoEntrate"></div>
-                        </div>
-                        <div class="transazioneInfoPrincipale">
-                            <span class="transazioneTitolo">${
-                              entrataItem.title || "N/A"
-                            }</span>
-                            <span class="transazioneDescrizione">Data: ${giorno}/${mese}/${anno}</span>
-                        </div>
-                        <div class="transazioneDettagliDestra">
-                            <span class="transazioneImporto transazioneEntrata">+€${
-                              entrataItem.tariffa_oraria || "N/A"
-                            }</span>
-                            <span class="transazioneTestoTotale">totale</span>
-                        </div>
-            `;
-      elementoTransazione.classList.add("entrata");
-
-      // Aggiungi l'element
-      document
-        .getElementsByClassName("listaBil")[0]
-        .appendChild(elementoTransazione);
+        <div class="transazioneIconaContenitore">
+          <div class="pallino pallinoEntrate"></div>
+        </div>
+        <div class="transazioneInfoPrincipale">
+          <span class="transazioneTitolo">${
+            entrataItem.title || "N/A"
+          }</span>
+          <span class="transazioneDescrizione">Data: ${giorno}/${mese}/${anno}</span>
+        </div>
+        <div class="transazioneDettagliDestra">
+          <span class="transazioneImporto transazioneEntrata">+€${
+            entrataItem.tariffa_oraria || "N/A"
+          }</span>
+          <span class="transazioneTestoTotale">totale</span>
+        </div>
+      `;
+      document.getElementsByClassName("listaBil")[0].appendChild(elementoTransazione);
       continue;
     }
     const spesaItem = r;
-
     const elementoTransazione = document.createElement("div");
     elementoTransazione.classList.add("elementoTransazione", "uscita");
     elementoTransazione.setAttribute("data-id", spesaItem.ID);
-    elementoTransazione.setAttribute("filterCategory", "uscita"); // <-- aggiungi questa riga
+    elementoTransazione.setAttribute("data-filter-category", "uscita"); // <-- CORREZIONE QUI
 
     // CREA ICONA CESTINO
     const iconaCestino = document.createElement("img");
@@ -264,24 +256,23 @@ document.addEventListener("DOMContentLoaded", async function () {
     const giorno = String(spesaItem._data.split(" ")[0].split("-")[2])
       .padStart(2, "0")
       .split("T")[0];
-
     elementoTransazione.innerHTML += `
-  <div class="transazioneIconaContenitore">
-    <div class="pallino pallinoUscite"></div>
-  </div>
-  <div class="transazioneInfoPrincipale">
-    <span class="transazioneTitolo">${spesaItem.Descrizione || "N/A"}</span>
-    <span class="transazioneDescrizione">Data: ${giorno}/${mese}/${anno}</span>
-  </div>
-  <div class="transazioneDettagliDestra">
-    <span class="transazioneImporto transazioneUscita">-€${
-      spesaItem.Uscita || "N/A"
-    }</span>
-    <span class="transazioneTestoTotale">totale</span>
-  </div>
-`;
+      <div class="transazioneIconaContenitore">
+        <div class="pallino pallinoUscite"></div>
+      </div>
+      <div class="transazioneInfoPrincipale">
+        <span class="transazioneTitolo">${spesaItem.Descrizione || "N/A"}</span>
+        <span class="transazioneDescrizione">Data: ${giorno}/${mese}/${anno}</span>
+      </div>
+      <div class="transazioneDettagliDestra">
+        <span class="transazioneImporto transazioneUscita">-€${
+          spesaItem.Uscita || "N/A"
+        }</span>
+        <span class="transazioneTestoTotale">totale</span>
+      </div>
+    `;
 
-    // GESTIONE HOVER
+    // HOVER HANDLING
     elementoTransazione.addEventListener("mouseenter", function () {
       elementoTransazione.classList.add("hover-uscita");
     });
@@ -289,10 +280,10 @@ document.addEventListener("DOMContentLoaded", async function () {
       elementoTransazione.classList.remove("hover-uscita");
     });
 
-    // GESTIONE CLICK SUL CESTINO
+    // TRASH ICON CLICK HANDLING
     elementoTransazione.addEventListener("click", function (e) {
       console.log("Ciaone");
-      e.stopPropagation(); // evita che il click propaghi al div
+      e.stopPropagation(); // prevent click from propagating to the div
       const idSpesa = elementoTransazione.getAttribute("data-id");
       if (confirm("Vuoi eliminare questa spesa?")) {
         inviaRichiesta("DELETE", `/db-spesa/${idSpesa}`)
@@ -300,28 +291,22 @@ document.addEventListener("DOMContentLoaded", async function () {
             elementoTransazione.remove();
           })
           .catch(() => {
-            alert("Errore durante l'eliminazione della spesa.");
+            alert("Errore nell'eliminazione della spesa.");
           });
       }
       window.location.reload();
     });
-
-    // Aggiungi l'element
-    document
-      .getElementsByClassName("listaBil")[0]
-      .appendChild(elementoTransazione);
+    document.getElementsByClassName("listaBil")[0].appendChild(elementoTransazione);
   }
 
-  updateGraphTotal(res);
-  renderBalanceChart(res);
+  // >>> NUOVE POSIZIONI QUI PER GRAFICO E TOTALE <<<
+  updateGraphTotal(res);   // <-- RIPOSIZIONATO QUI
+  renderBalanceChart(res); // <-- RIPOSIZIONATO QUI
 
-  setupFiltroInterazione();
-});
+  // >>> IMPORTANTE: CHIAMARE setupFiltroInterazione DOPO che le transazioni sono state aggiunte <<<
+  setupFiltroInterazione(); // <-- RIPOSIZIONATO QUI
 
-// evento scroll non ancora funzionante (in piu se abbiamo tempo)
-document.addEventListener("DOMContentLoaded", function () {
-  document.body.appendChild(BalancePage());
-
+  // Existing code for filter bar scroll
   const filterBar = document.getElementById("tendinaFiltriBilancio");
 
   if (filterBar) {
@@ -329,13 +314,13 @@ document.addEventListener("DOMContentLoaded", function () {
     let startX;
     let scrollLeft;
 
-    // evento scroll mousewheel
+    // mousewheel scroll event
     filterBar.addEventListener("wheel", (e) => {
       e.preventDefault();
       filterBar.scrollLeft += e.deltaY;
     });
 
-    // evento inizio del trascinamento (quando si clicca il mouse)
+    // drag start event (when mouse is clicked)
     filterBar.addEventListener("mousedown", (e) => {
       if (e.button === 0) {
         isDragging = true;
@@ -345,7 +330,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
-    // evento fine del trascinamento (quando il mouse esce o viene rilasciato)
+    // drag end event (when mouse leaves or is released)
     filterBar.addEventListener("mouseleave", () => {
       isDragging = false;
       filterBar.classList.remove("is-dragging");
@@ -356,7 +341,7 @@ document.addEventListener("DOMContentLoaded", function () {
       filterBar.classList.remove("is-dragging");
     });
 
-    // evento durante il trascinamento (quando il mouse si muove con il tasto premuto)
+    // dragging event (when mouse moves with button pressed)
     filterBar.addEventListener("mousemove", (e) => {
       if (!isDragging) return;
       e.preventDefault();
@@ -366,61 +351,74 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   } else {
     console.warn(
-      "Elemento #tendinaFiltriBilancio non trovato. Lo scorrimento non sarà abilitato."
+      "Element #tendinaFiltriBilancio not found. Scrolling will not be enabled."
     );
   }
-
-  // chiamata iniziale per recuperare e renderizzare le transazioni quando il DOM è caricato
-  //fetchAndRenderTransactions();
-
-  /*setupFiltroInterazione();*/
 });
 
-setupFiltroInterazione();
-
-// Function to set up filter interaction
+// Interazione filtro
 function setupFiltroInterazione() {
   const filters = document.querySelectorAll(".elementoFiltro");
   const listaBil = document.querySelector(".listaBil"); // Get the parent container
-  const transazioni = listaBil.querySelectorAll(".elementoTransazione"); // Get all transaction elements
+
+  console.log("setupFiltroInterazione called.");
+  console.log("listaBil element:", listaBil);
+
+  if (!listaBil) {
+    console.error("Error: .listaBil non esiste"); //
+    return;
+  }
 
   filters.forEach((filtro) => {
     filtro.addEventListener("click", () => {
       // Update active state
-      filters.forEach((el) => el.classList.remove("attivo"));
-      filtro.classList.add("attivo");
+      filters.forEach((el) => el.classList.remove("attivo")); //
+      filtro.classList.add("attivo"); //
 
-      const selectedFilterCategory = filtro.dataset.filter;
+      const selectedFilterCategory = filtro.dataset.filter; //
+      console.log("Selected filter:", selectedFilterCategory);
 
-      // Show/hide transactions based on the selected filter
-      let counterNascosti = 0;
+      // Re-query all transaction elements every time a filter is clicked
+      const transazioni = listaBil.querySelectorAll(".elementoTransazione"); // Get all transaction elements
+
+      console.log("Transactions NodeList:", transazioni);
+      console.log("Total transactions found:", transazioni.length);
+
+      // mosta/nasconde dipendenda dal filtro selezionato
+      let counterNascosti = 0; // This actually counts visible items
       transazioni.forEach((tx) => {
         const noTransactionsMessage = document.querySelector(
           ".no-transactions-message"
-        );
+        ); //
         console.log();
         if (noTransactionsMessage) {
-          noTransactionsMessage.remove();
+          noTransactionsMessage.remove(); //
         }
-        const txCategory = tx.dataset.filterCategory;
+        const txCategory = tx.dataset.filterCategory; // <-- USARE QUI
         //let counter = 0;
+        console.log(`  Transaction ID: ${tx.dataset.id || 'N/A'}, Category: ${txCategory}, Selected Filter: ${selectedFilterCategory}`);
+
         if (
           selectedFilterCategory === "all" ||
           txCategory === selectedFilterCategory
         ) {
           tx.style.display = ""; // Show
-          counterNascosti++;
+          counterNascosti++; //
+          console.log("  Displaying transaction.");
         } else {
           tx.style.display = "none"; // Hide
+          console.log("  Hiding transaction.");
         }
       });
+      console.log("Visible transactions after filter:", counterNascosti);
+
       if (counterNascosti == 0) {
-        // Show a message or handle the case where no transactions are visible
-        const noTransactionsMessage = document.createElement("div");
-        noTransactionsMessage.className = "no-transactions-message";
+        // mosta un messago quando non ci sono transazioni visibile
+        const noTransactionsMessage = document.createElement("div"); //
+        noTransactionsMessage.className = "no-transactions-message"; //
         noTransactionsMessage.textContent =
-          "Nessuna transazione trovata per questo filtro.";
-        listaBil.appendChild(noTransactionsMessage);
+          "Nessuna transazione trovata per questo filtro."; //
+        listaBil.appendChild(noTransactionsMessage); //
       }
     });
   });
