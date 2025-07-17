@@ -200,7 +200,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       const elementoTransazione = document.createElement("div");
       elementoTransazione.classList.add("elementoTransazione", "entrata");
       elementoTransazione.setAttribute("data-id", entrataItem.id);
-      elementoTransazione.setAttribute("data-filter-category", "entrata"); // <-- CORREZIONE QUI
+      elementoTransazione.setAttribute("data-filter-category", "entrata");
 
       const anno = String(entrataItem.end.split(" ")[0].split("-")[0]).padStart(
         2,
@@ -237,7 +237,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const elementoTransazione = document.createElement("div");
     elementoTransazione.classList.add("elementoTransazione", "uscita");
     elementoTransazione.setAttribute("data-id", spesaItem.ID);
-    elementoTransazione.setAttribute("data-filter-category", "uscita"); // <-- CORREZIONE QUI
+    elementoTransazione.setAttribute("data-filter-category", "uscita");
 
     // CREA ICONA CESTINO
     const iconaCestino = document.createElement("img");
@@ -293,18 +293,18 @@ document.addEventListener("DOMContentLoaded", async function () {
           .catch(() => {
             alert("Errore nell'eliminazione della spesa.");
           });
+          /*window.location.reload();*/ //rompe per qualche ragione
       }
-      window.location.reload();
     });
     document.getElementsByClassName("listaBil")[0].appendChild(elementoTransazione);
   }
 
   // >>> NUOVE POSIZIONI QUI PER GRAFICO E TOTALE <<<
-  updateGraphTotal(res);   // <-- RIPOSIZIONATO QUI
-  renderBalanceChart(res); // <-- RIPOSIZIONATO QUI
+  updateGraphTotal(res);
+  renderBalanceChart(res);
 
   // >>> IMPORTANTE: CHIAMARE setupFiltroInterazione DOPO che le transazioni sono state aggiunte <<<
-  setupFiltroInterazione(); // <-- RIPOSIZIONATO QUI
+  setupFiltroInterazione();
 
   // Existing code for filter bar scroll
   const filterBar = document.getElementById("tendinaFiltriBilancio");
@@ -365,37 +365,36 @@ function setupFiltroInterazione() {
   console.log("listaBil element:", listaBil);
 
   if (!listaBil) {
-    console.error("Error: .listaBil non esiste"); //
+    console.error("Error: .listaBil non esiste");
     return;
   }
 
   filters.forEach((filtro) => {
     filtro.addEventListener("click", () => {
       // Update active state
-      filters.forEach((el) => el.classList.remove("attivo")); //
-      filtro.classList.add("attivo"); //
+      filters.forEach((el) => el.classList.remove("attivo"));
+      filtro.classList.add("attivo");
 
-      const selectedFilterCategory = filtro.dataset.filter; //
+      const selectedFilterCategory = filtro.dataset.filter;
       console.log("Selected filter:", selectedFilterCategory);
 
       // Re-query all transaction elements every time a filter is clicked
-      const transazioni = listaBil.querySelectorAll(".elementoTransazione"); // Get all transaction elements
+      const transazioni = listaBil.querySelectorAll(".elementoTransazione");
 
       console.log("Transactions NodeList:", transazioni);
       console.log("Total transactions found:", transazioni.length);
 
       // mosta/nasconde dipendenda dal filtro selezionato
-      let counterNascosti = 0; // This actually counts visible items
+      let counterNascosti = 0;
       transazioni.forEach((tx) => {
         const noTransactionsMessage = document.querySelector(
           ".no-transactions-message"
-        ); //
+        );
         console.log();
         if (noTransactionsMessage) {
-          noTransactionsMessage.remove(); //
+          noTransactionsMessage.remove();
         }
-        const txCategory = tx.dataset.filterCategory; // <-- USARE QUI
-        //let counter = 0;
+        const txCategory = tx.dataset.filterCategory;
         console.log(`  Transaction ID: ${tx.dataset.id || 'N/A'}, Category: ${txCategory}, Selected Filter: ${selectedFilterCategory}`);
 
         if (
@@ -403,7 +402,7 @@ function setupFiltroInterazione() {
           txCategory === selectedFilterCategory
         ) {
           tx.style.display = ""; // Show
-          counterNascosti++; //
+          counterNascosti++;
           console.log("  Displaying transaction.");
         } else {
           tx.style.display = "none"; // Hide
@@ -414,11 +413,11 @@ function setupFiltroInterazione() {
 
       if (counterNascosti == 0) {
         // mosta un messago quando non ci sono transazioni visibile
-        const noTransactionsMessage = document.createElement("div"); //
-        noTransactionsMessage.className = "no-transactions-message"; //
+        const noTransactionsMessage = document.createElement("div");
+        noTransactionsMessage.className = "no-transactions-message";
         noTransactionsMessage.textContent =
-          "Nessuna transazione trovata per questo filtro."; //
-        listaBil.appendChild(noTransactionsMessage); //
+          "Nessuna transazione trovata per questo filtro.";
+        listaBil.appendChild(noTransactionsMessage);
       }
     });
   });
