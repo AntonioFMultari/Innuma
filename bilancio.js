@@ -361,6 +361,13 @@ function setupFiltroInterazione() {
       // Show/hide transactions based on the selected filter
       let counterNascosti = 0;
       transazioni.forEach((tx) => {
+        const noTransactionsMessage = document.querySelector(
+          ".no-transactions-message"
+        );
+        console.log();
+        if (noTransactionsMessage) {
+          noTransactionsMessage.remove();
+        }
         const txCategory = tx.dataset.filterCategory;
         //let counter = 0;
         if (

@@ -199,6 +199,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       const elementoTransazione = document.createElement("div");
       elementoTransazione.classList.add("elementoTransazione", "entrata");
       elementoTransazione.setAttribute("data-id", entrataItem.id); // <-- aggiungi questa riga
+      elementoTransazione.setAttribute("filterCategory", "entrata"); // <-- aggiungi questa riga
 
       const anno = String(entrataItem.end.split(" ")[0].split("-")[0]).padStart(
         2,
@@ -244,6 +245,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const elementoTransazione = document.createElement("div");
     elementoTransazione.classList.add("elementoTransazione", "uscita");
     elementoTransazione.setAttribute("data-id", spesaItem.ID);
+    elementoTransazione.setAttribute("filterCategory", "uscita"); // <-- aggiungi questa riga
 
     // CREA ICONA CESTINO
     const iconaCestino = document.createElement("img");
@@ -376,9 +378,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 setupFiltroInterazione();
 
+// Function to set up filter interaction
 function setupFiltroInterazione() {
   const filters = document.querySelectorAll(".elementoFiltro");
-  const transazioni = document.querySelectorAll(".elementoTransazione");
+  const listaBil = document.querySelector(".listaBil"); // Get the parent container
+  const transazioni = listaBil.querySelectorAll(".elementoTransazione"); // Get all transaction elements
 
   filters.forEach((filtro) => {
     filtro.addEventListener("click", () => {
@@ -386,18 +390,38 @@ function setupFiltroInterazione() {
       filters.forEach((el) => el.classList.remove("attivo"));
       filtro.classList.add("attivo");
 
-      const selectedFilter = filtro.dataset.filter;
+      const selectedFilterCategory = filtro.dataset.filter;
 
-      // mostra/nasconde transactions
+      // Show/hide transactions based on the selected filter
+      let counterNascosti = 0;
       transazioni.forEach((tx) => {
-        if (selectedFilter === "all") {
-          tx.style.display = "";
+        const noTransactionsMessage = document.querySelector(
+          ".no-transactions-message"
+        );
+        console.log();
+        if (noTransactionsMessage) {
+          noTransactionsMessage.remove();
+        }
+        const txCategory = tx.dataset.filterCategory;
+        //let counter = 0;
+        if (
+          selectedFilterCategory === "all" ||
+          txCategory === selectedFilterCategory
+        ) {
+          tx.style.display = ""; // Show
+          counterNascosti++;
         } else {
-          tx.style.display = tx.classList.contains(selectedFilter)
-            ? ""
-            : "none";
+          tx.style.display = "none"; // Hide
         }
       });
+      if (counterNascosti == 0) {
+        // Show a message or handle the case where no transactions are visible
+        const noTransactionsMessage = document.createElement("div");
+        noTransactionsMessage.className = "no-transactions-message";
+        noTransactionsMessage.textContent =
+          "Nessuna transazione trovata per questo filtro.";
+        listaBil.appendChild(noTransactionsMessage);
+      }
     });
   });
 }
