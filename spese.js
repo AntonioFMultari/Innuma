@@ -64,7 +64,7 @@ if (salva && modal) {
                         </div>
                     `;
         document.querySelector(".listaBil").appendChild(SpesaDiv);
-        //window.location.reload();
+        window.location.reload();
       });
     }
   };

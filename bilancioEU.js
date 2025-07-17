@@ -45,7 +45,6 @@ function BalancePage() {
     { label: "Tutti", colorClass: "pallinoFiltro", type: "all" },
     { label: "Entrate", colorClass: "pallinoEntrate", type: "entrata" },
     { label: "Uscite", colorClass: "pallinoUscite", type: "uscita" },
-    { label: "Da Cont.", colorClass: "pallinoDaCont", type: "pending" },
   ];
 
   filters.forEach((filter, index) => {

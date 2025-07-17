@@ -116,7 +116,10 @@ async function renderBalanceChart(transactions) {
   // Fetch activities to get colors and descriptions for the chart
   const attivitaResponse = await inviaRichiesta("GET", "/db-attivita");
   const attivitaMap = new Map(
-    attivitaResponse.data.map((a) => [a.Descrizione, { color: a.Colore, type: a.type }])
+    attivitaResponse.data.map((a) => [
+      a.Descrizione,
+      { color: a.Colore, type: a.type },
+    ])
   );
 
   const chartLabels = [];
@@ -137,7 +140,10 @@ async function renderBalanceChart(transactions) {
     // Aggregate data for the doughnut chart by activity description
     const activityDesc = t.descrizione_attivita || "Sconosciuto";
     const currentAmount = chartDataMap.get(activityDesc) || 0;
-    chartDataMap.set(activityDesc, currentAmount + (isExpense ? parseFloat(t.Uscita) : amount));
+    chartDataMap.set(
+      activityDesc,
+      currentAmount + (isExpense ? parseFloat(t.Uscita) : amount)
+    );
   });
 
   // Populate chart data based on aggregated map
@@ -221,7 +227,9 @@ async function renderTransactions(transactions, attivita) {
 
   transactions.forEach((item) => {
     const isExpense = item.Uscita && parseFloat(item.Uscita) > 0;
-    const amount = isExpense ? parseFloat(item.Uscita) : parseFloat(item.tariffa_oraria);
+    const amount = isExpense
+      ? parseFloat(item.Uscita)
+      : parseFloat(item.tariffa_oraria);
     const amountPrefix = isExpense ? "-" : "+";
     const amountClass = isExpense ? "transazioneUscita" : "transazioneEntrata";
     const transactionTypeClass = isExpense ? "uscita" : "entrata";
@@ -235,9 +243,15 @@ async function renderTransactions(transactions, attivita) {
     const anno = String(date.getFullYear());
 
     const elementoTransazione = document.createElement("div");
-    elementoTransazione.classList.add("elementoTransazione", transactionTypeClass);
+    elementoTransazione.classList.add(
+      "elementoTransazione",
+      transactionTypeClass
+    );
     elementoTransazione.setAttribute("data-id", item.id);
-    elementoTransazione.setAttribute("data-filter-category", item.descrizione_attivita); // Add category for filtering
+    elementoTransazione.setAttribute(
+      "data-filter-category",
+      item.descrizione_attivita
+    ); // Add category for filtering
 
     elementoTransazione.innerHTML = `
             <div class="transazioneIconaContenitore">
@@ -248,7 +262,9 @@ async function renderTransactions(transactions, attivita) {
                 <span class="transazioneDescrizione">Data: ${giorno}/${mese}/${anno}</span>
             </div>
             <div class="transazioneDettagliDestra">
-                <span class="transazioneImporto ${amountClass}">${amountPrefix}€${amount.toFixed(2)}</span>
+                <span class="transazioneImporto ${amountClass}">${amountPrefix}€${amount.toFixed(
+      2
+    )}</span>
                 <span class="transazioneTestoTotale">totale</span>
             </div>
         `;
@@ -343,14 +359,28 @@ function setupFiltroInterazione() {
       const selectedFilterCategory = filtro.dataset.filter;
 
       // Show/hide transactions based on the selected filter
+      let counterNascosti = 0;
       transazioni.forEach((tx) => {
         const txCategory = tx.dataset.filterCategory;
-        if (selectedFilterCategory === "all" || txCategory === selectedFilterCategory) {
+        //let counter = 0;
+        if (
+          selectedFilterCategory === "all" ||
+          txCategory === selectedFilterCategory
+        ) {
           tx.style.display = ""; // Show
+          counterNascosti++;
         } else {
           tx.style.display = "none"; // Hide
         }
       });
+      if (counterNascosti == 0) {
+        // Show a message or handle the case where no transactions are visible
+        const noTransactionsMessage = document.createElement("div");
+        noTransactionsMessage.className = "no-transactions-message";
+        noTransactionsMessage.textContent =
+          "Nessuna transazione trovata per questo filtro.";
+        listaBil.appendChild(noTransactionsMessage);
+      }
     });
   });
 }

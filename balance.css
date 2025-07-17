@@ -20,8 +20,17 @@
   flex-basis: 0;
   max-width: 500px;
   justify-content: center;
+  align-items: center;
   margin-left: 2rem;
   margin-right: 2rem;
+
+  a {
+    max-width: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 3rem;
+  }
 }
 
 /* Chart container with relative positioning for total overlay */
@@ -63,7 +72,7 @@
   align-items: center;
   padding: 1rem;
   border-radius: 2.5rem;
-  max-width: 700px;
+  max-width: 30rem;
   min-width: 0;
   gap: 1rem;
   background: #fff;
@@ -113,12 +122,8 @@
   border-radius: 1.5rem;
   font-size: 1.1rem;
   cursor: pointer;
-  margin-top: 1rem;
-  margin-left: 124px;
-  width: 80%;
-  max-width: 15rem;
+  width: 100%;
   user-select: none;
-  margin-bottom: 74px;
 }
 
 /* transactions list */
